@@ -1,0 +1,46 @@
+Loading scriptforage module in apso console.
+
+ScriptForge Service names
+    SF_Array =          'ScriptForge.Array'
+    SF_Basic =          'ScriptForge.Basic'
+    SF_Dictionary =     'ScriptForge.Dictionary'
+    SF_Exception =      'ScriptForge.Exception'
+    SF_FileSystem =     'ScriptForge.FileSystem'
+    SF_L10N =           'ScriptForge.L10N'
+    SF_Platform =       'ScriptForge.Platform'
+    SF_Region =         'ScriptForge.Region'
+    SF_Session =        'ScriptForge.Session'
+    SF_String =         'ScriptForge.String'
+    SF_TextStream =     'ScriptForge.TextStream'
+    SF_UI =             'ScriptForge.UI'
+
+    SF_Database =       'SFDatabases.Database'
+
+    SF_Dialog =         'SFDialogs.Dialog'
+    SF_DialogControl =  'SFDialogs.DialogControl'
+
+    SF_Document =       'SFDocuments.Document'
+    SF_Base =           'SFDocuments.Base'
+    SF_Calc =           'SFDocuments.Calc'
+    SF_CalcReference =  'SFDocuments.CalcReference'
+    SF_Chart =          'SFDocuments.Chart'
+    SF_Form =           'SFDocuments.Form'
+    SF_FormControl =    'SFDocuments.FormControl'
+    SF_Writer =         'SFDocuments.Writer'
+
+    SF_Menu =           'SFWidgets.Menu'
+    SF_PopupMenu =      'SFWidgets.PopupMenu'
+
+
+from scriptforge import CreateScriptService
+
+bas = CreateScriptService('ScriptForge.Basic')
+fso = CreateScriptService('ScriptForge.FileSystem')
+ses = CreateScriptService('ScriptForge.Session')
+txt = CreateScriptService('ScriptForge.String')
+sfui = CreateScriptService('ScriptForge.UI')
+clc = CreateScriptService('SFDocuments.Calc')
+
+sfs = CreateScriptService('ScriptForge.String')
+    >>> sfs.HashStr("œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬", "MD5")
+    '616eb9c513ad07cd02924b4d285b9987'

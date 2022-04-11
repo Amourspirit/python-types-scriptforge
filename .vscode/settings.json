@@ -1,0 +1,37 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/env",
+    "autoDocstring.docstringFormat": "google",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "python.testing.unittestEnabled": true,
+    "python.testing.pytestEnabled": false,
+    "sqltools.useNodeRuntime": true,
+    "editor.snippetSuggestions": "bottom",
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "editor.suggestSelection": "first",
+    "editor.suggest.localityBonus": true,
+    "workbench.colorCustomizations": {
+        "[Monokai]": {
+            "titleBar.activeBackground": "#593d57"
+        }
+    },
+    "workbench.colorTheme": "Monokai",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell7": {
+            "path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+            "args": [
+                "-NoProfile",
+                "-noexit",
+                "-file",
+                "${workspaceFolder}\\.profile\\profile.ps1"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell7",
+    "python.formatting.provider": "black",
+    "esbonio.sphinx.confDir": ""
+}
