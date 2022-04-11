@@ -1,3 +1,4 @@
+# region IMPORTS
 import datetime
 import time
 from typing import Any, Optional, List, Tuple, TypeVar, overload
@@ -19,9 +20,13 @@ from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
 from ooo.lo.table.x_cell_range import XCellRange
 from ooo.lo.sheet.x_sheet_cell_cursor import XSheetCellCursor
 from ooo.lo.sheet.x_spreadsheet import XSpreadsheet
+# endregion IMPORTS
 
+# region Types
 _T = TypeVar("_T")
+# endregion Types
 
+# region MetaClass
 class _Singleton(type):
     """
     A Singleton metaclass design pattern
@@ -30,7 +35,9 @@ class _Singleton(type):
 
     instances: dict
     def __call__(cls: _T, *args, **kwargs) -> _T: ...
+# endregion MetaClass
 
+# region ScriptForge Class
 class ScriptForge(object, metaclass=_Singleton):
     """
         The ScriptForge (singleton) class encapsulates the core of the ScriptForge run-time
@@ -43,21 +50,18 @@ class ScriptForge(object, metaclass=_Singleton):
         It embeds the Service class that manages the protocol with Basic
     """
 
-    # #########################################################################
-    # Class attributes
-    # #########################################################################
+    # region Class attributes
     hostname: str
     port: int
     componentcontext: XComponentContext
     scriptprovider: Any
     SCRIPTFORGEINITDONE: bool
+    # endregion Class attributes
 
-    # #########################################################################
-    # Class constants
-    # #########################################################################
+    # region Class constants
     library: Literal["ScriptForge"]
     Version: Literal["7.3"]
-    #
+    # endregion Class constants
     # Basic dispatcher for Python scripts
     basicdispatcher: Literal[
         "@application#ScriptForge.SF_PythonHelper._PythonDispatcher"
@@ -65,7 +69,7 @@ class ScriptForge(object, metaclass=_Singleton):
     # Python helper functions module
     pythonhelpermodule: Literal["ScriptForgeHelper.py"]
     #
-    # VarType() constants
+    # region VarType() constants
     V_EMPTY: Literal[0]
     V_NULL: Literal[1]
     V_INTEGER: Literal[2]
@@ -85,10 +89,12 @@ class ScriptForge(object, metaclass=_Singleton):
     objMODULE: Literal[1]
     objCLASS: Literal[2]
     objUNO: Literal[3]
-    # Special argument symbols
+    # endregion VarType() constants
+    # regoin Special argument symbols
     cstSymEmpty: Literal["+++EMPTY+++"]
     cstSymNull: Literal["+++NULL+++"]
     cstSymMissing: Literal["+++MISSING+++"]
+    # endregoin Special argument symbols
     # Predefined references for services implemented as standard Basic modules
     servicesmodules: dict
     def __init__(self, hostname: str = ..., port: int = ...):
@@ -100,6 +106,7 @@ class ScriptForge(object, metaclass=_Singleton):
             hostname (str, optional): probably 'localhost'. Defaults to ''.
             port (int, optional): Port Number. Defaults to 0.
         """
+    # region ClassMethods
     @classmethod
     def ConnectToLOProcess(
         cls, hostname: str = ..., port: int = ...
@@ -185,6 +192,8 @@ class ScriptForge(object, metaclass=_Singleton):
                 - the 0th element of the tuple when scalar, tuple or UNO object
                 - a new Service() object or one of its subclasses otherwise
         """
+    # endregion ClassMethods
+    # region Static Methods
     @staticmethod
     def SetAttributeSynonyms() -> None:
         """
@@ -203,6 +212,9 @@ class ScriptForge(object, metaclass=_Singleton):
                     # etc ...
                 copyFile, copyfile = CopyFile, CopyFile
         """
+    # endregion Static Methods
+# endregion ScriptForge Class
+
     # 7.4
     # @staticmethod
     # def unpack_args(kwargs) -> list:
@@ -212,10 +224,7 @@ class ScriptForge(object, metaclass=_Singleton):
     #         dict(A = 'a', B = 2) => 'A', 'a', 'B', 2
     #     """
 
-# #####################################################################################################################
-#                           SFServices CLASS    (ScriptForge services superclass)                                   ###
-# #####################################################################################################################
-
+# region SFServices CLASS    (ScriptForge services superclass)
 class SFServices:
     """
     Generic implementation of a parent Service class
@@ -277,7 +286,7 @@ class SFServices:
             Conventionally, camel-cased and lower-cased homonyms are supported where relevant
             All arguments must be present and initialized before the call to Basic, if any
     """
-
+    # region CONST
     vbGet: Literal[2]
     vbLet: Literal[4]
     vbMethod: Literal[1]
@@ -299,6 +308,9 @@ class SFServices:
     # Basic class type
     moduleClass: Literal[2]
     moduleStandard: Literal[1]
+    # endregion CONST
+    
+    # region Attribs
     forceGetProperty: bool = False
     """Define the default behaviour for read-only properties: buffer their values in Python"""
     propertysynonyms: dict = ...
@@ -307,6 +319,9 @@ class SFServices:
     # Shortcuts to script provider interfaces
     SIMPLEEXEC: Any
     EXEC: Any
+    # endregion Attribs
+
+    # region Methods
     def __init__(
         self,
         reference: int = ...,
@@ -344,16 +359,13 @@ class SFServices:
         """
         Set the given property to a new value in the Basic world
         """
+    # endregion Methods
+# endregion SFServices CLASS    (ScriptForge services superclass)
 
-# #####################################################################################################################
-#                       SFScriptForge CLASS    (alias of ScriptForge Basic library)                                 ###
-# #####################################################################################################################
-
+# region SFScriptForge CLASS    (alias of ScriptForge Basic library)
 class SFScriptForge:
     ...
-    # #########################################################################
-    # SF_Array CLASS
-    # #########################################################################
+    # region SF_Array CLASS
     class SF_Array(SFServices, metaclass=_Singleton):
         """
         Provides a collection of methods for manipulating and transforming arrays of one dimension (vectors)
@@ -374,9 +386,9 @@ class SFScriptForge:
             Difference with the Basic version: dates are returned in their iso format,
             not as any of the datetime objects.
             """
-    # #########################################################################
-    # SF_Basic CLASS
-    # #########################################################################
+    # endregion SF_Array CLASS
+    
+    # region SF_Basic CLASS
     class SF_Basic(SFServices, metaclass=_Singleton):
         """
         This service proposes a collection of Basic methods to be executed in a Python context
@@ -743,9 +755,9 @@ class SFScriptForge:
         )
         @classmethod
         def Xray(cls, unoobject: object | None = ...) -> Any: ...
-    # #########################################################################
-    # SF_Dictionary CLASS
-    # #########################################################################
+    # endregion SF_Basic CLASS
+    
+    # region SF_Dictionary CLASS
     class SF_Dictionary(SFServices, dict):
         """
             The service adds to a Python dict instance the interfaces for conversion to and from
@@ -798,9 +810,9 @@ class SFScriptForge:
             Returns:
                 bool: True when successful
             """
-    # #########################################################################
-    # SF_Exception CLASS
-    # #########################################################################
+    # endregion SF_Dictionary CLASS
+    
+    # region SF_Exception CLASS
     class SF_Exception(SFServices, metaclass=_Singleton):
         """
         The Exception service is a collection of methods for code debugging and error handling.
@@ -842,9 +854,9 @@ class SFScriptForge:
             
             For INTERNAL USE only
             """
-    # #########################################################################
-    # SF_FileSystem CLASS
-    # #########################################################################
+    # endregion SF_Exception CLASS
+    
+    # region SF_FileSystem CLASS
     class SF_FileSystem(SFServices, metaclass=_Singleton):
         """
         The "FileSystem" service includes common file and folder handling routines.
@@ -1261,9 +1273,9 @@ class SFScriptForge:
         @classmethod
         def _ConvertFromUrl(cls, filename: str) -> str: ...
         # _ConvertFromUrl Alias for same function in FileSystem Basic module
-    # #########################################################################
-    # SF_L10N CLASS
-    # #########################################################################
+    # endregion SF_FileSystem CLASS
+    
+    # region SF_L10N CLASS
     class SF_L10N(SFServices):
         """
         This service provides a number of methods related to the translation of strings
@@ -1372,9 +1384,9 @@ class SFScriptForge:
                 str: The translated string. If not found the MsgId string or the Context string
                 anyway the substitution is done
             """
-    # #########################################################################
-    # SF_Platform CLASS
-    # #########################################################################
+    # endregion SF_L10N CLASS
+    
+    # region SF_Platform CLASS
     class SF_Platform(SFServices, metaclass=_Singleton):
         """
         The 'Platform' service implements a collection of properties about the actual execution environment
@@ -1442,9 +1454,9 @@ class SFScriptForge:
             
             Such as ``Python 3.7.7``
             """
-    # #########################################################################
-    # SF_Region CLASS
-    # #########################################################################
+    # endregion SF_Platform CLASS
+    
+    # region SF_Region CLASS
     # 7.4
     # class SF_Region(SFServices, metaclass=_Singleton):
     #     """
@@ -1491,9 +1503,9 @@ class SFScriptForge:
     #         self, localdatetime: datetime.datetime, timezone: str, locale: str = ""
     #     ) -> datetime.datetime: ...
     #     def UTCNow(self, timezone: str, locale: str = "") -> datetime.datetime: ...
-    # #########################################################################
-    # SF_Session CLASS
-    # #########################################################################
+    # endregion SF_Region CLASS
+    
+    # region SF_Session CLASS
     class SF_Session(SFServices, metaclass=_Singleton):
         """
         The Session service gathers various general-purpose methods about:
@@ -1693,9 +1705,9 @@ class SFScriptForge:
                         "wiki.documentfoundation.org/api.php?hidebots=1&days=7&limit=50&action=feedrecentchanges&feedformat=rss"
                         )
             """
-    # #########################################################################
-    # SF_String CLASS
-    # #########################################################################
+    # endregion SF_Session CLASS
+    
+    # region SF_String CLASS
     class SF_String(SFServices, metaclass=_Singleton):
         """
         Focus on string manipulation, regular expressions, encodings and hashing algorithms.
@@ -1927,9 +1939,9 @@ class SFScriptForge:
                 Tabs are expanded. Symbolic line breaks are replaced by their hard equivalents.
                 If the wrapped output has no content, the returned tuple is empty.
             """
-    # #########################################################################
-    # SF_TextStream CLASS
-    # #########################################################################
+    # endregion SF_String CLASS
+    
+    # region SF_TextStream CLASS
     class SF_TextStream(SFServices):
         """
         The TextStream service is used to sequentially read from and write to files opened or created
@@ -1999,9 +2011,9 @@ class SFScriptForge:
             Args:
                 line (str): the line to write, may be empty.
             """
-    # #########################################################################
-    # SF_Timer CLASS
-    # #########################################################################
+    # endregion SF_TextStream CLASS
+    
+    # region SF_Timer CLASS
     class SF_Timer(SFServices):
         """
         The "Timer" service measures the amount of time it takes to run user scripts.
@@ -2055,9 +2067,9 @@ class SFScriptForge:
             Returns:
                 bool: True if successful, False if the timer is neither started nor suspended.
             """
-    # #########################################################################
-    # SF_UI CLASS
-    # #########################################################################
+    # endregion SF_Timer CLASS
+    
+    # region SF_UI CLASS
     class SF_UI(SFServices, metaclass=_Singleton):
         """
             Singleton class for the identification and the manipulation of the
@@ -2275,18 +2287,16 @@ class SFScriptForge:
             Returns:
                 bool: True if the given window is found.
             """
+    # endregion SF_UI CLASS
+# endregion SFScriptForge CLASS    (alias of ScriptForge Basic library)
 
-# #####################################################################################################################
-#                       SFDatabases CLASS    (alias of SFDatabases Basic library)                                   ###
-# #####################################################################################################################
+# region SFDatabases CLASS    (alias of SFDatabases Basic library)
 class SFDatabases:
     """
     The SFDatabases class manages databases embedded in or connected to Base documents
     """
 
-    # #########################################################################
-    # SF_Database CLASS
-    # #########################################################################
+    # region SF_Database CLASS
     class SF_Database(SFServices):
         """
         Each instance of the current class represents a single database, with essentially its tables, queries
@@ -2443,18 +2453,16 @@ class SFDatabases:
             Returns:
                 Any: result
             """
+    # endregion SF_Database CLASS
+# endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
 
-# #####################################################################################################################
-#                       SFDialogs CLASS    (alias of SFDialogs Basic library)                                       ###
-# #####################################################################################################################
+# region SFDialogs CLASS    (alias of SFDialogs Basic library)
 class SFDialogs:
     """
     The SFDialogs class manages dialogs defined with the Basic IDE
     """
 
-    # #########################################################################
-    # SF_Dialog CLASS
-    # #########################################################################
+    # region SF_Dialog CLASS
     class SF_Dialog(SFServices):
         """
         Each instance of the current class represents a single dialog box displayed to the user.
@@ -2557,9 +2565,9 @@ class SFDialogs:
             Returns:
                 bool: True if termination is successful.
             """
-    # #########################################################################
-    # SF_DialogControl CLASS
-    # #########################################################################
+    # endregion SF_Dialog CLASS
+    
+    # region SF_DialogControl CLASS
     class SF_DialogControl(SFServices):
         """
         Each instance of the current class represents a single control within a dialog box.
@@ -2728,19 +2736,17 @@ class SFDialogs:
             Returns:
                 bool: True if insertion is successful
             """
+    # endregion SF_DialogControl CLASS
+# endregion SFDialogs CLASS    (alias of SFDialogs Basic library)
 
-# #####################################################################################################################
-#                       SFDocuments CLASS    (alias of SFDocuments Basic library)                                   ###
-# #####################################################################################################################
+# region SFDocuments CLASS    (alias of SFDocuments Basic library)
 class SFDocuments:
     """
     The SFDocuments class gathers a number of classes, methods and properties making easy
     managing and manipulating LibreOffice documents
     """
 
-    # #########################################################################
-    # SF_Document CLASS
-    # #########################################################################
+    # region SF_Document CLASS
     class SF_Document(SFServices):
         """
         The methods and properties are generic for all types of documents: they are combined in the
@@ -2894,9 +2900,9 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
-    # #########################################################################
-    # SF_Base CLASS
-    # #########################################################################
+    # endregion SF_Document CLASS
+    
+    # region SF_Base CLASS
     class SF_Base(SF_Document, SFServices):
         """
         The SF_Base module is provided mainly to block parent properties that are NOT applicable to Base documents
@@ -3019,9 +3025,9 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
-    # #########################################################################
-    # SF_Calc CLASS
-    # #########################################################################
+    # endregion SF_Base CLASS
+    
+    # region SF_Calc CLASS
     class SF_Calc(SF_Document, SFServices):
         """
         The SF_Calc module is focused on :
@@ -4128,9 +4134,9 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help SortRange <https://tinyurl.com/y7jwr7b7#SortRange>`_
             """
-    # #########################################################################
-    # SF_CalcReference CLASS
-    # #########################################################################
+    # endregion SF_Calc CLASS
+    
+    # region SF_CalcReference CLASS
     class SF_CalcReference(SFServices):
         """
             The SF_CalcReference class has as unique role to hold sheet and range references.
@@ -4142,9 +4148,9 @@ class SFDocuments:
         servicename: Literal["SFDocuments.CalcReference"]
         servicesynonyms: tuple
         serviceproperties: dict
-    # #########################################################################
-    # SF_Chart CLASS
-    # #########################################################################
+    # endregion SF_CalcReference CLASS
+    
+    # region SF_Chart CLASS
     class SF_Chart(SFServices):
         """
         The SF_Chart module is focused on the description of chart documents
@@ -4210,9 +4216,9 @@ class SFDocuments:
             See Also:
                 `SF_Chart Help ExportToFile <https://tinyurl.com/ydcexzky#ExportToFile>`_
             """
-    # #########################################################################
-    # SF_Form CLASS
-    # #########################################################################
+    # endregion SF_Chart CLASS
+    
+    # region SF_Form CLASS
     class SF_Form(SFServices):
         """
         Management of forms defined in LibreOffice documents. Supported types are Base, Calc and Writer documents.
@@ -4408,9 +4414,9 @@ class SFDocuments:
             See Also:
                 `SF_Form Help Subforms <https://tinyurl.com/y72zdzjy#Subforms>`_
             """
-    # #########################################################################
-    # SF_FormControl CLASS
-    # #########################################################################
+    # endregion SF_Form CLASS
+    
+    # region SF_FormControl CLASS
     class SF_FormControl(SFServices):
         """
         Manage the controls belonging to a form or subform stored in a document.
@@ -4462,9 +4468,9 @@ class SFDocuments:
             See Also:
                 `SF_FormControl Help SetFocus <https://tinyurl.com/y8d9qlcl#SetFocus>`_
             """
-    # #########################################################################
-    # SF_Writer CLASS
-    # #########################################################################
+    # endregion SF_FormControl CLASS
+    
+    # region SF_Writer CLASS
     class SF_Writer(SF_Document, SFServices):
         """
         The SF_Writer module is focused on :
@@ -4551,18 +4557,16 @@ class SFDocuments:
             See Also:
                 `SF_Writer Help PrintOut <https://tinyurl.com/y7kv226a#PrintOut>`_
             """
+    # endregion SF_Writer CLASS
+# endregion SFDocuments CLASS    (alias of SFDocuments Basic library)
 
-# #####################################################################################################################
-#                       SFWidgets CLASS    (alias of SFWidgets Basic library)                                       ###
-# #####################################################################################################################
+# region SFWidgets CLASS    (alias of SFWidgets Basic library)
 class SFWidgets:
     """
     The SFWidgets class manages toolbars and popup menus
     """
 
-    # #########################################################################
-    # SF_PopupMenu CLASS
-    # #########################################################################
+    # region SF_PopupMenu CLASS
     class SF_PopupMenu(SFServices):
         """
         Display a popup menu anywhere and any time.
@@ -4684,10 +4688,10 @@ class SFWidgets:
             Returns:
                 int | str: The item clicked by the user.
             """
+    # endregion SF_PopupMenu CLASS
+# endregion SFWidgets CLASS    (alias of SFWidgets Basic library)
 
-# ##############################################False##################################################################
-#                           CreateScriptService()                                                                   ###
-# #####################################################################################################################
+# region CreateScriptService()
 def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices | Any:
     """
     A service being the name of a collection of properties and methods,
@@ -4710,6 +4714,7 @@ def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices |
      Returns:
         SFServices | Any:  the service as a Python object
     """
+# endregion CreateScriptService()
 
 createScriptService: SFServices | Any
 createscriptservice: SFServices | Any
