@@ -3,23 +3,27 @@ import datetime
 import time
 from typing import Any, Optional, List, Tuple, TypeVar, overload
 from typing_extensions import Literal
-from ooo.lo.uno.x_interface import XInterface
-from ooo.lo.uno.x_component_context import XComponentContext
-from ooo.lo.script.provider.x_script_provider import XScriptProvider
-from ooo.lo.util.date_time import DateTime as UNODateTime
-from ooo.lo.util.date import Date as UNODate
-from ooo.lo.util.time import Time as UNOTime
-from ooo.lo.frame.x_desktop import XDesktop
-from ooo.lo.lang.x_component import XComponent
-from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
-from ooo.lo.beans.property_value import PropertyValue
-from ooo.lo.sdb.database_document import DatabaseDocument
 from ooo.lo.awt.x_window import XWindow
 from ooo.lo.awt.tree.x_tree_node import XTreeNode
 from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
-from ooo.lo.table.x_cell_range import XCellRange
+from ooo.lo.awt.x_control import XControl
+from ooo.lo.awt.x_control_model import XControlModel
+from ooo.lo.beans.property_value import PropertyValue
+from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
+from ooo.lo.frame.x_desktop import XDesktop
+from ooo.lo.lang.x_component import XComponent
+from ooo.lo.script.provider.x_script_provider import XScriptProvider
 from ooo.lo.sheet.x_sheet_cell_cursor import XSheetCellCursor
 from ooo.lo.sheet.x_spreadsheet import XSpreadsheet
+from ooo.lo.sdb.database_document import DatabaseDocument
+from ooo.lo.sdbc.x_connection import XConnection as UNOXConnection
+from ooo.lo.sdbc.x_database_meta_data import XDatabaseMetaData
+from ooo.lo.table.x_cell_range import XCellRange
+from ooo.lo.uno.x_interface import XInterface
+from ooo.lo.uno.x_component_context import XComponentContext
+from ooo.lo.util.date_time import DateTime as UNODateTime
+from ooo.lo.util.date import Date as UNODate
+from ooo.lo.util.time import Time as UNOTime
 # endregion IMPORTS
 
 # region Types
@@ -215,15 +219,6 @@ class ScriptForge(object, metaclass=_Singleton):
     # endregion Static Methods
 # endregion ScriptForge Class
 
-    # 7.4
-    # @staticmethod
-    # def unpack_args(kwargs) -> list:
-    #     """
-    #     Convert a dictionary passed as argument to a list alternating keys and values
-    #     Example:
-    #         dict(A = 'a', B = 2) => 'A', 'a', 'B', 2
-    #     """
-
 # region SFServices CLASS    (ScriptForge services superclass)
 class SFServices:
     """
@@ -372,6 +367,9 @@ class SFScriptForge:
         and arrays of two dimensions (matrices). This includes set operations, sorting,
         importing to and exporting from text files.
         The Python version of the service provides a single method: ImportFromCSVFile
+        
+        See Also:
+            `Array Help <https://tinyurl.com/y8b7bq2d>`_
         """
 
         # Mandatory class properties for service registration
@@ -399,8 +397,8 @@ class SFScriptForge:
         The signatures of Basic builtin functions are derived from
             core/basic/source/runtime/stdobj.cxx
 
-        Detailed user documentation:
-            https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_basic.html?DbPAR=BASIC
+        See Also:
+           `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
         """
 
         serviceimplementation: Literal["python"]
@@ -776,6 +774,9 @@ class SFScriptForge:
                 myDict['D'] = 4
                 print(myDict)   # {'A': 1, 'B': 2, 'C': 3, 'D': 4}
                 propval = myDict.ConvertToPropertyValues()
+            
+            See Also: 
+                `ScriptForge.Dictionary service <https://tinyurl.com/y9quuboc>`_
             """
 
         # Mandatory class properties for service registration
@@ -823,6 +824,9 @@ class SFScriptForge:
         Use DebugPrint() method to aggregate additional user data of any type.
 
         Console entries can be dumped to a text file or visualized in a dialogue.
+
+        See Also:
+            `ScriptForge.Exception service <https://tinyurl.com/y8ezar7q>`_
         """
 
         # Mandatory class properties for service registration
@@ -830,6 +834,7 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.Exception"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         def Console(self, modal: bool = ...) -> Any: ...
         def ConsoleClear(self, keep: int = ...) -> Any: ...
         def ConsoleToFile(self, filename: str) -> Any: ...
@@ -854,12 +859,40 @@ class SFScriptForge:
             
             For INTERNAL USE only
             """
+        # endregion Methods
+
+        # region Properties
+        @property
+        def Description(self) -> str:
+            """
+            Gets/Sets the error message text.
+
+            Default value is `''` or a string containing the Basic run-time error message.
+            """
+        @property
+        def Number(self) -> int:
+            """
+            Gets/Sets the location in the code where the error occurred. It can be a numeric value or text.
+
+            Default value is 0 or the numeric value corresponding to the Basic run-time error code.
+            """
+        @property
+        def Source(self) -> int:
+            """
+            Gets/Sets the location in the code where the error occurred. It can be a numeric value or text.
+
+            Default value is ``0`` or the code line number for a standard Basic run-time error.
+            """
+        # endregion Properties
     # endregion SF_Exception CLASS
     
     # region SF_FileSystem CLASS
     class SF_FileSystem(SFServices, metaclass=_Singleton):
         """
         The "FileSystem" service includes common file and folder handling routines.
+        
+        See Also:
+            `ScriptForge.FileSystem service <https://tinyurl.com/ybxpt7eo>`_
         """
 
         # Mandatory class properties for service registration
@@ -873,11 +906,11 @@ class SFScriptForge:
         ForReading: Literal[1]
         ForWriting: Literal[2]
         ForAppending: Literal[8]
+        # region Methods
         def BuildPath(self, foldername: str, name: str) -> str:
             """
             Combines a folder path and the name of a file and returns the combination with a valid path separator.
             Inserts an additional path separator between the foldername and the name, only if necessary.
-            
 
             Args:
                 foldername (str): Path with which Name is combined. Path need not specify an existing folder
@@ -1273,6 +1306,47 @@ class SFScriptForge:
         @classmethod
         def _ConvertFromUrl(cls, filename: str) -> str: ...
         # _ConvertFromUrl Alias for same function in FileSystem Basic module
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def FileNaming(self) -> str:
+            """
+            Gets/Sets the current files and folders notation, either ``ANY``, ``URL`` or ``SYS``:
+            * "ANY": (default) the methods of the FileSystem service accept both URL
+                and current operating system's notation for input arguments but always return URL strings.
+            * "URL": the methods of the FileSystem service expect URL notation for input arguments
+                and return URL strings.
+            * "SYS": the methods of the FileSystem service expect current operating system's notation
+                for both input arguments and return strings.
+
+            Once set, the FileNaming property remains unchanged either until the end of the
+            LibreOffice session or until it is set again.
+            """
+        @property
+        def ConfigFolder(self) -> str:
+            """Gets the configuration folder of LibreOffice."""
+        @property
+        def ExtensionsFolder(self) -> str:
+            """Gets the folder where extensions are installed."""
+        @property
+        def HomeFolder(self) -> str:
+            """Gets the user home folder."""
+        @property
+        def InstallFolder(self) -> str:
+            """Gets the installation folder of LibreOffice."""
+        @property
+        def TemplatesFolder(self) -> str:
+            """Gets the folder containing the system templates files."""
+        @property
+        def TemporaryFolder(self) -> str:
+            """
+            Gets the temporary files folder defined in the LibreOffice path settings.
+            """
+        @property
+        def UserTemplatesFolder(self) -> str:
+            """Gets the folder containing the user-defined template files."""
+        # endregion Properties
     # endregion SF_FileSystem CLASS
     
     # region SF_L10N CLASS
@@ -1283,6 +1357,9 @@ class SFScriptForge:
         The methods provided by the L10N service can be used mainly to:
             Create POT files that can be used as templates for translation of all strings in the program.
             Get translated strings at runtime for the language defined in the Locale property.
+
+        See Also:
+            `ScriptForge.L10N service <https://tinyurl.com/y77mbtp9>`_
         """
 
         # Mandatory class properties for service registration
@@ -1291,6 +1368,7 @@ class SFScriptForge:
         servicesynonyms: Tuple[str, str] = ...
         serviceproperties: dict = ...
 
+        # region Methods
         # 7.4
         # @classmethod
         # def ReviewServiceArgs(
@@ -1384,6 +1462,28 @@ class SFScriptForge:
                 str: The translated string. If not found the MsgId string or the Context string
                 anyway the substitution is done
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Folder(self) -> str:
+            """
+            Gets The folder containing the PO files (see the FileSystem.FileNaming property to learn about the notation used).
+            """
+        @property
+        def Languages(self) -> Tuple[str, ...]:
+            """
+            A listing all the base names (without the ".po" extension)
+            of the PO-files found in the specified Folder.
+            """
+        @property
+        def Locale(self) -> str:
+            """
+            Gets The currently active language-COUNTRY combination.
+            This property will be initially empty if the service was instantiated without
+            any of the optional arguments.
+            """
+        # endregion Properties
     # endregion SF_L10N CLASS
     
     # region SF_Platform CLASS
@@ -1396,7 +1496,10 @@ class SFScriptForge:
             the LibreOffice version
             the current user
         All those properties are read-only.
-        The implementation is mainly based on the 'platform' module of the Python standard library
+        The implementation is mainly based on the 'platform' module of the Python standard library.
+
+        See Also:
+            `ScriptForge.Platform service <https://tinyurl.com/ybuvx3v4>`_
         """
 
         # Mandatory class properties for service registration
@@ -1406,6 +1509,7 @@ class SFScriptForge:
         serviceproperties: dict = ...
         # Python helper functions
         py: str = ...
+        # region Properties
         @property
         def Architecture(self) -> str:
             """Gets the actual bit architecture"""
@@ -1419,8 +1523,27 @@ class SFScriptForge:
         def CurrentUser(self) -> str:
             """Gets the name of logged in user"""
         @property
+        def Fonts(sefl) -> Tuple[str, ...]:
+            """
+            Gets tuple of strings containing the names of all available fonts.
+            """
+        @property
+        def Locale(self) -> str:
+            """
+            Returns the operating system locale as a string in the format language-COUNTRY (la-CO).
+            
+            Examples: "en-US", "pt-BR", "fr-BE".
+            """
+        @property
         def Machine(self) -> str:
             """Gets the machine type like 'i386' or 'x86_64'"""
+        @property
+        def OfficeVersion(self) -> str:
+            """
+            The actual LibreOffice version expressed as 'LibreOffice w.x.y.z (The Document Foundation)'.
+            
+            Example: 'LibreOffice 7.1.1.2 (The Document Foundation, Debian and Ubuntu)
+            """
         @property
         def OSName(self) -> str:
             """Gets the name of the operating system like 'Linux' or 'Windows'"""
@@ -1443,6 +1566,13 @@ class SFScriptForge:
             Such as ``118-Ubuntu SMP Fri Sep 4 20:02:41 UTC 2020``
             """
         @property
+        def Printers(self) -> Tuple[str]:
+            """
+            The tuple of available printers.
+
+            The default printer is put in the first position (index = 0).
+            """
+        @property
         def Processor(self) -> str:
             """
             Gets the (real) processor name, e.g. 'amdk6'. Might return the same value as Machine.
@@ -1454,6 +1584,7 @@ class SFScriptForge:
             
             Such as ``Python 3.7.7``
             """
+        # endregion Properties
     # endregion SF_Platform CLASS
     
     # region SF_Region CLASS
@@ -1511,8 +1642,11 @@ class SFScriptForge:
         The Session service gathers various general-purpose methods about:
         - UNO introspection
         - the invocation of external scripts or programs
-        """
 
+        See Also:
+            `ScriptForge.Session service <https://tinyurl.com/yaf7co37>`_
+        """
+        # region CONST
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["ScriptForge.Session"]
@@ -1533,6 +1667,9 @@ class SFScriptForge:
         SCRIPTISOXT: Literal[
             "uno_packages"
         ]  # in an extension but the installation parameters are unknown (Python)
+        # endregion CONST
+        
+        # region Methods
         @classmethod
         def ExecuteBasicScript(
             cls, scope: str = ..., script: str = ..., *args: Any
@@ -1705,6 +1842,7 @@ class SFScriptForge:
                         "wiki.documentfoundation.org/api.php?hidebots=1&days=7&limit=50&action=feedrecentchanges&feedformat=rss"
                         )
             """
+        # endregion Methods
     # endregion SF_Session CLASS
     
     # region SF_String CLASS
@@ -1713,6 +1851,9 @@ class SFScriptForge:
         Focus on string manipulation, regular expressions, encodings and hashing algorithms.
         The methods implemented in Basic that are redundant with Python builtin functions
         are not duplicated
+
+        See Also:
+            `ScriptForge.String service <https://tinyurl.com/y9hm6agu>`_
         """
 
         # Mandatory class properties for service registration
@@ -1720,6 +1861,7 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.String"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def HashStr(cls, inputstr: str, algorithm: str) -> str:
             """
@@ -1939,6 +2081,34 @@ class SFScriptForge:
                 Tabs are expanded. Symbolic line breaks are replaced by their hard equivalents.
                 If the wrapped output has no content, the returned tuple is empty.
             """
+        # endregion Methods
+    
+        # region Properties
+        @property
+        def sfCR(self) -> str:
+            """Gets Carriage return: Chr(13)"""
+        @property
+        def sfCRLF(self) -> str:
+            """Gets Carriage return + Linefeed: Chr(13) & Chr(10)"""
+        @property
+        def sfLF(self) -> str:
+            """Gets Linefeed: Chr(10)"""
+        @property
+        def sfNEWLINE(self) -> str:
+            """
+            Gets Carriage return + Linefeed, which can be
+            
+            1) Chr(13) & Chr(10) or
+            
+            2) Linefeed: Chr(10)
+            
+            depending on the operating system.
+            """
+        @property
+        def sfCR(self) -> str:
+            """Gets Horizontal tabulation: Chr(9)"""
+        # endregion Properties
+    
     # endregion SF_String CLASS
     
     # region SF_TextStream CLASS
@@ -1946,6 +2116,9 @@ class SFScriptForge:
         """
         The TextStream service is used to sequentially read from and write to files opened or created
         using the ScriptForge.FileSystem service..
+
+        See Also:
+            `ScriptForge.TextStream service <https://tinyurl.com/y9ubyoel>`_
         """
 
         # Mandatory class properties for service registration
@@ -1953,20 +2126,8 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.TextStream"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
-        @property
-        def AtEndOfStream(self) -> bool:
-            """
-            In reading mode, True indicates that the end of the file has been reached
-            In write and append modes, or if the file is not ready => always True
-            The property should be invoked BEFORE each ReadLine() method:
-            A ReadLine() executed while AtEndOfStream is True will raise an error
-            """
-        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
-        @property
-        def Line(self) -> int:
-            """
-            Gets the number of lines read or written so far.
-            """
+
+        # region Methods
         def CloseFile(self) -> bool:
             """
             Empties the output buffer if relevant. Closes the actual input or output stream.
@@ -2011,8 +2172,51 @@ class SFScriptForge:
             Args:
                 line (str): the line to write, may be empty.
             """
+        # end region Methods
+
+
+
     # endregion SF_TextStream CLASS
-    
+
+        # region Properties
+        @property
+        def AtEndOfStream(self) -> bool:
+            """
+            In reading mode, True indicates that the end of the file has been reached
+            In write and append modes, or if the file is not ready => always True
+            The property should be invoked BEFORE each ReadLine() method:
+            A ReadLine() executed while AtEndOfStream is True will raise an error
+            """
+        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
+        @property
+        def Encoding(self) -> str:
+            """
+            Gets the character set to be used. The default encoding is ``UTF-8``.
+            """
+        @property
+        def FileName(self) -> str:
+            """
+            Gets the name of the current file either in URL format or in the native
+            operating system's format, depending on the current value of the FileNaming
+            property of the FileSystem service.
+            """
+        @property
+        def IOMode(self) -> str:
+            """
+            Gets the input/output mode. Possible values are ``READ``, ``WRITE`` or ``APPEND``.
+            """
+        @property
+        def Line(self) -> int:
+            """
+            Gets the number of lines read or written so far.
+            """
+        @property
+        def NewLine(self) -> str:
+            """
+            Gets/Sets the current delimiter to be inserted between two successive written lines.
+            The default value is the native line delimiter in the current operating system.
+            """
+        # endregion Properties
     # region SF_Timer CLASS
     class SF_Timer(SFServices):
         """
@@ -2306,6 +2510,9 @@ class SFDatabases:
         instead of the (RDBMS-dependent) normal surrounding character.
         SQL statements may be run in direct or indirect mode. In direct mode the statement is transferred literally
         without syntax checking nor review to the database engine.
+
+        See Also:
+            `SFDatabases.Database service <https://tinyurl.com/yd9y6xa7>`_
         """
 
         # Mandatory class properties for service registration
@@ -2313,6 +2520,7 @@ class SFDatabases:
         servicename: Literal["SFDatabases.Database"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls,
@@ -2453,6 +2661,27 @@ class SFDatabases:
             Returns:
                 Any: result
             """
+        # endregion Methods
+
+        # region Properties
+        @property
+        def Queries(self) -> Tuple[str, ...]:
+            """Gets the list of stored queries."""
+        @property
+        def Tables(self) -> Tuple[str, ...]:
+            """Gets the list of stored tables."""
+        @property
+        def XConnection(self) -> UNOXConnection:
+            """
+            Gets the UNO object representing the current database connection.
+            """
+        @property
+        def XMetaData(self) -> XDatabaseMetaData:
+            """
+            Gets the UNO object representing the metadata describing the database system attributes.
+            """
+        # endregion Properties
+
     # endregion SF_Database CLASS
 # endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
 
@@ -2475,8 +2704,11 @@ class SFDialogs:
 
         In non-modal mode, the floating dialog remains displayed until the dialog is terminated
         by code (Terminate()) or until the LibreOffice application stops.
-        """
 
+        See Also:
+            `SFDialogs.Dialog service <https://tinyurl.com/yckkehha>`_
+        """
+        # region CONST
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["SFDialogs.Dialog"]
@@ -2485,6 +2717,9 @@ class SFDialogs:
         # Class constants used together with the Execute() method
         OKBUTTON: Literal[1]
         CANCELBUTTON: Literal[0]
+        # endregion CONST
+
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls, container: str = ..., library: str = ..., dialogname: str = ...
@@ -2565,6 +2800,55 @@ class SFDialogs:
             Returns:
                 bool: True if termination is successful.
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Caption(self) -> str:
+            """Gets/Sets the title of the dialog."""
+        @property
+        def Height(self) -> int:
+            """Gets/Sets the height of the dialog box."""
+        @property
+        def Modal(self) -> int:
+            """Gets if the dialog box is currently in execution in modal mode."""
+        @property
+        def Name(self) -> str:
+            """Gets the name of the dialog"""
+        @property
+        def Page(self) -> int:
+            """
+            Gets/Sets A dialog may have several pages that can be traversed by 
+            the user step by step. The Page property of the Dialog object defines
+            which page of the dialog is active.
+            """
+        @property
+        def Visible(self) -> int:
+            """
+            Gets/Sets if the dialog box is visible on the desktop.
+            By default it is not visible until the Execute() method is run
+            and visible afterwards.
+            """
+        @property
+        def XDialogModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the dialog model.
+            
+            Refer to XControlModel and UnoControlDialogModel in Application Programming
+            Interface (API) documentation for detailed information.
+            """
+        @property
+        def XDialogView(self) -> XControl:
+            """
+            Gets the UNO object representing the dialog view.
+            
+            Refer to XControl and UnoControlDialog in Application Programming Interface
+            (API) documentation for detailed information.
+            """
+        @property
+        def Width(self) -> int:
+            """Gets/Sets the width of the dialog box."""
+        # endregion Properties
     # endregion SF_Dialog CLASS
     
     # region SF_DialogControl CLASS
@@ -2738,6 +3022,9 @@ class SFDialogs:
             """
     # endregion SF_DialogControl CLASS
 # endregion SFDialogs CLASS    (alias of SFDialogs Basic library)
+
+        
+
 
 # region SFDocuments CLASS    (alias of SFDocuments Basic library)
 class SFDocuments:
