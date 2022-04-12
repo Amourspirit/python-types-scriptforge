@@ -8,7 +8,9 @@ from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
 from ooo.lo.awt.x_control import XControl
 from ooo.lo.awt.x_control_model import XControlModel
 from ooo.lo.beans.property_value import PropertyValue
+from ooo.lo.chart.x_diagram import XDiagram
 from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
+from ooo.lo.drawing.x_shape import XShape
 from ooo.lo.frame.x_desktop import XDesktop
 from ooo.lo.lang.x_component import XComponent
 from ooo.lo.script.provider.x_script_provider import XScriptProvider
@@ -18,6 +20,7 @@ from ooo.lo.sdb.database_document import DatabaseDocument
 from ooo.lo.sdbc.x_connection import XConnection as UNOXConnection
 from ooo.lo.sdbc.x_database_meta_data import XDatabaseMetaData
 from ooo.lo.table.x_cell_range import XCellRange
+from ooo.lo.table.x_table_chart import XTableChart
 from ooo.lo.uno.x_interface import XInterface
 from ooo.lo.uno.x_component_context import XComponentContext
 from ooo.lo.util.date_time import DateTime as UNODateTime
@@ -4801,6 +4804,7 @@ class SFDocuments:
         servicename: Literal["SFDocuments.Chart"]
         servicesynonyms: tuple
         serviceproperties: dict
+        # region Methods
         def Resize(
             self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...
         ) -> bool:
@@ -4850,6 +4854,106 @@ class SFDocuments:
             See Also:
                 `SF_Chart Help ExportToFile <https://tinyurl.com/ydcexzky#ExportToFile>`_
             """
+        # endregion Methods
+
+        # region Properties
+        @property
+        def ChartType(self) -> str:
+            """
+            Gets/Sets the chart type as a string that can assume one of the following values:
+            ``Pie``, ``Bar``, ``Donut``, ``Column``, ``Area``, ``Line``, ``XY``, ``Bubble``, ``Net``.
+            """
+        @property
+        def Deep(self) -> bool:
+            """
+            Gets/Sets if the chart is three-dimensional.
+            
+            When ``True`` indicates that the chart is three-dimensional and each series is arranged in the z-direction.
+            
+            When ``False`` series are arranged considering only two dimensions.
+            """
+        
+        @property
+        def Dim3D(self) -> bool | str:
+            """
+            Gets/Sets if the chart is displayed with 3D elements.
+            
+            When setting as string the value must be either "Bar", ``Cylinder``, ``Cone`` or ``Pyramid``.
+            
+            When ``True`` value is specified, then the chart is displayed using 3D bars.
+            """
+        @property
+        def Exploded(self) -> float:
+            """
+            Gets/Sets how much pie segments are offset from the chart center as a percentage of the radius.
+            
+            Applicable to pie and donut charts only.
+            """
+        @property
+        def Filled(self) -> bool:
+            """
+            Gets/Sets if a filled net chart
+            
+            When ``True``, specifies a filled net chart.
+            
+            Applicable to net charts only.
+            """
+        @property
+        def Legend(self) -> bool:
+            """
+            Gets/Sets whether or not the chart has a legend.
+            """
+        @property
+        def Percent(self) -> bool:
+            """
+            Gets/Sets percent
+            
+            When ``True``, chart series are stacked and each category sums up to 100%.
+            
+            Applicable to Area, Bar, Bubble, Column and Net charts.
+            """ 
+        @property
+        def Stacked(self) -> bool:
+            """
+            Gets/Sets whether or not the chart series are stacked.
+            
+            When ``True``, chart series are stacked and each category sums up to 100%.
+            
+            Applicable to Area, Bar, Bubble, Column and Net charts.
+            """ 
+        @property
+        def Title(self) -> str:
+            """Gets/Sets the main title of the chart."""
+        @property
+        def XTitle(self) -> str:
+            """"Gets/Sets the title of the X axis."""
+        @property
+        def YTitle(self) -> str:
+            """"Gets/Sets title of the Y axis."""
+        @property
+        def XChartObj(self) -> object:
+            """
+            Gets the object representing the chart, which is an instance of the ScChartObj class.
+            
+            See Also:
+                `ScChartObj <https://docs.libreoffice.org/sc/html/classScChartObj.html>`_
+            """
+        @property
+        def XDiagram(self) -> XDiagram:
+            """
+            Gets the ``com.sun.star.chart.XDiagram`` object representing the diagram of the chart.
+            """
+        @property
+        def XShape(self) -> XShape:
+            """
+            Gets the ``com.sun.star.drawing.XShape`` object representing the shape of the chart.
+            """
+        @property
+        def XTableChart(self) -> XTableChart:
+            """
+            Gets the ``com.sun.star.table.XTableChart`` object representing the data being displayed in the chart.
+            """
+        # endregion Properties
     # endregion SF_Chart CLASS
     
     # region SF_Form CLASS
