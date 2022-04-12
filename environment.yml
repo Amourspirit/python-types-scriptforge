@@ -3,76 +3,89 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - appdirs=1.4.4=pyhd3eb1b0_0
-  - attrs=21.4.0=pyhd3eb1b0_0
-  - black=19.10b0=py_0
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - black=22.3.0=pyhd8ed1ab_0
   - bleach=5.0.0=pyhd8ed1ab_0
-  - brotlipy=0.7.0=py310he2412df_1004
-  - bzip2=1.0.8=he774522_0
-  - ca-certificates=2021.10.8=h5b45459_0
-  - certifi=2021.10.8=py310h5588dad_2
-  - cffi=1.15.0=py310hcbf9ad4_0
+  - brotlipy=0.7.0=py310h5764c6d_1004
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2021.10.8=ha878542_0
+  - certifi=2021.10.8=py310hff52083_2
+  - cffi=1.15.0=py310h0fdd8cc_0
   - charset-normalizer=2.0.12=pyhd8ed1ab_0
-  - click=8.0.4=py310haa95532_0
-  - cmarkgfm=0.8.0=py310he2412df_1
-  - colorama=0.4.4=pyhd3eb1b0_0
+  - click=8.1.2=py310hff52083_0
+  - cmarkgfm=0.8.0=py310h5764c6d_1
+  - colorama=0.4.4=pyh9f0ad1d_0
   - commonmark=0.9.1=py_0
-  - cryptography=36.0.2=py310ha857299_1
+  - cryptography=36.0.0=py310h9ce1e76_0
   - dataclasses=0.8=pyhc8e2a94_3
-  - future=0.18.2=py310h5588dad_5
+  - dbus=1.13.6=h5008d03_3
+  - expat=2.4.8=h27087fc_0
+  - future=0.18.2=py310hff52083_5
+  - gettext=0.19.8.1=h73d1719_1008
   - idna=3.3=pyhd8ed1ab_0
-  - importlib-metadata=4.11.3=py310h5588dad_1
+  - importlib-metadata=4.11.3=py310hff52083_1
   - importlib_metadata=4.11.3=hd8ed1ab_1
-  - keyring=23.4.0=py310h5588dad_2
-  - libffi=3.4.2=h604cdb4_1
-  - mypy_extensions=0.4.3=py310haa95532_1
-  - ooouno=0.1.13=pyhd8ed1ab_0
-  - openssl=1.1.1n=h8ffe710_0
+  - jeepney=0.8.0=pyhd8ed1ab_0
+  - keyring=23.4.0=py310hff52083_2
+  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=11.2.0=h1d223b6_15
+  - libglib=2.70.2=h174f98d_4
+  - libgomp=11.2.0=h1d223b6_15
+  - libiconv=1.16=h516909a_0
+  - libnsl=2.0.0=h7f98852_0
+  - libstdcxx-ng=11.2.0=he4da1e4_15
+  - libuuid=2.32.1=h7f98852_1000
+  - libzlib=1.2.11=h166bdaf_1014
+  - mypy_extensions=0.4.3=py310hff52083_5
+  - ncurses=6.3=h27087fc_1
+  - openssl=3.0.2=h166bdaf_1
   - packaging=21.3=pyhd8ed1ab_0
-  - pathspec=0.7.0=py_0
-  - pip=21.2.4=py310haa95532_0
+  - pathspec=0.9.0=pyhd8ed1ab_0
+  - pcre=8.45=h9c3ff4c_0
+  - pip=22.0.4=pyhd8ed1ab_0
   - pkginfo=1.8.2=pyhd8ed1ab_0
+  - platformdirs=2.5.1=pyhd8ed1ab_0
   - pycparser=2.21=pyhd8ed1ab_0
   - pygments=2.11.2=pyhd8ed1ab_0
   - pyopenssl=22.0.0=pyhd8ed1ab_0
   - pyparsing=3.0.8=pyhd8ed1ab_0
-  - pysocks=1.7.1=py310h5588dad_5
-  - python=3.10.4=hbb2ffb3_0
+  - pysocks=1.7.1=py310hff52083_5
+  - python=3.10.4=h2660328_0_cpython
   - python_abi=3.10=2_cp310
-  - pywin32-ctypes=0.2.0=py310h5588dad_1005
+  - readline=8.1=h46c0cb4_0
   - readme_renderer=34.0=pyhd8ed1ab_0
-  - regex=2022.3.15=py310h2bbff1b_0
   - requests=2.27.1=pyhd8ed1ab_0
   - requests-toolbelt=0.9.1=py_0
   - rfc3986=2.0.0=pyhd8ed1ab_0
   - rich=12.2.0=pyhd8ed1ab_0
-  - setuptools=58.0.4=py310haa95532_0
+  - secretstorage=3.3.1=py310hff52083_1
+  - setuptools=62.1.0=py310hff52083_0
   - six=1.16.0=pyh6c4a22f_0
-  - sqlite=3.38.2=h2bbff1b_0
-  - tk=8.6.11=h2bbff1b_0
-  - toml=0.10.2=pyhd3eb1b0_0
+  - sqlite=3.38.2=h4ff8645_0
+  - tk=8.6.12=h27826a3_0
+  - tomli=2.0.1=pyhd8ed1ab_0
   - twine=4.0.0=pyhd8ed1ab_0
-  - typed-ast=1.4.3=py310h2bbff1b_1
-  - typing_extensions=4.1.1=pyh06a4308_0
-  - tzdata=2022a=hda174b7_0
+  - typed-ast=1.5.2=py310h6acc77f_0
+  - typing_extensions=4.1.1=pyha770c72_0
+  - tzdata=2022a=h191b570_0
   - urllib3=1.26.9=pyhd8ed1ab_0
-  - vc=14.2=h21ff451_1
-  - vs2015_runtime=14.27.29016=h5e58377_2
   - webencodings=0.5.1=py_1
-  - wheel=0.37.1=pyhd3eb1b0_0
-  - win_inet_pton=1.1.0=py310h5588dad_4
-  - wincertstore=0.2=py310haa95532_2
-  - xz=5.2.5=h62dcd97_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xz=5.2.5=h516909a_1
   - zipp=3.8.0=pyhd8ed1ab_0
-  - zlib=1.2.11=hbd8134f_5
+  - zlib=1.2.11=h166bdaf_1014
   - pip:
     - alabaster==0.7.12
+    - appdirs==1.4.4
     - babel==2.9.1
     - docutils==0.17.1
     - esbonio==0.10.3
     - imagesize==1.3.0
     - jinja2==3.1.1
     - markupsafe==2.1.1
+    - ooouno==0.1.13
     - pydantic==1.8.2
     - pygls==0.11.3
     - pyspellchecker==0.6.3
@@ -86,5 +99,4 @@ dependencies:
     - sphinxcontrib-qthelp==1.0.3
     - sphinxcontrib-serializinghtml==1.1.5
     - typeguard==2.13.3
-    - types-sourceforge==0.1.1
 prefix: env
