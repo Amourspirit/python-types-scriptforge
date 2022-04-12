@@ -2333,13 +2333,14 @@ class SFScriptForge:
                 - Access to the underlying "documents"
             """
 
-        # Mandatory class properties for service registration
+        # region Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["ScriptForge.UI"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # endregion Mandatory class properties for service registration
 
-        # Class constants
+        # region CONST
         MACROEXECALWAYS: Literal[2]
         MACROEXECNEVER: Literal[1]
         MACROEXECNORMAL: Literal[0]
@@ -2349,6 +2350,8 @@ class SFScriptForge:
         IMPRESSDOCUMENT: Literal["Impress"]
         MATHDOCUMENT: Literal["Math"]
         WRITERDOCUMENT: Literal["Writer"]
+        # endregion CONST
+
         # region Properties
         @property
         def ActiveWindow(self) -> str:
@@ -4835,9 +4838,9 @@ class SFDocuments:
     # region SF_CalcReference CLASS
     class SF_CalcReference(SFServices):
         """
-            The SF_CalcReference class has as unique role to hold sheet and range references.
-            They are implemented in Basic as Type ... End Type data structures
-            """
+        The SF_CalcReference class has as unique role to hold sheet and range references.
+        They are implemented in Basic as Type ... End Type data structures
+        """
 
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
@@ -5662,13 +5665,16 @@ class SFDocuments:
             `SF_Writer Help <https://tinyurl.com/y7kv226a>`_
         """
 
-        # Mandatory class properties for service registration
+        # region Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["SFDocuments.Writer"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # endregion Mandatory class properties for service registration
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty: bool
+
+        # region Methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -5739,6 +5745,7 @@ class SFDocuments:
             See Also:
                 `SF_Writer Help PrintOut <https://tinyurl.com/y7kv226a#PrintOut>`_
             """
+        # endregion Methods
     # endregion SF_Writer CLASS
 # endregion SFDocuments CLASS    (alias of SFDocuments Basic library)
 
