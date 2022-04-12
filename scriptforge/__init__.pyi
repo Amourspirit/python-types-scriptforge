@@ -108,7 +108,7 @@ class ScriptForge(object, metaclass=_Singleton):
     servicesmodules: dict
     def __init__(self, hostname: str = ..., port: int = ...):
         """
-         Because singleton, constructor is executed only once while Python active
+        Because singleton, constructor is executed only once while Python active
         Arguments are mandatory when Python and LibreOffice run in separate processes
 
         Args:
@@ -405,10 +405,13 @@ class SFScriptForge:
         See Also:
            `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
         """
-
+        # region Class required
         serviceimplementation: Literal["python"]
         servicename: Literal["ScriptForge.Basic"]
         servicesynonyms: Tuple[str, str] = ...
+        # endregion Class required
+
+        # region CONST
         # Basic helper functions invocation
         module: Literal["SF_PythonHelper"]
         # Message box constants
@@ -432,6 +435,9 @@ class SFScriptForge:
         IDOK: Literal[1]
         IDRETRY: Literal[4]
         IDYES: Literal[6]
+        # endregion CONST
+
+        # region Methods
         @classmethod
         def CDate(cls, datevalue: Any) -> datetime.datetime | object: ...
         @staticmethod
@@ -728,6 +734,11 @@ class SFScriptForge:
         def Now(cls) -> datetime.datetime: ...
         @classmethod
         def RGB(cls, red: int, green: int, blue: int) -> int: ...
+        @classmethod
+        def Xray(cls, unoobject: object | None = ...) -> Any: ...
+        # endregion Methods
+
+        # region Properties
         @property
         def StarDesktop(self) -> XDesktop: ...
         starDesktop, stardesktop = StarDesktop, StarDesktop
@@ -756,8 +767,7 @@ class SFScriptForge:
             ThisDatabaseDocument,
             ThisDatabaseDocument,
         )
-        @classmethod
-        def Xray(cls, unoobject: object | None = ...) -> Any: ...
+        # endregion Properties
     # endregion SF_Basic CLASS
     
     # region SF_Dictionary CLASS
