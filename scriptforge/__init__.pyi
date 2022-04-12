@@ -2360,14 +2360,6 @@ class SFScriptForge:
             When "" is returned, the window could not be identified.
             """
         activeWindow, activewindow = ActiveWindow, ActiveWindow
-        @property
-        def Documents(self) -> Tuple[str, ...]:
-            """
-            Gets The list of the currently open documents. Special windows are ignored.
-            This list consists of a zero-based one dimensional array either of
-            filenames (in SF_FileSystem.FileNaming notation) or of window titles
-            for unsaved documents.
-            """
         # endregion Properties
 
         # region Methods
@@ -2434,7 +2426,12 @@ class SFScriptForge:
             """
         def GetDocument(
             self, windowname: str | XComponent | DatabaseDocument = ...
-        ) -> "SFDocuments.SF_Document":
+        ) -> (SFDocuments.SF_Base
+              | SFDocuments.SF_Calc
+              | SFDocuments.SF_Chart
+              | SFDocuments.SF_Document
+              | SFDocuments.SF_Form
+              | SFDocuments.SF_Writer):
             """
             Returns a SFDocuments.SF_Document object referring to the active window or the given window.
 
