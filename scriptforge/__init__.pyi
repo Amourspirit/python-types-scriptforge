@@ -384,7 +384,7 @@ class SFScriptForge:
             not as any of the datetime objects.
             """
     # endregion SF_Array CLASS
-    
+
     # region SF_Basic CLASS
     class SF_Basic(SFServices, metaclass=_Singleton):
         """
@@ -3272,9 +3272,14 @@ class SFDocuments:
         """
         The methods and properties are generic for all types of documents: they are combined in the
         current SF_Document class
-            - saving, closing documents
-            - accessing their standard or custom properties
+            * saving, closing documents
+            * accessing their standard or custom properties
+
         Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
+
+
+        See Also:
+            `SFDocuments.Document service <https://tinyurl.com/ybujrgjk>`_
         """
 
         # Mandatory class properties for service registration
@@ -3284,6 +3289,7 @@ class SFDocuments:
         serviceproperties: dict
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty: bool
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -3421,6 +3427,93 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
+        # region methods
+        
+        # region Properties
+        @property
+        def CustomProperties(self) -> SFScriptForge.SF_Dictionary:
+            """
+            Gets/Sets a ScriptForge.Dictionary object instance.
+            
+            After update, can be passed again to the property for updating the document.
+            Individual items of the dictionary may be either strings, numbers,
+            (Basic) dates or com.sun.star.util.Duration items.
+            """
+        @property
+        def Description(self) -> str:
+            """
+            Gets/Sets the Description property of the document (also known as "Comments")
+            """
+        @property
+        def DocumentProperties (self) -> SFScriptForge.SF_Dictionary:
+            """
+            Gets a ScriptForge.Dictionary object containing all the entries.
+            
+            Document statistics are included. Note that they are specific to the type of document.
+            As an example, a Calc document includes a "CellCount" entry. Other documents do not.
+            """
+        @property
+        def DocumentType(self) -> str:
+            """
+            Gets the value with the document type ("Base", "Calc", "Writer", etc)
+            """
+        @property
+        def IsBase(self) -> bool:
+            """
+            Gets if instance is Base document.
+            """
+        @property
+        def IsCalc(self) -> bool:
+            """
+            Gets if instance is Calc document.
+            """
+        @property
+        def IsDraw(self) -> bool:
+            """
+            Gets if instance is Draw document.
+            """
+        @property
+        def IsImpress(self) -> bool:
+            """
+            Gets if instance is Draw document.
+            """
+        @property
+        def IsMath(self) -> bool:
+            """
+            Gets if instance is Math document.
+            """
+        @property
+        def IsWriter(self) -> bool:
+            """
+            Gets if instance is Writer document.
+            """
+        @property
+        def Keywords(self) -> str:
+            """
+            Gets/Sets the Keywords property of the document. Represented as a comma-separated list of keywords
+            """
+        @property
+        def Readonly(self) -> bool:
+            """
+            Gets if the document is actually in read-only mode.
+            """
+        @property
+        def Subject(self) -> str:
+            """
+            Gets/Sets the Subject property of the document.
+            """
+        @property
+        def Title(self) -> str:
+            """
+            Gets/Sets the Title property of the document.
+            """
+        @property
+        def XComponent(self) -> XComponent:
+            """
+            Gets The UNO object com.sun.star.lang.XComponent
+            or com.sun.star.comp.dba.OfficeDatabaseDocument representing the document
+            """
+        # endregion Properties
     # endregion SF_Document CLASS
     
     # region SF_Base CLASS
