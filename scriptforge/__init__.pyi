@@ -4,7 +4,6 @@ import time
 from typing import Any, Optional, List, Tuple, TypeVar, overload
 from typing_extensions import Literal
 from ooo.lo.awt.x_window import XWindow
-from ooo.lo.awt.tree.x_tree_node import XTreeNode
 from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
 from ooo.lo.awt.x_control import XControl
 from ooo.lo.awt.x_control_model import XControlModel
@@ -2858,6 +2857,9 @@ class SFDialogs:
         The focus is clearly set on getting and setting the values displayed by the controls of the dialog box,
         not on their formatting.
         A special attention is given to controls with type TreeControl.
+
+        See Also:
+            `SFDialogs.DialogControl service <https://tinyurl.com/yb27tk36>'_
         """
 
         # Mandatory class properties for service registration
@@ -2866,17 +2868,7 @@ class SFDialogs:
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
 
-        # Root related properties do not start with X and, nevertheless, return a UNO object
-        @property
-        def CurrentNode(self) -> XTreeNode:
-            """
-            The CurrentNode property returns the currently selected node.
-            It returns Empty when there is no node selected.
-            When there are several selections, it returns the topmost node among the selected ones.
-            """
-        @property
-        def RootNode(self) -> XTreeNode:
-            """The RootNode property returns the last root node of a tree control"""
+        # region Methods
         def AddSubNode(
             self, parentnode: XMutableTreeNode, displayvalue: str, datavalue: str = ...,
         ) -> XMutableTreeNode:
@@ -3020,11 +3012,253 @@ class SFDialogs:
             Returns:
                 bool: True if insertion is successful
             """
+        # endregion Methods
+
+        # region Properties
+        # Root related properties do not start with X and, nevertheless, return a UNO object
+        @property
+        def Cancel(self) -> bool:
+            """
+            Gets/Sets if a command button has or not the behaviour of a Cancel button.
+            
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Caption(self) -> str:
+            """
+            Gets/Sets the text associated with the control.
+
+            Applicable Controls:
+                * Button
+                * CheckBox
+                * FixedLine
+                * FixedText
+                * GroupBox
+                * RadioButton
+            """
+        @property
+        def ControlType(self) -> str:
+            """
+            Gets/Sets the text associated with the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def CurrentNode(self) -> XMutableTreeNode:
+            """
+            The CurrentNode property returns the currently selected node.
+            It returns Empty when there is no node selected.
+            When there are several selections, it returns the topmost node among the selected ones.
+            
+            Applicable Controls:
+                TreeControl
+            """
+        @property
+        def Default(self) -> bool:
+            """
+            Gets/Sets if a command button is the default (OK) button.
+            
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Enabled(self) -> bool:
+            """
+            Gets/Sets if the control is accessible with the cursor.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def Format(self) -> str:
+            """
+            Gets/Sets the format used to display dates and times.
+            
+            For dates: "Standard (short)", "Standard (short YY)", "Standard (short YYYY)",
+            "Standard (long)", "DD/MM/YY", "MM/DD/YY", "YY/MM/DD", "DD/MM/YYYY", "MM/DD/YYYY",
+            "YYYY/MM/DD", "YY-MM-DD", "YYYY-MM-DD".
+
+            For times: "24h short", "24h long", "12h short", "12h long".
+
+            Applicable Controls:
+                * DateField
+                * TimeField
+                * FormattedField (read-only)
+            """
+        @property
+        def ListCount(self) -> int:
+            """
+            Gets the number of rows in a ListBox, a ComboBox or a TableControl.
+            
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+                * TableControl  
+            """
+        @property
+        def ListIndex(self) -> int:
+            """
+            Gets/Sets which item is selected in a ListBox, a ComboBox or a TableControl.
+            
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+                * TableControl  
+            """
+        @property
+        def Locked(self) -> bool:
+            """
+            Gets/Sets if the control is read-only.
+            
+            Applicable Controls:
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FormattedField
+                * ListBox
+                * NumericField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def MultiSelect(self) -> bool:
+            """
+            Gets/Sets if a user can make multiple selections in a listbox.
+            
+            Applicable Controls:
+                ListBox
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Page(self) -> int:
+            """
+            Gets/Sets the page of the dialog on which the control is visible.
+            
+            A dialog may have several pages that can be traversed by the user step by step.
+            The Page property of the Dialog object defines which page of the dialog is active.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Parent(self) -> SFDialogs.SF_Dialog:
+            """
+            Gets the parent SFDialogs.Dialog class object instance.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Picture(self) -> str:
+            """
+            Gets/Sets the file name containing a bitmap or other type of graphic to be
+            displayed on the specified control. The filename must comply with the
+            FileNaming attribute of the ``ScriptForge.FileSystem`` service.
+
+            Applicable Controls:
+                * Button
+                * ImageControl
+            """
+        @property
+        def RootNode(self) -> XMutableTreeNode:
+            """
+            Gets the RootNode property returns the last root node of a tree control
+
+            Applicable Controls:
+                TreeControl
+            """
+        @property
+        def RowSource(self) -> Tuple[str, ...]:
+            """
+            Gets/Sets the data contained in a combobox or a listbox.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def Text(self) -> str:
+            """
+            Gets the text being displayed by the control.
+
+            Applicable Controls:
+                * ComboBox
+                * FileControl
+                * FormattedField
+                * PatternField
+                * TextField
+            """
+        @property
+        def TipText(self) -> str:
+            """
+            Gets/Sets the text that appears as a tooltip when you hold the mouse pointer over the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def TripleState(self) -> bool:
+            """
+            Gets/Sets if the control may have the state "don't know".
+            
+            Applicable Controls:
+                CheckBox
+            """
+        @property
+        def Value(self) -> Any:
+            """
+            Gets/Sets control type.
+
+            See Also:
+                `The Value property <https://tinyurl.com/yb27tk36#hd_id81598540704978>`_
+            """
+        @property
+        def Visible(self) -> bool:
+            """
+            Gets/Sets if the control is hidden or visible.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the control model.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlView(self) -> XControl:
+            """
+            Gets the UNO object representing the control view.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlView(self) -> XMutableTreeNode:
+            """
+            Gets the UNO object representing the tree control data model.
+            
+            Applicable Controls:
+                TreeControl
+            """
+        # endregion Properties
+        
     # endregion SF_DialogControl CLASS
 # endregion SFDialogs CLASS    (alias of SFDialogs Basic library)
-
-        
-
 
 # region SFDocuments CLASS    (alias of SFDocuments Basic library)
 class SFDocuments:
