@@ -4,9 +4,10 @@ import time
 from typing import Any, Optional, List, Tuple, TypeVar, overload
 from typing_extensions import Literal
 from ooo.lo.awt.x_window import XWindow
-from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
 from ooo.lo.awt.x_control import XControl
 from ooo.lo.awt.x_control_model import XControlModel
+from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
+from ooo.lo.awt.tree.x_mutable_tree_data_model  import XMutableTreeDataModel 
 from ooo.lo.beans.property_value import PropertyValue
 from ooo.lo.chart.x_diagram import XDiagram
 from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
@@ -27,6 +28,7 @@ from ooo.lo.uno.x_component_context import XComponentContext
 from ooo.lo.util.date_time import DateTime as UNODateTime
 from ooo.lo.util.date import Date as UNODate
 from ooo.lo.util.time import Time as UNOTime
+from ooo.dyn.form.list_source_type import ListSourceType
 # endregion IMPORTS
 
 # region Types
@@ -2175,11 +2177,7 @@ class SFScriptForge:
             Args:
                 line (str): the line to write, may be empty.
             """
-        # end region Methods
-
-
-
-    # endregion SF_TextStream CLASS
+        # endregion Methods
 
         # region Properties
         @property
@@ -2220,6 +2218,9 @@ class SFScriptForge:
             The default value is the native line delimiter in the current operating system.
             """
         # endregion Properties
+
+    # endregion SF_TextStream CLASS
+
     # region SF_Timer CLASS
     class SF_Timer(SFServices):
         """
@@ -3252,7 +3253,7 @@ class SFDialogs:
                 All
             """
         @property
-        def XControlView(self) -> XMutableTreeNode:
+        def XTreeDataModel(self) -> XMutableTreeDataModel:
             """
             Gets the UNO object representing the tree control data model.
             
@@ -5260,6 +5261,7 @@ class SFDocuments:
         servicename: Literal["SFDocuments.FormControl"]
         servicesynonyms: tuple
         serviceproperties: dict
+        # region Methods
         @overload
         def Controls(self,) -> Tuple[str, ...]:
             """
@@ -5295,6 +5297,302 @@ class SFDocuments:
             See Also:
                 `SF_FormControl Help SetFocus <https://tinyurl.com/y8d9qlcl#SetFocus>`_
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Action(self) -> str:
+            """
+            Gets/Sets the action triggered when the button is clicked.
+            
+            Accepted values are:
+                * none
+                * submitForm
+                * resetForm
+                * refreshForm
+                * moveToFirst
+                * moveToLast
+                * moveToNext
+                * moveToPrev
+                * saveRecord
+                * moveToNew
+                * deleteRecord
+                * undoRecord
+
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Action(self) -> str:
+            """
+            Gets/Sets the text displayed by the control.
+
+            Applicable Controls:
+                * Button
+                * CheckBox
+                * FixedText
+                * GroupBox
+                * RadioButton
+            """
+        @property
+        def ControlSource(self) -> str:
+            """
+            Gets the rowset field mapped onto the current control.
+            
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FormattedField
+                * ImageControl
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def ControlType(self) -> str:
+            """
+            Gets control type from one of the controls listed in ``ControlSource`` property.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def Default(self) -> bool:
+            """
+            Gets/Sets if a command button is the default OK button.
+
+            Applicable Controls:
+                Button
+            """
+        @property
+        def DefaultValue(self) -> Any:
+            """
+            Gets/Sets the default value used to initialize a control in a new record.
+            
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FormattedField
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * SpinButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def Enabled(self) -> bool:
+            """
+            Gets/Sets if the control is accessible with the cursor.
+
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def Format(self) -> str:
+            """
+            Gets/Sets the format used to display dates and times.
+            
+            Must be one of following strings for dates:
+                * "Standard (short)"
+                * "Standard (short YY)"
+                * "Standard (short YYYY)"
+                * "Standard (long)"
+                * "DD/MM/YY"
+                * "MM/DD/YY"
+                * "YY/MM/DD"
+                * "DD/MM/YYYY"
+                * "MM/DD/YYYY"
+                * "YYYY/MM/DD"
+                * "YY-MM-DD"
+                * "YYYY-MM-DD"
+
+            Applicable Controls:
+                * DateField
+                * TimeField
+                * FormattedField (read-only)
+            """
+        @property
+        def ListCount(sefl) -> int:
+            """
+            Gets the number of rows in a ListBox or a ComboBox.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def ListIndex(sefl) -> int:
+            """
+            Gets/Sets which item is selected in a ListBox or ComboBox.
+
+            In case of multiple selection, the index of the first item
+            is returned or only one item is set.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def ListSource(self) -> ListSourceType:
+            """
+            Gets/Sets the type of data contained in a combobox or a listbox.
+
+            It must be one of the com.sun.star.form.ListSourceType.* constants.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def Locked(self) -> bool:
+            """
+            Gets/Sets if the control is read-only.
+
+            Applicable Controls:
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FileControl
+                * FormattedField
+                * ImageControl
+                * ListBox
+                * NumericField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def MultiSelect(self) -> bool:
+            """
+            Gets/Sets if the user can select multiple items in a listbox.
+
+            Applicable Controls:
+                ListBox
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_FormControl:
+            """
+            Gets parent type.
+            
+            Depending on the parent type, a form, a subform or a tablecontrol,
+            returns the parent ``SFDocuments.Form`` or ``SFDocuments.FormControl``
+            class object instance.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets/Sets the file name containing a bitmap or other type of graphic to be displayed on the control.
+
+            The filename must comply with the FileNaming attribute of the ``ScriptForge.FileSystem`` service.
+
+            Applicable Controls:
+                * Button
+                * ImageButton
+                * ImageControl
+            """
+        @property
+        def Required(self) -> bool:
+            """
+            Gets/Sets if a control is said required when the underlying data must not contain a null value.
+
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * SpinButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def Text(self) -> str:
+            """
+            Gets the text being displayed by the control.
+
+            Applicable Controls:
+                * ComboBox
+                * DateField
+                * FileControl
+                * FormattedField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def TipText(self) -> str:
+            """
+            Gets/Sets the text that appears as a tooltip when you hold the mouse pointer over the control.
+
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def TripleState(self) -> bool:
+            """
+            Gets/Sets if the control may have the state "don't know".
+            
+            Applicable Controls:
+                CheckBox
+            """
+        @property
+        def Value(self) -> Any:
+            """
+            Gets/Sets control type.
+
+            See Also:
+                `The Value property <https://tinyurl.com/yb27tk36#hd_id81598540704978>`_
+            """
+        @property
+        def Visible(self) -> bool:
+            """
+            Gets/Sets if the control is hidden or visible.
+            
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def XControlModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the control model.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlView(self) -> XControl:
+            """
+            Gets the UNO object representing the control view.
+            
+            Applicable Controls:
+                All
+            """
+        # endregion Properties
     # endregion SF_FormControl CLASS
     
     # region SF_Writer CLASS
