@@ -3427,7 +3427,7 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
-        # region methods
+        # endregion methods
         
         # region Properties
         @property
@@ -3522,6 +3522,9 @@ class SFDocuments:
         The SF_Base module is provided mainly to block parent properties that are NOT applicable to Base documents
         In addition, it provides methods to identify form documents and access their internal forms
         (read more elsewhere (the "SFDocuments.Form" service) about this subject)
+
+        See Also:
+            `SFDocuments.Base service <https://tinyurl.com/ya4lp2mq>`_
         """
 
         # Mandatory class properties for service registration
@@ -3529,6 +3532,7 @@ class SFDocuments:
         servicename = Literal["SFDocuments.Base"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = "") -> Tuple[str]:
             """
@@ -3639,6 +3643,7 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
+        # endregion methods
     # endregion SF_Base CLASS
     
     # region SF_Calc CLASS
@@ -3659,6 +3664,7 @@ class SFDocuments:
         serviceproperties: dict
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -3687,7 +3693,7 @@ class SFDocuments:
             Returns:
                 int: Returns the leftmost column number in a given range or sheet.
             """
-        def FirstRow(self, rangename) -> int:
+        def FirstRow(self, rangename: str) -> int:
             """
             Returns the First used column in a given range.
 
@@ -4748,6 +4754,20 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help SortRange <https://tinyurl.com/y7jwr7b7#SortRange>`_
             """
+        # endregion methods
+
+        # region Properties
+        @property
+        def CurrentSelection(self) -> str | Tuple[str, ...]:
+            """
+            Gets/Sets the single selected range as a string or the list of selected ranges.
+            """
+        @property
+        def Sheets(self) -> Tuple[str, ...]:
+            """
+            Gets a tuple with the names of all existing sheets.
+            """
+        # endregion Properties
     # endregion SF_Calc CLASS
     
     # region SF_CalcReference CLASS
