@@ -40,6 +40,8 @@ ses = CreateScriptService('ScriptForge.Session')
 txt = CreateScriptService('ScriptForge.String')
 sfui = CreateScriptService('ScriptForge.UI')
 clc = CreateScriptService('SFDocuments.Calc')
+dct = CreateScriptService('ScriptForge.Dictionary')
+arr = CreateScriptService('ScriptForge.Array')
 
 sfs = CreateScriptService('ScriptForge.String')
     >>> sfs.HashStr("œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬", "MD5")
