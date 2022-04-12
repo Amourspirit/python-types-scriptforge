@@ -11,6 +11,7 @@ from ooo.lo.beans.property_value import PropertyValue
 from ooo.lo.chart.x_diagram import XDiagram
 from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
 from ooo.lo.drawing.x_shape import XShape
+from ooo.lo.form.x_form import XForm
 from ooo.lo.frame.x_desktop import XDesktop
 from ooo.lo.lang.x_component import XComponent
 from ooo.lo.script.provider.x_script_provider import XScriptProvider
@@ -4974,6 +4975,8 @@ class SFDocuments:
         servicename: Literal["SFDocuments.Form"]
         servicesynonyms: tuple
         serviceproperties: dict
+
+        # region Methods
         def Activate(self) -> bool:
             """
             Sets the focus on the current Form instance. Returns True if focusing was successful.
@@ -5152,6 +5155,92 @@ class SFDocuments:
             See Also:
                 `SF_Form Help Subforms <https://tinyurl.com/y72zdzjy#Subforms>`_
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def AllowDeletes(self) -> bool:
+            """
+            Gets/Sets if the form allows to delete records.
+            """
+        @property
+        def AllowInserts(self) -> bool:
+            """
+            Gets/Sets if the form allows to add records.
+            """
+        @property
+        def AllowUpdates(self) -> bool:
+            """
+            Gets/Sets if the form allows to update records.
+            """
+        @property
+        def BaseForm(self) -> str:
+            """
+            Gets the hierarchical name of the Base Form containing the actual form.
+            """
+        @property
+        def Bookmark(self) -> Any:
+            """
+            Gets/Sets uniquely the current record of the form's underlying table, query or SQL statement.
+            """
+        @property
+        def CurrentRecord(self) -> int:
+            """
+            Gets/Sets the current record in the dataset being viewed on a form.
+            
+            If the row number is positive, the cursor moves to the given row number
+            with respect to the beginning of the result set. Row count starts at ``1``.
+            If the given row number is negative, the cursor moves to an absolute
+            row position with respect to the end of the result set.
+            Row ``-1`` refers to the last row in the result set.
+            """
+        @property
+        def Filter(self) -> bool:
+            """
+            Gets/Sets filter for subset.
+            
+            Specifies a subset of records to be displayed as a
+            ``SQL WHERE``-clause without the ``WHERE`` keyword.
+            """
+        @property
+        def LinkChildFields(self) -> str:
+            """
+            Gets how records in a child subform are linked to records in its parent form.
+            """
+        @property
+        def LinkParentFields(self) -> str:
+            """
+            Gets how records in a child subform are linked to records in its parent form.
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the current form.
+            """
+        @property
+        def OrderBy(self) -> str:
+            """
+            Gets/Sets in which order the records should be displayed
+            as a ``SQL`` ``ORDER BY`` clause without the`` ORDER BY`` keywords.
+            """
+        @property
+        def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_Document:
+            """
+            Gets the parent of the current form. It can be either a SFDocuments.Form or a SFDocuments.Document object.
+            """
+        @property
+        def RecordSource(self) -> str:
+            """
+            Gets/Sets the source of the data, as a table name, a query name or a SQL statement.
+            """
+        @property
+        def XForm(self) -> XForm:
+            """
+            Gets The UNO object representing interactions with the form.
+            
+            Refer to XForm and DataForm in the API documentation for detailed information.
+            """
+        # endregion Properties
     # endregion SF_Form CLASS
     
     # region SF_FormControl CLASS
