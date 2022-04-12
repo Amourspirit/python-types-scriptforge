@@ -2234,6 +2234,7 @@ class SFScriptForge:
         serviceproperties: dict
         # Force for each property to get its value from Basic
         forceGetProperty: bool = True
+        # region Methods
         @classmethod
         def ReviewServiceArgs(cls, start: bool = ...) -> Tuple[bool]:
             """
@@ -2275,6 +2276,39 @@ class SFScriptForge:
             Returns:
                 bool: True if successful, False if the timer is neither started nor suspended.
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Duration(self) -> float:
+            """
+            Gets the actual running time elapsed since start or between start and stop (does not consider suspended time).
+            """
+        @property
+        def IsStarted(self) -> bool:
+            """
+            Gets if the timer is started.
+            
+            ``True`` when timer is started or suspended.
+            """
+        @property
+        def IsSuspended(self) -> bool:
+            """
+            Gets if the timer is suspended.
+            
+            ``True`` when timer is started and suspended.
+            """
+        @property
+        def SuspendDuration(self) -> float:
+            """
+            Gets the actual time elapsed while suspended since start or between start and stop.
+            """
+        @property
+        def TotalDuration(self) -> float:
+            """
+            Gets the actual time elapsed since start or between start and stop (including suspensions and running time).
+            """
+        # endregion Properties
     # endregion SF_Timer CLASS
     
     # region SF_UI CLASS
@@ -2305,6 +2339,7 @@ class SFScriptForge:
         IMPRESSDOCUMENT: Literal["Impress"]
         MATHDOCUMENT: Literal["Math"]
         WRITERDOCUMENT: Literal["Writer"]
+        # region Properties
         @property
         def ActiveWindow(self) -> str:
             """
@@ -2312,6 +2347,17 @@ class SFScriptForge:
             When "" is returned, the window could not be identified.
             """
         activeWindow, activewindow = ActiveWindow, ActiveWindow
+        @property
+        def Documents(self) -> Tuple[str, ...]:
+            """
+            Gets The list of the currently open documents. Special windows are ignored.
+            This list consists of a zero-based one dimensional array either of
+            filenames (in SF_FileSystem.FileNaming notation) or of window titles
+            for unsaved documents.
+            """
+        # endregion Properties
+
+        # region Methods
         def Activate(self, windowname: str = ...) -> bool:
             """
             Make the specified window active.
@@ -2495,6 +2541,7 @@ class SFScriptForge:
             Returns:
                 bool: True if the given window is found.
             """
+        # endregion Methods
     # endregion SF_UI CLASS
 # endregion SFScriptForge CLASS    (alias of ScriptForge Basic library)
 
@@ -5711,6 +5758,7 @@ class SFWidgets:
         servicename: Literal["SFWidgets.PopupMenu"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls, event: Any = ..., x: int = ..., y: int = ..., submenuchar: str = ...
@@ -5813,6 +5861,20 @@ class SFWidgets:
             Returns:
                 int | str: The item clicked by the user.
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def SubmenuCharacter(self) -> str:
+            """
+            Gets/Sets the character or string that defines how menu items are nested. The default character is ``>``.
+            """
+        @property
+        def ShortcutCharacter(self) -> str:
+            """
+            Gets/Sets the character used to define the access key of a menu item. The default character is ``~``.
+            """
+        # endregion Properties
     # endregion SF_PopupMenu CLASS
 # endregion SFWidgets CLASS    (alias of SFWidgets Basic library)
 
