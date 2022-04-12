@@ -2433,7 +2433,7 @@ class SFScriptForge:
               | SFDocuments.SF_Form
               | SFDocuments.SF_Writer):
             """
-            Returns a SFDocuments.SF_Document object referring to the active window or the given window.
+            Returns a Document object referring to the active window or the given window.
 
             Args:
                 windowname (Union[str, XComponent, DatabaseDocument], optional): when a string, see definitions. If absent the active window is considered.
