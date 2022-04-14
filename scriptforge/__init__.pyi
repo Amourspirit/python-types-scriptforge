@@ -1,27 +1,42 @@
+# region IMPORTS
 import datetime
 import time
-from typing import Any, Optional, List, Tuple, TypeVar, overload
+from typing import Any, Optional, List, Tuple, TypeVar, overload, TYPE_CHECKING
 from typing_extensions import Literal
-from ooo.lo.uno.x_interface import XInterface
-from ooo.lo.uno.x_component_context import XComponentContext
-from ooo.lo.script.provider.x_script_provider import XScriptProvider
-from ooo.lo.util.date_time import DateTime as UNODateTime
-from ooo.lo.util.date import Date as UNODate
-from ooo.lo.util.time import Time as UNOTime
-from ooo.lo.frame.x_desktop import XDesktop
-from ooo.lo.lang.x_component import XComponent
-from ooo.lo.document.x_embedded_scripts import XEmbeddedScripts
-from ooo.lo.beans.property_value import PropertyValue
-from ooo.lo.sdb.database_document import DatabaseDocument
-from ooo.lo.awt.x_window import XWindow
-from ooo.lo.awt.tree.x_tree_node import XTreeNode
-from ooo.lo.awt.tree.x_mutable_tree_node import XMutableTreeNode
-from ooo.lo.table.x_cell_range import XCellRange
-from ooo.lo.sheet.x_sheet_cell_cursor import XSheetCellCursor
-from ooo.lo.sheet.x_spreadsheet import XSpreadsheet
+if TYPE_CHECKING:
+    from com.sun.star.awt import XWindow
+    from com.sun.star.awt import XControl
+    from com.sun.star.awt import XControlModel
+    from com.sun.star.awt.tree import XMutableTreeNode
+    from com.sun.star.awt.tree import XMutableTreeDataModel
+    from com.sun.star.beans import PropertyValue
+    from com.sun.star.chart import XDiagram
+    from com.sun.star.document import XEmbeddedScripts
+    from com.sun.star.drawing import XShape
+    from com.sun.star.form import XForm
+    from com.sun.star.frame import XDesktop
+    from com.sun.star.lang import XComponent
+    from com.sun.star.script.provider import XScriptProvider
+    from com.sun.star.sheet import XSheetCellCursor
+    from com.sun.star.sheet import XSpreadsheet
+    from com.sun.star.sdb import DatabaseDocument
+    from com.sun.star.sdbc import XConnection as UNOXConnection
+    from com.sun.star.sdbc import XDatabaseMetaData
+    from com.sun.star.table import XCellRange
+    from com.sun.star.table import XTableChart
+    from com.sun.star.uno import XInterface
+    from com.sun.star.uno import XComponentContext
+    from com.sun.star.util import DateTime as UNODateTime
+    from com.sun.star.util import Date as UNODate
+    from com.sun.star.util import Time as UNOTime
+    from com.sun.star.form import ListSourceType
+# endregion IMPORTS
 
+# region Types
 _T = TypeVar("_T")
+# endregion Types
 
+# region MetaClass
 class _Singleton(type):
     """
     A Singleton metaclass design pattern
@@ -30,7 +45,9 @@ class _Singleton(type):
 
     instances: dict
     def __call__(cls: _T, *args, **kwargs) -> _T: ...
+# endregion MetaClass
 
+# region ScriptForge Class
 class ScriptForge(object, metaclass=_Singleton):
     """
         The ScriptForge (singleton) class encapsulates the core of the ScriptForge run-time
@@ -43,21 +60,18 @@ class ScriptForge(object, metaclass=_Singleton):
         It embeds the Service class that manages the protocol with Basic
     """
 
-    # #########################################################################
-    # Class attributes
-    # #########################################################################
+    # region Class attributes
     hostname: str
     port: int
     componentcontext: XComponentContext
     scriptprovider: Any
     SCRIPTFORGEINITDONE: bool
+    # endregion Class attributes
 
-    # #########################################################################
-    # Class constants
-    # #########################################################################
+    # region Class constants
     library: Literal["ScriptForge"]
     Version: Literal["7.3"]
-    #
+    # endregion Class constants
     # Basic dispatcher for Python scripts
     basicdispatcher: Literal[
         "@application#ScriptForge.SF_PythonHelper._PythonDispatcher"
@@ -65,7 +79,7 @@ class ScriptForge(object, metaclass=_Singleton):
     # Python helper functions module
     pythonhelpermodule: Literal["ScriptForgeHelper.py"]
     #
-    # VarType() constants
+    # region VarType() constants
     V_EMPTY: Literal[0]
     V_NULL: Literal[1]
     V_INTEGER: Literal[2]
@@ -85,21 +99,24 @@ class ScriptForge(object, metaclass=_Singleton):
     objMODULE: Literal[1]
     objCLASS: Literal[2]
     objUNO: Literal[3]
-    # Special argument symbols
+    # endregion VarType() constants
+    # regoin Special argument symbols
     cstSymEmpty: Literal["+++EMPTY+++"]
     cstSymNull: Literal["+++NULL+++"]
     cstSymMissing: Literal["+++MISSING+++"]
+    # endregoin Special argument symbols
     # Predefined references for services implemented as standard Basic modules
     servicesmodules: dict
     def __init__(self, hostname: str = ..., port: int = ...):
         """
-         Because singleton, constructor is executed only once while Python active
+        Because singleton, constructor is executed only once while Python active
         Arguments are mandatory when Python and LibreOffice run in separate processes
 
         Args:
             hostname (str, optional): probably 'localhost'. Defaults to ''.
             port (int, optional): Port Number. Defaults to 0.
         """
+    # region ClassMethods
     @classmethod
     def ConnectToLOProcess(
         cls, hostname: str = ..., port: int = ...
@@ -185,6 +202,8 @@ class ScriptForge(object, metaclass=_Singleton):
                 - the 0th element of the tuple when scalar, tuple or UNO object
                 - a new Service() object or one of its subclasses otherwise
         """
+    # endregion ClassMethods
+    # region Static Methods
     @staticmethod
     def SetAttributeSynonyms() -> None:
         """
@@ -203,19 +222,10 @@ class ScriptForge(object, metaclass=_Singleton):
                     # etc ...
                 copyFile, copyfile = CopyFile, CopyFile
         """
-    # 7.4
-    # @staticmethod
-    # def unpack_args(kwargs) -> list:
-    #     """
-    #     Convert a dictionary passed as argument to a list alternating keys and values
-    #     Example:
-    #         dict(A = 'a', B = 2) => 'A', 'a', 'B', 2
-    #     """
+    # endregion Static Methods
+# endregion ScriptForge Class
 
-# #####################################################################################################################
-#                           SFServices CLASS    (ScriptForge services superclass)                                   ###
-# #####################################################################################################################
-
+# region SFServices CLASS    (ScriptForge services superclass)
 class SFServices:
     """
     Generic implementation of a parent Service class
@@ -277,7 +287,7 @@ class SFServices:
             Conventionally, camel-cased and lower-cased homonyms are supported where relevant
             All arguments must be present and initialized before the call to Basic, if any
     """
-
+    # region CONST
     vbGet: Literal[2]
     vbLet: Literal[4]
     vbMethod: Literal[1]
@@ -299,6 +309,9 @@ class SFServices:
     # Basic class type
     moduleClass: Literal[2]
     moduleStandard: Literal[1]
+    # endregion CONST
+    
+    # region Attribs
     forceGetProperty: bool = False
     """Define the default behaviour for read-only properties: buffer their values in Python"""
     propertysynonyms: dict = ...
@@ -307,6 +320,9 @@ class SFServices:
     # Shortcuts to script provider interfaces
     SIMPLEEXEC: Any
     EXEC: Any
+    # endregion Attribs
+
+    # region Methods
     def __init__(
         self,
         reference: int = ...,
@@ -344,22 +360,22 @@ class SFServices:
         """
         Set the given property to a new value in the Basic world
         """
+    # endregion Methods
+# endregion SFServices CLASS    (ScriptForge services superclass)
 
-# #####################################################################################################################
-#                       SFScriptForge CLASS    (alias of ScriptForge Basic library)                                 ###
-# #####################################################################################################################
-
+# region SFScriptForge CLASS    (alias of ScriptForge Basic library)
 class SFScriptForge:
     ...
-    # #########################################################################
-    # SF_Array CLASS
-    # #########################################################################
+    # region SF_Array CLASS
     class SF_Array(SFServices, metaclass=_Singleton):
         """
         Provides a collection of methods for manipulating and transforming arrays of one dimension (vectors)
         and arrays of two dimensions (matrices). This includes set operations, sorting,
         importing to and exporting from text files.
         The Python version of the service provides a single method: ImportFromCSVFile
+        
+        See Also:
+            `Array Help <https://tinyurl.com/y8b7bq2d>`_
         """
 
         # Mandatory class properties for service registration
@@ -374,9 +390,9 @@ class SFScriptForge:
             Difference with the Basic version: dates are returned in their iso format,
             not as any of the datetime objects.
             """
-    # #########################################################################
-    # SF_Basic CLASS
-    # #########################################################################
+    # endregion SF_Array CLASS
+
+    # region SF_Basic CLASS
     class SF_Basic(SFServices, metaclass=_Singleton):
         """
         This service proposes a collection of Basic methods to be executed in a Python context
@@ -387,13 +403,16 @@ class SFScriptForge:
         The signatures of Basic builtin functions are derived from
             core/basic/source/runtime/stdobj.cxx
 
-        Detailed user documentation:
-            https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_basic.html?DbPAR=BASIC
+        See Also:
+           `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
         """
-
+        # region Class required
         serviceimplementation: Literal["python"]
         servicename: Literal["ScriptForge.Basic"]
         servicesynonyms: Tuple[str, str] = ...
+        # endregion Class required
+
+        # region CONST
         # Basic helper functions invocation
         module: Literal["SF_PythonHelper"]
         # Message box constants
@@ -417,6 +436,9 @@ class SFScriptForge:
         IDOK: Literal[1]
         IDRETRY: Literal[4]
         IDYES: Literal[6]
+        # endregion CONST
+
+        # region Methods
         @classmethod
         def CDate(cls, datevalue: Any) -> datetime.datetime | object: ...
         @staticmethod
@@ -713,6 +735,11 @@ class SFScriptForge:
         def Now(cls) -> datetime.datetime: ...
         @classmethod
         def RGB(cls, red: int, green: int, blue: int) -> int: ...
+        @classmethod
+        def Xray(cls, unoobject: object | None = ...) -> Any: ...
+        # endregion Methods
+
+        # region Properties
         @property
         def StarDesktop(self) -> XDesktop: ...
         starDesktop, stardesktop = StarDesktop, StarDesktop
@@ -741,11 +768,10 @@ class SFScriptForge:
             ThisDatabaseDocument,
             ThisDatabaseDocument,
         )
-        @classmethod
-        def Xray(cls, unoobject: object | None = ...) -> Any: ...
-    # #########################################################################
-    # SF_Dictionary CLASS
-    # #########################################################################
+        # endregion Properties
+    # endregion SF_Basic CLASS
+    
+    # region SF_Dictionary CLASS
     class SF_Dictionary(SFServices, dict):
         """
             The service adds to a Python dict instance the interfaces for conversion to and from
@@ -764,6 +790,9 @@ class SFScriptForge:
                 myDict['D'] = 4
                 print(myDict)   # {'A': 1, 'B': 2, 'C': 3, 'D': 4}
                 propval = myDict.ConvertToPropertyValues()
+            
+            See Also: 
+                `ScriptForge.Dictionary service <https://tinyurl.com/y9quuboc>`_
             """
 
         # Mandatory class properties for service registration
@@ -798,9 +827,9 @@ class SFScriptForge:
             Returns:
                 bool: True when successful
             """
-    # #########################################################################
-    # SF_Exception CLASS
-    # #########################################################################
+    # endregion SF_Dictionary CLASS
+    
+    # region SF_Exception CLASS
     class SF_Exception(SFServices, metaclass=_Singleton):
         """
         The Exception service is a collection of methods for code debugging and error handling.
@@ -811,6 +840,9 @@ class SFScriptForge:
         Use DebugPrint() method to aggregate additional user data of any type.
 
         Console entries can be dumped to a text file or visualized in a dialogue.
+
+        See Also:
+            `ScriptForge.Exception service <https://tinyurl.com/y8ezar7q>`_
         """
 
         # Mandatory class properties for service registration
@@ -818,6 +850,7 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.Exception"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         def Console(self, modal: bool = ...) -> Any: ...
         def ConsoleClear(self, keep: int = ...) -> Any: ...
         def ConsoleToFile(self, filename: str) -> Any: ...
@@ -842,12 +875,40 @@ class SFScriptForge:
             
             For INTERNAL USE only
             """
-    # #########################################################################
-    # SF_FileSystem CLASS
-    # #########################################################################
+        # endregion Methods
+
+        # region Properties
+        @property
+        def Description(self) -> str:
+            """
+            Gets/Sets the error message text.
+
+            Default value is `''` or a string containing the Basic run-time error message.
+            """
+        @property
+        def Number(self) -> int:
+            """
+            Gets/Sets the location in the code where the error occurred. It can be a numeric value or text.
+
+            Default value is 0 or the numeric value corresponding to the Basic run-time error code.
+            """
+        @property
+        def Source(self) -> int:
+            """
+            Gets/Sets the location in the code where the error occurred. It can be a numeric value or text.
+
+            Default value is ``0`` or the code line number for a standard Basic run-time error.
+            """
+        # endregion Properties
+    # endregion SF_Exception CLASS
+    
+    # region SF_FileSystem CLASS
     class SF_FileSystem(SFServices, metaclass=_Singleton):
         """
         The "FileSystem" service includes common file and folder handling routines.
+        
+        See Also:
+            `ScriptForge.FileSystem service <https://tinyurl.com/ybxpt7eo>`_
         """
 
         # Mandatory class properties for service registration
@@ -861,11 +922,11 @@ class SFScriptForge:
         ForReading: Literal[1]
         ForWriting: Literal[2]
         ForAppending: Literal[8]
+        # region Methods
         def BuildPath(self, foldername: str, name: str) -> str:
             """
             Combines a folder path and the name of a file and returns the combination with a valid path separator.
             Inserts an additional path separator between the foldername and the name, only if necessary.
-            
 
             Args:
                 foldername (str): Path with which Name is combined. Path need not specify an existing folder
@@ -1261,9 +1322,50 @@ class SFScriptForge:
         @classmethod
         def _ConvertFromUrl(cls, filename: str) -> str: ...
         # _ConvertFromUrl Alias for same function in FileSystem Basic module
-    # #########################################################################
-    # SF_L10N CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def FileNaming(self) -> str:
+            """
+            Gets/Sets the current files and folders notation, either ``ANY``, ``URL`` or ``SYS``:
+            * "ANY": (default) the methods of the FileSystem service accept both URL
+                and current operating system's notation for input arguments but always return URL strings.
+            * "URL": the methods of the FileSystem service expect URL notation for input arguments
+                and return URL strings.
+            * "SYS": the methods of the FileSystem service expect current operating system's notation
+                for both input arguments and return strings.
+
+            Once set, the FileNaming property remains unchanged either until the end of the
+            LibreOffice session or until it is set again.
+            """
+        @property
+        def ConfigFolder(self) -> str:
+            """Gets the configuration folder of LibreOffice."""
+        @property
+        def ExtensionsFolder(self) -> str:
+            """Gets the folder where extensions are installed."""
+        @property
+        def HomeFolder(self) -> str:
+            """Gets the user home folder."""
+        @property
+        def InstallFolder(self) -> str:
+            """Gets the installation folder of LibreOffice."""
+        @property
+        def TemplatesFolder(self) -> str:
+            """Gets the folder containing the system templates files."""
+        @property
+        def TemporaryFolder(self) -> str:
+            """
+            Gets the temporary files folder defined in the LibreOffice path settings.
+            """
+        @property
+        def UserTemplatesFolder(self) -> str:
+            """Gets the folder containing the user-defined template files."""
+        # endregion Properties
+    # endregion SF_FileSystem CLASS
+    
+    # region SF_L10N CLASS
     class SF_L10N(SFServices):
         """
         This service provides a number of methods related to the translation of strings
@@ -1271,6 +1373,9 @@ class SFScriptForge:
         The methods provided by the L10N service can be used mainly to:
             Create POT files that can be used as templates for translation of all strings in the program.
             Get translated strings at runtime for the language defined in the Locale property.
+
+        See Also:
+            `ScriptForge.L10N service <https://tinyurl.com/y77mbtp9>`_
         """
 
         # Mandatory class properties for service registration
@@ -1279,6 +1384,7 @@ class SFScriptForge:
         servicesynonyms: Tuple[str, str] = ...
         serviceproperties: dict = ...
 
+        # region Methods
         # 7.4
         # @classmethod
         # def ReviewServiceArgs(
@@ -1372,9 +1478,31 @@ class SFScriptForge:
                 str: The translated string. If not found the MsgId string or the Context string
                 anyway the substitution is done
             """
-    # #########################################################################
-    # SF_Platform CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Folder(self) -> str:
+            """
+            Gets The folder containing the PO files (see the FileSystem.FileNaming property to learn about the notation used).
+            """
+        @property
+        def Languages(self) -> Tuple[str, ...]:
+            """
+            A listing all the base names (without the ".po" extension)
+            of the PO-files found in the specified Folder.
+            """
+        @property
+        def Locale(self) -> str:
+            """
+            Gets The currently active language-COUNTRY combination.
+            This property will be initially empty if the service was instantiated without
+            any of the optional arguments.
+            """
+        # endregion Properties
+    # endregion SF_L10N CLASS
+    
+    # region SF_Platform CLASS
     class SF_Platform(SFServices, metaclass=_Singleton):
         """
         The 'Platform' service implements a collection of properties about the actual execution environment
@@ -1384,7 +1512,10 @@ class SFScriptForge:
             the LibreOffice version
             the current user
         All those properties are read-only.
-        The implementation is mainly based on the 'platform' module of the Python standard library
+        The implementation is mainly based on the 'platform' module of the Python standard library.
+
+        See Also:
+            `ScriptForge.Platform service <https://tinyurl.com/ybuvx3v4>`_
         """
 
         # Mandatory class properties for service registration
@@ -1394,6 +1525,7 @@ class SFScriptForge:
         serviceproperties: dict = ...
         # Python helper functions
         py: str = ...
+        # region Properties
         @property
         def Architecture(self) -> str:
             """Gets the actual bit architecture"""
@@ -1407,8 +1539,27 @@ class SFScriptForge:
         def CurrentUser(self) -> str:
             """Gets the name of logged in user"""
         @property
+        def Fonts(sefl) -> Tuple[str, ...]:
+            """
+            Gets tuple of strings containing the names of all available fonts.
+            """
+        @property
+        def Locale(self) -> str:
+            """
+            Returns the operating system locale as a string in the format language-COUNTRY (la-CO).
+            
+            Examples: "en-US", "pt-BR", "fr-BE".
+            """
+        @property
         def Machine(self) -> str:
             """Gets the machine type like 'i386' or 'x86_64'"""
+        @property
+        def OfficeVersion(self) -> str:
+            """
+            The actual LibreOffice version expressed as 'LibreOffice w.x.y.z (The Document Foundation)'.
+            
+            Example: 'LibreOffice 7.1.1.2 (The Document Foundation, Debian and Ubuntu)
+            """
         @property
         def OSName(self) -> str:
             """Gets the name of the operating system like 'Linux' or 'Windows'"""
@@ -1431,6 +1582,13 @@ class SFScriptForge:
             Such as ``118-Ubuntu SMP Fri Sep 4 20:02:41 UTC 2020``
             """
         @property
+        def Printers(self) -> Tuple[str]:
+            """
+            The tuple of available printers.
+
+            The default printer is put in the first position (index = 0).
+            """
+        @property
         def Processor(self) -> str:
             """
             Gets the (real) processor name, e.g. 'amdk6'. Might return the same value as Machine.
@@ -1442,9 +1600,10 @@ class SFScriptForge:
             
             Such as ``Python 3.7.7``
             """
-    # #########################################################################
-    # SF_Region CLASS
-    # #########################################################################
+        # endregion Properties
+    # endregion SF_Platform CLASS
+    
+    # region SF_Region CLASS
     # 7.4
     # class SF_Region(SFServices, metaclass=_Singleton):
     #     """
@@ -1491,16 +1650,19 @@ class SFScriptForge:
     #         self, localdatetime: datetime.datetime, timezone: str, locale: str = ""
     #     ) -> datetime.datetime: ...
     #     def UTCNow(self, timezone: str, locale: str = "") -> datetime.datetime: ...
-    # #########################################################################
-    # SF_Session CLASS
-    # #########################################################################
+    # endregion SF_Region CLASS
+    
+    # region SF_Session CLASS
     class SF_Session(SFServices, metaclass=_Singleton):
         """
         The Session service gathers various general-purpose methods about:
         - UNO introspection
         - the invocation of external scripts or programs
-        """
 
+        See Also:
+            `ScriptForge.Session service <https://tinyurl.com/yaf7co37>`_
+        """
+        # region CONST
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["ScriptForge.Session"]
@@ -1521,6 +1683,9 @@ class SFScriptForge:
         SCRIPTISOXT: Literal[
             "uno_packages"
         ]  # in an extension but the installation parameters are unknown (Python)
+        # endregion CONST
+        
+        # region Methods
         @classmethod
         def ExecuteBasicScript(
             cls, scope: str = ..., script: str = ..., *args: Any
@@ -1693,14 +1858,18 @@ class SFScriptForge:
                         "wiki.documentfoundation.org/api.php?hidebots=1&days=7&limit=50&action=feedrecentchanges&feedformat=rss"
                         )
             """
-    # #########################################################################
-    # SF_String CLASS
-    # #########################################################################
+        # endregion Methods
+    # endregion SF_Session CLASS
+    
+    # region SF_String CLASS
     class SF_String(SFServices, metaclass=_Singleton):
         """
         Focus on string manipulation, regular expressions, encodings and hashing algorithms.
         The methods implemented in Basic that are redundant with Python builtin functions
         are not duplicated
+
+        See Also:
+            `ScriptForge.String service <https://tinyurl.com/y9hm6agu>`_
         """
 
         # Mandatory class properties for service registration
@@ -1708,6 +1877,7 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.String"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def HashStr(cls, inputstr: str, algorithm: str) -> str:
             """
@@ -1927,13 +2097,44 @@ class SFScriptForge:
                 Tabs are expanded. Symbolic line breaks are replaced by their hard equivalents.
                 If the wrapped output has no content, the returned tuple is empty.
             """
-    # #########################################################################
-    # SF_TextStream CLASS
-    # #########################################################################
+        # endregion Methods
+    
+        # region Properties
+        @property
+        def sfCR(self) -> str:
+            """Gets Carriage return: Chr(13)"""
+        @property
+        def sfCRLF(self) -> str:
+            """Gets Carriage return + Linefeed: Chr(13) & Chr(10)"""
+        @property
+        def sfLF(self) -> str:
+            """Gets Linefeed: Chr(10)"""
+        @property
+        def sfNEWLINE(self) -> str:
+            """
+            Gets Carriage return + Linefeed, which can be
+            
+            1) Chr(13) & Chr(10) or
+            
+            2) Linefeed: Chr(10)
+            
+            depending on the operating system.
+            """
+        @property
+        def sfCR(self) -> str:
+            """Gets Horizontal tabulation: Chr(9)"""
+        # endregion Properties
+    
+    # endregion SF_String CLASS
+    
+    # region SF_TextStream CLASS
     class SF_TextStream(SFServices):
         """
         The TextStream service is used to sequentially read from and write to files opened or created
         using the ScriptForge.FileSystem service..
+
+        See Also:
+            `ScriptForge.TextStream service <https://tinyurl.com/y9ubyoel>`_
         """
 
         # Mandatory class properties for service registration
@@ -1941,20 +2142,8 @@ class SFScriptForge:
         servicename: Literal["ScriptForge.TextStream"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
-        @property
-        def AtEndOfStream(self) -> bool:
-            """
-            In reading mode, True indicates that the end of the file has been reached
-            In write and append modes, or if the file is not ready => always True
-            The property should be invoked BEFORE each ReadLine() method:
-            A ReadLine() executed while AtEndOfStream is True will raise an error
-            """
-        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
-        @property
-        def Line(self) -> int:
-            """
-            Gets the number of lines read or written so far.
-            """
+
+        # region Methods
         def CloseFile(self) -> bool:
             """
             Empties the output buffer if relevant. Closes the actual input or output stream.
@@ -1999,9 +2188,51 @@ class SFScriptForge:
             Args:
                 line (str): the line to write, may be empty.
             """
-    # #########################################################################
-    # SF_Timer CLASS
-    # #########################################################################
+        # endregion Methods
+
+        # region Properties
+        @property
+        def AtEndOfStream(self) -> bool:
+            """
+            In reading mode, True indicates that the end of the file has been reached
+            In write and append modes, or if the file is not ready => always True
+            The property should be invoked BEFORE each ReadLine() method:
+            A ReadLine() executed while AtEndOfStream is True will raise an error
+            """
+        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
+        @property
+        def Encoding(self) -> str:
+            """
+            Gets the character set to be used. The default encoding is ``UTF-8``.
+            """
+        @property
+        def FileName(self) -> str:
+            """
+            Gets the name of the current file either in URL format or in the native
+            operating system's format, depending on the current value of the FileNaming
+            property of the FileSystem service.
+            """
+        @property
+        def IOMode(self) -> str:
+            """
+            Gets the input/output mode. Possible values are ``READ``, ``WRITE`` or ``APPEND``.
+            """
+        @property
+        def Line(self) -> int:
+            """
+            Gets the number of lines read or written so far.
+            """
+        @property
+        def NewLine(self) -> str:
+            """
+            Gets/Sets the current delimiter to be inserted between two successive written lines.
+            The default value is the native line delimiter in the current operating system.
+            """
+        # endregion Properties
+
+    # endregion SF_TextStream CLASS
+
+    # region SF_Timer CLASS
     class SF_Timer(SFServices):
         """
         The "Timer" service measures the amount of time it takes to run user scripts.
@@ -2014,6 +2245,7 @@ class SFScriptForge:
         serviceproperties: dict
         # Force for each property to get its value from Basic
         forceGetProperty: bool = True
+        # region Methods
         @classmethod
         def ReviewServiceArgs(cls, start: bool = ...) -> Tuple[bool]:
             """
@@ -2055,9 +2287,42 @@ class SFScriptForge:
             Returns:
                 bool: True if successful, False if the timer is neither started nor suspended.
             """
-    # #########################################################################
-    # SF_UI CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Duration(self) -> float:
+            """
+            Gets the actual running time elapsed since start or between start and stop (does not consider suspended time).
+            """
+        @property
+        def IsStarted(self) -> bool:
+            """
+            Gets if the timer is started.
+            
+            ``True`` when timer is started or suspended.
+            """
+        @property
+        def IsSuspended(self) -> bool:
+            """
+            Gets if the timer is suspended.
+            
+            ``True`` when timer is started and suspended.
+            """
+        @property
+        def SuspendDuration(self) -> float:
+            """
+            Gets the actual time elapsed while suspended since start or between start and stop.
+            """
+        @property
+        def TotalDuration(self) -> float:
+            """
+            Gets the actual time elapsed since start or between start and stop (including suspensions and running time).
+            """
+        # endregion Properties
+    # endregion SF_Timer CLASS
+    
+    # region SF_UI CLASS
     class SF_UI(SFServices, metaclass=_Singleton):
         """
             Singleton class for the identification and the manipulation of the
@@ -2069,13 +2334,14 @@ class SFScriptForge:
                 - Access to the underlying "documents"
             """
 
-        # Mandatory class properties for service registration
+        # region Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["ScriptForge.UI"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # endregion Mandatory class properties for service registration
 
-        # Class constants
+        # region CONST
         MACROEXECALWAYS: Literal[2]
         MACROEXECNEVER: Literal[1]
         MACROEXECNORMAL: Literal[0]
@@ -2085,6 +2351,9 @@ class SFScriptForge:
         IMPRESSDOCUMENT: Literal["Impress"]
         MATHDOCUMENT: Literal["Math"]
         WRITERDOCUMENT: Literal["Writer"]
+        # endregion CONST
+
+        # region Properties
         @property
         def ActiveWindow(self) -> str:
             """
@@ -2092,6 +2361,9 @@ class SFScriptForge:
             When "" is returned, the window could not be identified.
             """
         activeWindow, activewindow = ActiveWindow, ActiveWindow
+        # endregion Properties
+
+        # region Methods
         def Activate(self, windowname: str = ...) -> bool:
             """
             Make the specified window active.
@@ -2155,9 +2427,14 @@ class SFScriptForge:
             """
         def GetDocument(
             self, windowname: str | XComponent | DatabaseDocument = ...
-        ) -> "SFDocuments.SF_Document":
+        ) -> (SFDocuments.SF_Base
+              | SFDocuments.SF_Calc
+              | SFDocuments.SF_Chart
+              | SFDocuments.SF_Document
+              | SFDocuments.SF_Form
+              | SFDocuments.SF_Writer):
             """
-            Returns a SFDocuments.SF_Document object referring to the active window or the given window.
+            Returns a Document object referring to the active window or the given window.
 
             Args:
                 windowname (Union[str, XComponent, DatabaseDocument], optional): when a string, see definitions. If absent the active window is considered.
@@ -2275,18 +2552,17 @@ class SFScriptForge:
             Returns:
                 bool: True if the given window is found.
             """
+        # endregion Methods
+    # endregion SF_UI CLASS
+# endregion SFScriptForge CLASS    (alias of ScriptForge Basic library)
 
-# #####################################################################################################################
-#                       SFDatabases CLASS    (alias of SFDatabases Basic library)                                   ###
-# #####################################################################################################################
+# region SFDatabases CLASS    (alias of SFDatabases Basic library)
 class SFDatabases:
     """
     The SFDatabases class manages databases embedded in or connected to Base documents
     """
 
-    # #########################################################################
-    # SF_Database CLASS
-    # #########################################################################
+    # region SF_Database CLASS
     class SF_Database(SFServices):
         """
         Each instance of the current class represents a single database, with essentially its tables, queries
@@ -2296,6 +2572,9 @@ class SFDatabases:
         instead of the (RDBMS-dependent) normal surrounding character.
         SQL statements may be run in direct or indirect mode. In direct mode the statement is transferred literally
         without syntax checking nor review to the database engine.
+
+        See Also:
+            `SFDatabases.Database service <https://tinyurl.com/yd9y6xa7>`_
         """
 
         # Mandatory class properties for service registration
@@ -2303,6 +2582,7 @@ class SFDatabases:
         servicename: Literal["SFDatabases.Database"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls,
@@ -2443,18 +2723,37 @@ class SFDatabases:
             Returns:
                 Any: result
             """
+        # endregion Methods
 
-# #####################################################################################################################
-#                       SFDialogs CLASS    (alias of SFDialogs Basic library)                                       ###
-# #####################################################################################################################
+        # region Properties
+        @property
+        def Queries(self) -> Tuple[str, ...]:
+            """Gets the list of stored queries."""
+        @property
+        def Tables(self) -> Tuple[str, ...]:
+            """Gets the list of stored tables."""
+        @property
+        def XConnection(self) -> UNOXConnection:
+            """
+            Gets the UNO object representing the current database connection.
+            """
+        @property
+        def XMetaData(self) -> XDatabaseMetaData:
+            """
+            Gets the UNO object representing the metadata describing the database system attributes.
+            """
+        # endregion Properties
+
+    # endregion SF_Database CLASS
+# endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
+
+# region SFDialogs CLASS    (alias of SFDialogs Basic library)
 class SFDialogs:
     """
     The SFDialogs class manages dialogs defined with the Basic IDE
     """
 
-    # #########################################################################
-    # SF_Dialog CLASS
-    # #########################################################################
+    # region SF_Dialog CLASS
     class SF_Dialog(SFServices):
         """
         Each instance of the current class represents a single dialog box displayed to the user.
@@ -2467,8 +2766,11 @@ class SFDialogs:
 
         In non-modal mode, the floating dialog remains displayed until the dialog is terminated
         by code (Terminate()) or until the LibreOffice application stops.
-        """
 
+        See Also:
+            `SFDialogs.Dialog service <https://tinyurl.com/yckkehha>`_
+        """
+        # region CONST
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["SFDialogs.Dialog"]
@@ -2477,6 +2779,9 @@ class SFDialogs:
         # Class constants used together with the Execute() method
         OKBUTTON: Literal[1]
         CANCELBUTTON: Literal[0]
+        # endregion CONST
+
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls, container: str = ..., library: str = ..., dialogname: str = ...
@@ -2557,15 +2862,67 @@ class SFDialogs:
             Returns:
                 bool: True if termination is successful.
             """
-    # #########################################################################
-    # SF_DialogControl CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Caption(self) -> str:
+            """Gets/Sets the title of the dialog."""
+        @property
+        def Height(self) -> int:
+            """Gets/Sets the height of the dialog box."""
+        @property
+        def Modal(self) -> int:
+            """Gets if the dialog box is currently in execution in modal mode."""
+        @property
+        def Name(self) -> str:
+            """Gets the name of the dialog"""
+        @property
+        def Page(self) -> int:
+            """
+            Gets/Sets A dialog may have several pages that can be traversed by 
+            the user step by step. The Page property of the Dialog object defines
+            which page of the dialog is active.
+            """
+        @property
+        def Visible(self) -> int:
+            """
+            Gets/Sets if the dialog box is visible on the desktop.
+            By default it is not visible until the Execute() method is run
+            and visible afterwards.
+            """
+        @property
+        def XDialogModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the dialog model.
+            
+            Refer to XControlModel and UnoControlDialogModel in Application Programming
+            Interface (API) documentation for detailed information.
+            """
+        @property
+        def XDialogView(self) -> XControl:
+            """
+            Gets the UNO object representing the dialog view.
+            
+            Refer to XControl and UnoControlDialog in Application Programming Interface
+            (API) documentation for detailed information.
+            """
+        @property
+        def Width(self) -> int:
+            """Gets/Sets the width of the dialog box."""
+        # endregion Properties
+    # endregion SF_Dialog CLASS
+    
+    # region SF_DialogControl CLASS
     class SF_DialogControl(SFServices):
         """
         Each instance of the current class represents a single control within a dialog box.
         The focus is clearly set on getting and setting the values displayed by the controls of the dialog box,
         not on their formatting.
         A special attention is given to controls with type TreeControl.
+
+        See Also:
+            `SFDialogs.DialogControl service <https://tinyurl.com/yb27tk36>'_
         """
 
         # Mandatory class properties for service registration
@@ -2574,17 +2931,7 @@ class SFDialogs:
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
 
-        # Root related properties do not start with X and, nevertheless, return a UNO object
-        @property
-        def CurrentNode(self) -> XTreeNode:
-            """
-            The CurrentNode property returns the currently selected node.
-            It returns Empty when there is no node selected.
-            When there are several selections, it returns the topmost node among the selected ones.
-            """
-        @property
-        def RootNode(self) -> XTreeNode:
-            """The RootNode property returns the last root node of a tree control"""
+        # region Methods
         def AddSubNode(
             self, parentnode: XMutableTreeNode, displayvalue: str, datavalue: str = ...,
         ) -> XMutableTreeNode:
@@ -2728,26 +3075,274 @@ class SFDialogs:
             Returns:
                 bool: True if insertion is successful
             """
+        # endregion Methods
 
-# #####################################################################################################################
-#                       SFDocuments CLASS    (alias of SFDocuments Basic library)                                   ###
-# #####################################################################################################################
+        # region Properties
+        # Root related properties do not start with X and, nevertheless, return a UNO object
+        @property
+        def Cancel(self) -> bool:
+            """
+            Gets/Sets if a command button has or not the behaviour of a Cancel button.
+            
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Caption(self) -> str:
+            """
+            Gets/Sets the text associated with the control.
+
+            Applicable Controls:
+                * Button
+                * CheckBox
+                * FixedLine
+                * FixedText
+                * GroupBox
+                * RadioButton
+            """
+        @property
+        def ControlType(self) -> str:
+            """
+            Gets/Sets the text associated with the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def CurrentNode(self) -> XMutableTreeNode:
+            """
+            The CurrentNode property returns the currently selected node.
+            It returns Empty when there is no node selected.
+            When there are several selections, it returns the topmost node among the selected ones.
+            
+            Applicable Controls:
+                TreeControl
+            """
+        @property
+        def Default(self) -> bool:
+            """
+            Gets/Sets if a command button is the default (OK) button.
+            
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Enabled(self) -> bool:
+            """
+            Gets/Sets if the control is accessible with the cursor.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def Format(self) -> str:
+            """
+            Gets/Sets the format used to display dates and times.
+            
+            For dates: "Standard (short)", "Standard (short YY)", "Standard (short YYYY)",
+            "Standard (long)", "DD/MM/YY", "MM/DD/YY", "YY/MM/DD", "DD/MM/YYYY", "MM/DD/YYYY",
+            "YYYY/MM/DD", "YY-MM-DD", "YYYY-MM-DD".
+
+            For times: "24h short", "24h long", "12h short", "12h long".
+
+            Applicable Controls:
+                * DateField
+                * TimeField
+                * FormattedField (read-only)
+            """
+        @property
+        def ListCount(self) -> int:
+            """
+            Gets the number of rows in a ListBox, a ComboBox or a TableControl.
+            
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+                * TableControl  
+            """
+        @property
+        def ListIndex(self) -> int:
+            """
+            Gets/Sets which item is selected in a ListBox, a ComboBox or a TableControl.
+            
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+                * TableControl  
+            """
+        @property
+        def Locked(self) -> bool:
+            """
+            Gets/Sets if the control is read-only.
+            
+            Applicable Controls:
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FormattedField
+                * ListBox
+                * NumericField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def MultiSelect(self) -> bool:
+            """
+            Gets/Sets if a user can make multiple selections in a listbox.
+            
+            Applicable Controls:
+                ListBox
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Page(self) -> int:
+            """
+            Gets/Sets the page of the dialog on which the control is visible.
+            
+            A dialog may have several pages that can be traversed by the user step by step.
+            The Page property of the Dialog object defines which page of the dialog is active.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Parent(self) -> SFDialogs.SF_Dialog:
+            """
+            Gets the parent SFDialogs.Dialog class object instance.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Picture(self) -> str:
+            """
+            Gets/Sets the file name containing a bitmap or other type of graphic to be
+            displayed on the specified control. The filename must comply with the
+            FileNaming attribute of the ``ScriptForge.FileSystem`` service.
+
+            Applicable Controls:
+                * Button
+                * ImageControl
+            """
+        @property
+        def RootNode(self) -> XMutableTreeNode:
+            """
+            Gets the RootNode property returns the last root node of a tree control
+
+            Applicable Controls:
+                TreeControl
+            """
+        @property
+        def RowSource(self) -> Tuple[str, ...]:
+            """
+            Gets/Sets the data contained in a combobox or a listbox.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def Text(self) -> str:
+            """
+            Gets the text being displayed by the control.
+
+            Applicable Controls:
+                * ComboBox
+                * FileControl
+                * FormattedField
+                * PatternField
+                * TextField
+            """
+        @property
+        def TipText(self) -> str:
+            """
+            Gets/Sets the text that appears as a tooltip when you hold the mouse pointer over the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def TripleState(self) -> bool:
+            """
+            Gets/Sets if the control may have the state "don't know".
+            
+            Applicable Controls:
+                CheckBox
+            """
+        @property
+        def Value(self) -> Any:
+            """
+            Gets/Sets control type.
+
+            See Also:
+                `The Value property <https://tinyurl.com/yb27tk36#hd_id81598540704978>`_
+            """
+        @property
+        def Visible(self) -> bool:
+            """
+            Gets/Sets if the control is hidden or visible.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the control model.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlView(self) -> XControl:
+            """
+            Gets the UNO object representing the control view.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XTreeDataModel(self) -> XMutableTreeDataModel:
+            """
+            Gets the UNO object representing the tree control data model.
+            
+            Applicable Controls:
+                TreeControl
+            """
+        # endregion Properties
+        
+    # endregion SF_DialogControl CLASS
+# endregion SFDialogs CLASS    (alias of SFDialogs Basic library)
+
+# region SFDocuments CLASS    (alias of SFDocuments Basic library)
 class SFDocuments:
     """
     The SFDocuments class gathers a number of classes, methods and properties making easy
     managing and manipulating LibreOffice documents
     """
 
-    # #########################################################################
-    # SF_Document CLASS
-    # #########################################################################
+    # region SF_Document CLASS
     class SF_Document(SFServices):
         """
         The methods and properties are generic for all types of documents: they are combined in the
         current SF_Document class
-            - saving, closing documents
-            - accessing their standard or custom properties
+            * saving, closing documents
+            * accessing their standard or custom properties
+
         Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
+
+
+        See Also:
+            `SFDocuments.Document service <https://tinyurl.com/ybujrgjk>`_
         """
 
         # Mandatory class properties for service registration
@@ -2757,6 +3352,7 @@ class SFDocuments:
         serviceproperties: dict
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty: bool
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -2894,14 +3490,104 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
-    # #########################################################################
-    # SF_Base CLASS
-    # #########################################################################
+        # endregion methods
+        
+        # region Properties
+        @property
+        def CustomProperties(self) -> SFScriptForge.SF_Dictionary:
+            """
+            Gets/Sets a ScriptForge.Dictionary object instance.
+            
+            After update, can be passed again to the property for updating the document.
+            Individual items of the dictionary may be either strings, numbers,
+            (Basic) dates or com.sun.star.util.Duration items.
+            """
+        @property
+        def Description(self) -> str:
+            """
+            Gets/Sets the Description property of the document (also known as "Comments")
+            """
+        @property
+        def DocumentProperties (self) -> SFScriptForge.SF_Dictionary:
+            """
+            Gets a ScriptForge.Dictionary object containing all the entries.
+            
+            Document statistics are included. Note that they are specific to the type of document.
+            As an example, a Calc document includes a "CellCount" entry. Other documents do not.
+            """
+        @property
+        def DocumentType(self) -> str:
+            """
+            Gets the value with the document type ("Base", "Calc", "Writer", etc)
+            """
+        @property
+        def IsBase(self) -> bool:
+            """
+            Gets if instance is Base document.
+            """
+        @property
+        def IsCalc(self) -> bool:
+            """
+            Gets if instance is Calc document.
+            """
+        @property
+        def IsDraw(self) -> bool:
+            """
+            Gets if instance is Draw document.
+            """
+        @property
+        def IsImpress(self) -> bool:
+            """
+            Gets if instance is Draw document.
+            """
+        @property
+        def IsMath(self) -> bool:
+            """
+            Gets if instance is Math document.
+            """
+        @property
+        def IsWriter(self) -> bool:
+            """
+            Gets if instance is Writer document.
+            """
+        @property
+        def Keywords(self) -> str:
+            """
+            Gets/Sets the Keywords property of the document. Represented as a comma-separated list of keywords
+            """
+        @property
+        def Readonly(self) -> bool:
+            """
+            Gets if the document is actually in read-only mode.
+            """
+        @property
+        def Subject(self) -> str:
+            """
+            Gets/Sets the Subject property of the document.
+            """
+        @property
+        def Title(self) -> str:
+            """
+            Gets/Sets the Title property of the document.
+            """
+        @property
+        def XComponent(self) -> XComponent:
+            """
+            Gets The UNO object com.sun.star.lang.XComponent
+            or com.sun.star.comp.dba.OfficeDatabaseDocument representing the document
+            """
+        # endregion Properties
+    # endregion SF_Document CLASS
+    
+    # region SF_Base CLASS
     class SF_Base(SF_Document, SFServices):
         """
         The SF_Base module is provided mainly to block parent properties that are NOT applicable to Base documents
         In addition, it provides methods to identify form documents and access their internal forms
         (read more elsewhere (the "SFDocuments.Form" service) about this subject)
+
+        See Also:
+            `SFDocuments.Base service <https://tinyurl.com/ya4lp2mq>`_
         """
 
         # Mandatory class properties for service registration
@@ -2909,6 +3595,7 @@ class SFDocuments:
         servicename = Literal["SFDocuments.Base"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = "") -> Tuple[str]:
             """
@@ -3019,9 +3706,10 @@ class SFDocuments:
             Returns:
                 bool: True when successful.
             """
-    # #########################################################################
-    # SF_Calc CLASS
-    # #########################################################################
+        # endregion methods
+    # endregion SF_Base CLASS
+    
+    # region SF_Calc CLASS
     class SF_Calc(SF_Document, SFServices):
         """
         The SF_Calc module is focused on :
@@ -3039,6 +3727,7 @@ class SFDocuments:
         serviceproperties: dict
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
+        # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -3067,7 +3756,7 @@ class SFDocuments:
             Returns:
                 int: Returns the leftmost column number in a given range or sheet.
             """
-        def FirstRow(self, rangename) -> int:
+        def FirstRow(self, rangename: str) -> int:
             """
             Returns the First used column in a given range.
 
@@ -4128,23 +4817,37 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help SortRange <https://tinyurl.com/y7jwr7b7#SortRange>`_
             """
-    # #########################################################################
-    # SF_CalcReference CLASS
-    # #########################################################################
+        # endregion methods
+
+        # region Properties
+        @property
+        def CurrentSelection(self) -> str | Tuple[str, ...]:
+            """
+            Gets/Sets the single selected range as a string or the list of selected ranges.
+            """
+        @property
+        def Sheets(self) -> Tuple[str, ...]:
+            """
+            Gets a tuple with the names of all existing sheets.
+            """
+        # endregion Properties
+    # endregion SF_Calc CLASS
+    
+    # region SF_CalcReference CLASS
     class SF_CalcReference(SFServices):
         """
-            The SF_CalcReference class has as unique role to hold sheet and range references.
-            They are implemented in Basic as Type ... End Type data structures
-            """
+        The SF_CalcReference class has as unique role to hold sheet and range references.
+        They are implemented in Basic as Type ... End Type data structures
+        """
 
         # Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["SFDocuments.CalcReference"]
         servicesynonyms: tuple
         serviceproperties: dict
-    # #########################################################################
-    # SF_Chart CLASS
-    # #########################################################################
+    # endregion SF_CalcReference CLASS
+    
+    # region SF_Chart CLASS
     class SF_Chart(SFServices):
         """
         The SF_Chart module is focused on the description of chart documents
@@ -4161,6 +4864,7 @@ class SFDocuments:
         servicename: Literal["SFDocuments.Chart"]
         servicesynonyms: tuple
         serviceproperties: dict
+        # region Methods
         def Resize(
             self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...
         ) -> bool:
@@ -4210,9 +4914,109 @@ class SFDocuments:
             See Also:
                 `SF_Chart Help ExportToFile <https://tinyurl.com/ydcexzky#ExportToFile>`_
             """
-    # #########################################################################
-    # SF_Form CLASS
-    # #########################################################################
+        # endregion Methods
+
+        # region Properties
+        @property
+        def ChartType(self) -> str:
+            """
+            Gets/Sets the chart type as a string that can assume one of the following values:
+            ``Pie``, ``Bar``, ``Donut``, ``Column``, ``Area``, ``Line``, ``XY``, ``Bubble``, ``Net``.
+            """
+        @property
+        def Deep(self) -> bool:
+            """
+            Gets/Sets if the chart is three-dimensional.
+            
+            When ``True`` indicates that the chart is three-dimensional and each series is arranged in the z-direction.
+            
+            When ``False`` series are arranged considering only two dimensions.
+            """
+        
+        @property
+        def Dim3D(self) -> bool | str:
+            """
+            Gets/Sets if the chart is displayed with 3D elements.
+            
+            When setting as string the value must be either "Bar", ``Cylinder``, ``Cone`` or ``Pyramid``.
+            
+            When ``True`` value is specified, then the chart is displayed using 3D bars.
+            """
+        @property
+        def Exploded(self) -> float:
+            """
+            Gets/Sets how much pie segments are offset from the chart center as a percentage of the radius.
+            
+            Applicable to pie and donut charts only.
+            """
+        @property
+        def Filled(self) -> bool:
+            """
+            Gets/Sets if a filled net chart
+            
+            When ``True``, specifies a filled net chart.
+            
+            Applicable to net charts only.
+            """
+        @property
+        def Legend(self) -> bool:
+            """
+            Gets/Sets whether or not the chart has a legend.
+            """
+        @property
+        def Percent(self) -> bool:
+            """
+            Gets/Sets percent
+            
+            When ``True``, chart series are stacked and each category sums up to 100%.
+            
+            Applicable to Area, Bar, Bubble, Column and Net charts.
+            """ 
+        @property
+        def Stacked(self) -> bool:
+            """
+            Gets/Sets whether or not the chart series are stacked.
+            
+            When ``True``, chart series are stacked and each category sums up to 100%.
+            
+            Applicable to Area, Bar, Bubble, Column and Net charts.
+            """ 
+        @property
+        def Title(self) -> str:
+            """Gets/Sets the main title of the chart."""
+        @property
+        def XTitle(self) -> str:
+            """"Gets/Sets the title of the X axis."""
+        @property
+        def YTitle(self) -> str:
+            """"Gets/Sets title of the Y axis."""
+        @property
+        def XChartObj(self) -> object:
+            """
+            Gets the object representing the chart, which is an instance of the ScChartObj class.
+            
+            See Also:
+                `ScChartObj <https://docs.libreoffice.org/sc/html/classScChartObj.html>`_
+            """
+        @property
+        def XDiagram(self) -> XDiagram:
+            """
+            Gets the ``com.sun.star.chart.XDiagram`` object representing the diagram of the chart.
+            """
+        @property
+        def XShape(self) -> XShape:
+            """
+            Gets the ``com.sun.star.drawing.XShape`` object representing the shape of the chart.
+            """
+        @property
+        def XTableChart(self) -> XTableChart:
+            """
+            Gets the ``com.sun.star.table.XTableChart`` object representing the data being displayed in the chart.
+            """
+        # endregion Properties
+    # endregion SF_Chart CLASS
+    
+    # region SF_Form CLASS
     class SF_Form(SFServices):
         """
         Management of forms defined in LibreOffice documents. Supported types are Base, Calc and Writer documents.
@@ -4230,6 +5034,8 @@ class SFDocuments:
         servicename: Literal["SFDocuments.Form"]
         servicesynonyms: tuple
         serviceproperties: dict
+
+        # region Methods
         def Activate(self) -> bool:
             """
             Sets the focus on the current Form instance. Returns True if focusing was successful.
@@ -4408,9 +5214,95 @@ class SFDocuments:
             See Also:
                 `SF_Form Help Subforms <https://tinyurl.com/y72zdzjy#Subforms>`_
             """
-    # #########################################################################
-    # SF_FormControl CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def AllowDeletes(self) -> bool:
+            """
+            Gets/Sets if the form allows to delete records.
+            """
+        @property
+        def AllowInserts(self) -> bool:
+            """
+            Gets/Sets if the form allows to add records.
+            """
+        @property
+        def AllowUpdates(self) -> bool:
+            """
+            Gets/Sets if the form allows to update records.
+            """
+        @property
+        def BaseForm(self) -> str:
+            """
+            Gets the hierarchical name of the Base Form containing the actual form.
+            """
+        @property
+        def Bookmark(self) -> Any:
+            """
+            Gets/Sets uniquely the current record of the form's underlying table, query or SQL statement.
+            """
+        @property
+        def CurrentRecord(self) -> int:
+            """
+            Gets/Sets the current record in the dataset being viewed on a form.
+            
+            If the row number is positive, the cursor moves to the given row number
+            with respect to the beginning of the result set. Row count starts at ``1``.
+            If the given row number is negative, the cursor moves to an absolute
+            row position with respect to the end of the result set.
+            Row ``-1`` refers to the last row in the result set.
+            """
+        @property
+        def Filter(self) -> bool:
+            """
+            Gets/Sets filter for subset.
+            
+            Specifies a subset of records to be displayed as a
+            ``SQL WHERE``-clause without the ``WHERE`` keyword.
+            """
+        @property
+        def LinkChildFields(self) -> str:
+            """
+            Gets how records in a child subform are linked to records in its parent form.
+            """
+        @property
+        def LinkParentFields(self) -> str:
+            """
+            Gets how records in a child subform are linked to records in its parent form.
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the current form.
+            """
+        @property
+        def OrderBy(self) -> str:
+            """
+            Gets/Sets in which order the records should be displayed
+            as a ``SQL`` ``ORDER BY`` clause without the`` ORDER BY`` keywords.
+            """
+        @property
+        def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_Document:
+            """
+            Gets the parent of the current form. It can be either a SFDocuments.Form or a SFDocuments.Document object.
+            """
+        @property
+        def RecordSource(self) -> str:
+            """
+            Gets/Sets the source of the data, as a table name, a query name or a SQL statement.
+            """
+        @property
+        def XForm(self) -> XForm:
+            """
+            Gets The UNO object representing interactions with the form.
+            
+            Refer to XForm and DataForm in the API documentation for detailed information.
+            """
+        # endregion Properties
+    # endregion SF_Form CLASS
+    
+    # region SF_FormControl CLASS
     class SF_FormControl(SFServices):
         """
         Manage the controls belonging to a form or subform stored in a document.
@@ -4427,6 +5319,7 @@ class SFDocuments:
         servicename: Literal["SFDocuments.FormControl"]
         servicesynonyms: tuple
         serviceproperties: dict
+        # region Methods
         @overload
         def Controls(self,) -> Tuple[str, ...]:
             """
@@ -4462,9 +5355,305 @@ class SFDocuments:
             See Also:
                 `SF_FormControl Help SetFocus <https://tinyurl.com/y8d9qlcl#SetFocus>`_
             """
-    # #########################################################################
-    # SF_Writer CLASS
-    # #########################################################################
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def Action(self) -> str:
+            """
+            Gets/Sets the action triggered when the button is clicked.
+            
+            Accepted values are:
+                * none
+                * submitForm
+                * resetForm
+                * refreshForm
+                * moveToFirst
+                * moveToLast
+                * moveToNext
+                * moveToPrev
+                * saveRecord
+                * moveToNew
+                * deleteRecord
+                * undoRecord
+
+            Applicable Controls:
+                Button
+            """
+        @property
+        def Action(self) -> str:
+            """
+            Gets/Sets the text displayed by the control.
+
+            Applicable Controls:
+                * Button
+                * CheckBox
+                * FixedText
+                * GroupBox
+                * RadioButton
+            """
+        @property
+        def ControlSource(self) -> str:
+            """
+            Gets the rowset field mapped onto the current control.
+            
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FormattedField
+                * ImageControl
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def ControlType(self) -> str:
+            """
+            Gets control type from one of the controls listed in ``ControlSource`` property.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def Default(self) -> bool:
+            """
+            Gets/Sets if a command button is the default OK button.
+
+            Applicable Controls:
+                Button
+            """
+        @property
+        def DefaultValue(self) -> Any:
+            """
+            Gets/Sets the default value used to initialize a control in a new record.
+            
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FormattedField
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * SpinButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def Enabled(self) -> bool:
+            """
+            Gets/Sets if the control is accessible with the cursor.
+
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def Format(self) -> str:
+            """
+            Gets/Sets the format used to display dates and times.
+            
+            Must be one of following strings for dates:
+                * "Standard (short)"
+                * "Standard (short YY)"
+                * "Standard (short YYYY)"
+                * "Standard (long)"
+                * "DD/MM/YY"
+                * "MM/DD/YY"
+                * "YY/MM/DD"
+                * "DD/MM/YYYY"
+                * "MM/DD/YYYY"
+                * "YYYY/MM/DD"
+                * "YY-MM-DD"
+                * "YYYY-MM-DD"
+
+            Applicable Controls:
+                * DateField
+                * TimeField
+                * FormattedField (read-only)
+            """
+        @property
+        def ListCount(sefl) -> int:
+            """
+            Gets the number of rows in a ListBox or a ComboBox.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def ListIndex(sefl) -> int:
+            """
+            Gets/Sets which item is selected in a ListBox or ComboBox.
+
+            In case of multiple selection, the index of the first item
+            is returned or only one item is set.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def ListSource(self) -> ListSourceType:
+            """
+            Gets/Sets the type of data contained in a combobox or a listbox.
+
+            It must be one of the com.sun.star.form.ListSourceType.* constants.
+
+            Applicable Controls:
+                * ComboBox
+                * ListBox
+            """
+        @property
+        def Locked(self) -> bool:
+            """
+            Gets/Sets if the control is read-only.
+
+            Applicable Controls:
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * FileControl
+                * FileControl
+                * FormattedField
+                * ImageControl
+                * ListBox
+                * NumericField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def MultiSelect(self) -> bool:
+            """
+            Gets/Sets if the user can select multiple items in a listbox.
+
+            Applicable Controls:
+                ListBox
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets the name of the control.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_FormControl:
+            """
+            Gets parent type.
+            
+            Depending on the parent type, a form, a subform or a tablecontrol,
+            returns the parent ``SFDocuments.Form`` or ``SFDocuments.FormControl``
+            class object instance.
+
+            Applicable Controls:
+                All
+            """
+        @property
+        def Name(self) -> str:
+            """
+            Gets/Sets the file name containing a bitmap or other type of graphic to be displayed on the control.
+
+            The filename must comply with the FileNaming attribute of the ``ScriptForge.FileSystem`` service.
+
+            Applicable Controls:
+                * Button
+                * ImageButton
+                * ImageControl
+            """
+        @property
+        def Required(self) -> bool:
+            """
+            Gets/Sets if a control is said required when the underlying data must not contain a null value.
+
+            Applicable Controls:
+                * CheckBox
+                * ComboBox
+                * CurrencyField
+                * DateField
+                * ListBox
+                * NumericField
+                * PatternField
+                * RadioButton
+                * SpinButton
+                * TextField
+                * TimeField
+            """
+        @property
+        def Text(self) -> str:
+            """
+            Gets the text being displayed by the control.
+
+            Applicable Controls:
+                * ComboBox
+                * DateField
+                * FileControl
+                * FormattedField
+                * PatternField
+                * TextField
+                * TimeField
+            """
+        @property
+        def TipText(self) -> str:
+            """
+            Gets/Sets the text that appears as a tooltip when you hold the mouse pointer over the control.
+
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def TripleState(self) -> bool:
+            """
+            Gets/Sets if the control may have the state "don't know".
+            
+            Applicable Controls:
+                CheckBox
+            """
+        @property
+        def Value(self) -> Any:
+            """
+            Gets/Sets control type.
+
+            See Also:
+                `The Value property <https://tinyurl.com/yb27tk36#hd_id81598540704978>`_
+            """
+        @property
+        def Visible(self) -> bool:
+            """
+            Gets/Sets if the control is hidden or visible.
+            
+            Applicable Controls:
+                All (except HiddenControl)
+            """
+        @property
+        def XControlModel(self) -> XControlModel:
+            """
+            Gets the UNO object representing the control model.
+            
+            Applicable Controls:
+                All
+            """
+        @property
+        def XControlView(self) -> XControl:
+            """
+            Gets the UNO object representing the control view.
+            
+            Applicable Controls:
+                All
+            """
+        # endregion Properties
+    # endregion SF_FormControl CLASS
+    
+    # region SF_Writer CLASS
     class SF_Writer(SF_Document, SFServices):
         """
         The SF_Writer module is focused on :
@@ -4474,13 +5663,16 @@ class SFDocuments:
             `SF_Writer Help <https://tinyurl.com/y7kv226a>`_
         """
 
-        # Mandatory class properties for service registration
+        # region Mandatory class properties for service registration
         serviceimplementation: Literal["basic"]
         servicename: Literal["SFDocuments.Writer"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # endregion Mandatory class properties for service registration
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty: bool
+
+        # region Methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
@@ -4551,18 +5743,17 @@ class SFDocuments:
             See Also:
                 `SF_Writer Help PrintOut <https://tinyurl.com/y7kv226a#PrintOut>`_
             """
+        # endregion Methods
+    # endregion SF_Writer CLASS
+# endregion SFDocuments CLASS    (alias of SFDocuments Basic library)
 
-# #####################################################################################################################
-#                       SFWidgets CLASS    (alias of SFWidgets Basic library)                                       ###
-# #####################################################################################################################
+# region SFWidgets CLASS    (alias of SFWidgets Basic library)
 class SFWidgets:
     """
     The SFWidgets class manages toolbars and popup menus
     """
 
-    # #########################################################################
-    # SF_PopupMenu CLASS
-    # #########################################################################
+    # region SF_PopupMenu CLASS
     class SF_PopupMenu(SFServices):
         """
         Display a popup menu anywhere and any time.
@@ -4582,6 +5773,7 @@ class SFWidgets:
         servicename: Literal["SFWidgets.PopupMenu"]
         servicesynonyms: Tuple[str, str]
         serviceproperties: dict
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls, event: Any = ..., x: int = ..., y: int = ..., submenuchar: str = ...
@@ -4684,10 +5876,24 @@ class SFWidgets:
             Returns:
                 int | str: The item clicked by the user.
             """
+        # endregion Methods
+        
+        # region Properties
+        @property
+        def SubmenuCharacter(self) -> str:
+            """
+            Gets/Sets the character or string that defines how menu items are nested. The default character is ``>``.
+            """
+        @property
+        def ShortcutCharacter(self) -> str:
+            """
+            Gets/Sets the character used to define the access key of a menu item. The default character is ``~``.
+            """
+        # endregion Properties
+    # endregion SF_PopupMenu CLASS
+# endregion SFWidgets CLASS    (alias of SFWidgets Basic library)
 
-# ##############################################False##################################################################
-#                           CreateScriptService()                                                                   ###
-# #####################################################################################################################
+# region CreateScriptService()
 def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices | Any:
     """
     A service being the name of a collection of properties and methods,
@@ -4710,6 +5916,7 @@ def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices |
      Returns:
         SFServices | Any:  the service as a Python object
     """
+# endregion CreateScriptService()
 
 createScriptService: SFServices | Any
 createscriptservice: SFServices | Any

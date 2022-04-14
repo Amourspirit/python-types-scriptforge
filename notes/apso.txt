@@ -34,12 +34,15 @@ ScriptForge Service names
 
 from scriptforge import CreateScriptService
 
+doc = CreateScriptService('SFDocuments.Document')
 bas = CreateScriptService('ScriptForge.Basic')
 fso = CreateScriptService('ScriptForge.FileSystem')
 ses = CreateScriptService('ScriptForge.Session')
 txt = CreateScriptService('ScriptForge.String')
 sfui = CreateScriptService('ScriptForge.UI')
 clc = CreateScriptService('SFDocuments.Calc')
+dct = CreateScriptService('ScriptForge.Dictionary')
+arr = CreateScriptService('ScriptForge.Array')
 
 sfs = CreateScriptService('ScriptForge.String')
     >>> sfs.HashStr("œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬", "MD5")

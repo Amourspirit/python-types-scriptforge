@@ -4,7 +4,7 @@ import os
 from setuptools import setup
 # from scriptforge_stubs import __version__
 PKG_NAME = 'types-sourceforge'
-VERSION = "0.1.4"
+VERSION = "0.1.12"
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -39,7 +39,7 @@ setup(
     ],
     install_requires=[
         'typing_extensions>=3.7.4.3;python_version<"3.7"',
-        'ooouno>=0.1.13'
+        'types-unopy>=0.1.5'
     ],
     description="Type annotations for ScriptForge",
     long_description_content_type="text/x-rst",
