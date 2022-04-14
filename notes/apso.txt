@@ -34,6 +34,7 @@ ScriptForge Service names
 
 from scriptforge import CreateScriptService
 
+doc = CreateScriptService('SFDocuments.Document')
 bas = CreateScriptService('ScriptForge.Basic')
 fso = CreateScriptService('ScriptForge.FileSystem')
 ses = CreateScriptService('ScriptForge.Session')
