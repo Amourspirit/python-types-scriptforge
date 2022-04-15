@@ -24,11 +24,11 @@ Installation
 PIP
 ---
 
-**types-scriptforge** `PyPI <https://pypi.org/project/types-sourceforge/>`_
+**types-scriptforge** `PyPI <https://pypi.org/project/types-scriptforge/>`_
 
 .. code-block:: bash
 
-    $ pip install types-sourceforge
+    $ pip install types-scriptforge
 
 `ScriptForge Docs <The ScriptForge Library>`_ on LibreOffice Help.
 
@@ -38,4 +38,4 @@ Other
 **Figure 1:** ScriptForge typings example
 
 .. figure:: https://user-images.githubusercontent.com/4193389/163497042-a572dff9-0278-4d42-be22-dea4555545ff.gif
-   :alt: types-sourceforge example gif.
+   :alt: types-scriptforge example gif.
