@@ -37,5 +37,5 @@ Other
 
 **Figure 1:** ScriptForge typings example
 
-.. figure:: https://i.postimg.cc/3RCKdzsF/scriptforge-eg.gif
+.. figure:: https://user-images.githubusercontent.com/4193389/163497042-a572dff9-0278-4d42-be22-dea4555545ff.gif
    :alt: types-sourceforge example gif.
