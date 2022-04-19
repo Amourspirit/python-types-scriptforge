@@ -98,5 +98,5 @@ dependencies:
     - sphinxcontrib-qthelp==1.0.3
     - sphinxcontrib-serializinghtml==1.1.5
     - typeguard==2.13.3
-    - types-unopy==0.3.3
+    - types-unopy==0.3.9
 prefix: env
