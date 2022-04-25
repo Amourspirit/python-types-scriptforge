@@ -6138,6 +6138,81 @@ class SFDocuments:
             Gets the name of the current form.
             """
         @property
+        def OnApproveCursorMove(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveParameter(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveReset(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveRowChange(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveSubmit(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnConfirmDelete(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnCursorMoved(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnErrorOccurred(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnLoaded(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnReloaded(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnReloading(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnResetted(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnRowChanged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnUnloaded(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnUnloading(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
         def OrderBy(self) -> str:
             """
             Gets/Sets in which order the records should be displayed
