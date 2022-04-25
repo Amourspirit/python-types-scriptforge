@@ -1407,7 +1407,7 @@ class SFScriptForge:
             """
         def GetBaseName(self, filename: str) -> str:
             """
-            Returns the BaseName part of the last component of a File- or FolderName, without its extension.
+            Returns the BaseName part of the last component of a File or FolderName, without its extension.
             The method does not check for the existence of the specified file or folder.
 
             Args:
@@ -1415,6 +1415,9 @@ class SFScriptForge:
 
             Returns:
                 str: The BaseName of the given argument in native operating system format. May be empty.
+
+            See Also:
+                `GetBaseName <https://tinyurl.com/ybxpt7eo#GetBaseName>`_
             """
         def GetExtension(self, filename: str) -> str:
             """
@@ -1428,14 +1431,18 @@ class SFScriptForge:
                 str: The extension without a leading dot. May be empty.
             
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> print(session.GetExtension("C:\\Windows\\Notepad.exe"))
                     'exe'
+
+            See Also:
+                `GetExtension <https://tinyurl.com/ybxpt7eo#GetExtension>`_
             """
         def GetFileLen(self, filename: str) -> int:
             """
-            Return file size in bytes with four decimals.
+            The builtin ``FileLen`` Basic function returns the number of bytes contained
+            in a file as a Long value, i.e. up to 2GB.
 
             Args:
                 filename (str): a string representing a file
@@ -1444,10 +1451,13 @@ class SFScriptForge:
                 float: File size if FileName exists
             
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> print(session.GetFileLen("C:\\Windows\\Notepad.exe"))
                     '201728'
+
+            See Also:
+                `GetFileLen <https://tinyurl.com/ybxpt7eo#GetFileLen>`_
             """
         def GetFileModified(self, filename: str) -> datetime.datetime:
             """
@@ -1460,14 +1470,18 @@ class SFScriptForge:
                 datetime.datetime: The modification date and time.
            
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> print(session.GetFileModified("C:\\Windows\\Notepad.exe"))
                     2022-04-03 21:12:26
+
+            See Also:
+                `GetFileModified <https://tinyurl.com/ybxpt7eo#GetFileModified>`_
             """
         def GetName(self, filename: str) -> str:
             """
             Returns the last component of a File- or FolderName.
+
             The method does not check for the existence of the specified file or folder
 
             Args:
@@ -1481,10 +1495,14 @@ class SFScriptForge:
 
                     >>> print(session.GetName("C:\\Windows\\Notepad.exe"))
                    Notepad.exe
+
+            See Also:
+                `GetName <https://tinyurl.com/ybxpt7eo#GetName>`_
             """
         def GetParentFolderName(self, filename: str) -> str:
             """
             Returns a string containing the name of the parent folder of the last component in a specified File- or FolderName.
+
             The method does not check for the existence of the specified file or folder
 
             Args:
@@ -1494,10 +1512,13 @@ class SFScriptForge:
                 str: A FolderName including its final path separator
 
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> print(session.GetParentFolderName("C:\\Windows\\Notepad.exe"))
                    file:///C:/Windows/
+
+            See Also:
+                `GetParentFolderName <https://tinyurl.com/ybxpt7eo#GetParentFolderName>`_
             """
         def GetTempName(self) -> str:
             """
@@ -1516,26 +1537,45 @@ class SFScriptForge:
             """
         def HashFile(self, filename: str, algorithm: str) -> str:
             """
-            Return an hexadecimal string representing a checksum of the given file.
-            Next algorithms are supported: MD5, SHA1, SHA224, SHA256, SHA384 and SHA512
+            Gets a hexadecimal string representing a checksum of the given file.
 
             Args:
                 filename (str): a string representing a file
-                algorithm (str): The hashing algorithm to use: ``MD5``, ``SHA1``, ``SHA224``, ``SHA256``, ``SHA384`` or ``SHA512``
+                algorithm (str): The hashing algorithm to use.
 
             Returns:
                 str: The requested checksum as a string. Hexadecimal digits are lower-cased.
                 A zero-length string when an error occurred.
 
+            Note:
+                Arg ``algorithm`` support algorithms are:
+                    - MD5
+                    - SHA1
+                    - SHA224
+                    - SHA256
+                    - SHA384
+                    - SHA512
+
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> print(fso.HashFile("C:\\Windows\\Notepad.exe", "MD5"))
                     bbe80313cf12098d3fc4d8a42e9dbb33
+
+            See Also:
+                `HashFile <https://tinyurl.com/ybxpt7eo#HashFile>`_
             """
         def MoveFile(self, source: str, destination: str) -> bool:
             """
             Moves one or more files from one location to another.
+
+            Returns ``True`` if at least one file has been moved or ``False`` if an error occurred.
+
+            An error will also occur if the source parameter uses wildcard characters and
+            does not match any files.
+
+            The method stops immediately after it encounters an error. The method does not
+            roll back nor does it undo changes made before the error occurred.
 
             Args:
                 source (str): FileName or NamePattern which can include wildcard characters, for one or more files to be moved
@@ -1547,25 +1587,33 @@ class SFScriptForge:
 
             Returns:
                 bool: True if at least one file has been moved. False if an error occurred.
-                An error also occurs if a source using wildcard characters doesn't match any files.
-                The method stops on the first error it encounters.
-                No attempt is made to roll back or undo any changes made before an error occurs.
+
+            See Also:
+                `MoveFile <https://tinyurl.com/ybxpt7eo#MoveFile>`_
             """
         def MoveFolder(self, source: str, destination: str) -> bool:
             """
             Moves one or more folders from one location to another.
 
+            Returns ``True`` if at least one folder has been moved or ``False`` if an error occurred.
+
+            An error will also occur if the source parameter uses wildcard characters and does
+            not match any folders.
+
+            The method stops immediately after it encounters an error. The method does not roll
+            back nor does it undo changes made before the error occurred.
+
             Args:
                 source (str): FolderName or NamePattern which can include wildcard characters, for one or more folders to be moved
                 destination (str): FolderName where the single Source folder is to be moved. FolderName must not exist or
-                FolderName where the multiple folders from Source are to be moved.
-                If FolderName does not exist, it is created anyway, wildcard characters are not allowed in Destination.
+                    FolderName where the multiple folders from Source are to be moved.
+                    If FolderName does not exist, it is created anyway, wildcard characters are not allowed in Destination.
 
             Returns:
                 bool: True if at least one folder has been moved. False if an error occurred.
-                An error also occurs if a source using wildcard characters doesn't match any folders.
-                The method stops on the first error it encounters.
-                No attempt is made to roll back or undo any changes made before an error occurs.
+
+            See Also:
+                `MoveFolder <https://tinyurl.com/ybxpt7eo#MoveFolder>`_
             """
         def OpenTextFile(
             self,
@@ -1573,56 +1621,71 @@ class SFScriptForge:
             iomode: int = ...,
             create: bool = ...,
             encoding: str = ...,
-        ) -> "SFScriptForge.SF_TextStream":
+        ) -> SFScriptForge.SF_TextStream:
             """
             Opens a specified file and returns a TextStream object that can be used to read from, write to, or append to the file.
 
             Args:
                 filename (str): Identifies the file to open
-                iomode (int, optional): Indicates input/output mode. Can be one of three constants:
-                    SF_FileSystem.ForReading, SF_FileSystem.ForWriting, or SF_FileSystem.ForAppending. Defaults to 1.
+                iomode (int, optional): Indicates input/output mode.
                 create (bool, optional): Boolean value that indicates whether a new file can be created if the specified filename doesn't exist.
                     The value is True if a new file and its parent folders may be created; False if they aren't created. Defaults to False.
                 encoding (str, optional):  The character set that should be used. Defaults to "UTF-8".
 
             Returns:
-                SFScriptForge.SF_TextStream: An instance of the :py:`SFScriptForge.SF_TextStream` class representing the opened file or a ``None`` object if an error occurred.
-                The method does not check if the file is really a text file.
-                It doesn't check either if the given encoding is implemented in LibreOffice nor if it is the right one.
+                SFScriptForge.SF_TextStream: SF_TextStream instance representing the opened file
+                    or None if an error occurred. The method does not check if the file is really
+                    a text file. It doesn't check either if the given encoding is implemented in
+                    LibreOffice nor if it is the right one.
 
             Note:
-                ``encoding`` is one of the following `Character Sets <https://www.iana.org/assignments/character-sets/character-sets.xhtml>'_
+                Arg ``iomode`` Constants.
+                    - SF_FileSystem.ForReading (Default)
+                    - SF_FileSystem.ForWriting
+                    - SF_FileSystem.ForAppending
+
+                Arg ``encoding`` is one of the following `Character Sets <https://www.iana.org/assignments/character-sets/character-sets.xhtml>`_
                 
                 LibreOffice does not implement all existing encoding sets.
 
             Example:
-                .. code-block:: python
+                .. code::
 
                     >>> a = session.OpenTextFile("c:\\temp\\test.txt", session.ForReading, False)
                     >>> if a is not None:
                             a.ReadAll()
-                    'ScriptForge Rocks\r\n'
+                    'ScriptForge Rocks\\r\\n'
                     >>> a.CloseFile()
                     True
+
+            See Also:
+                `OpenTextFile <https://tinyurl.com/ybxpt7eo#OpenTextFile>`_
             """
         def PickFile(
             self, defaultfile: str = ..., mode: str = ..., filter: str = ...,
         ) -> str:
             """
-            Returns the file selected with a FilePicker dialog box.
-            The mode, OPEN or SAVE, and the filter may be preset.
-            If mode = SAVE and the picked file exists, a warning message will be displayed.
+            Opens a dialog box to open or save files.
+
+            If the ``SAVE`` mode is set and the picked file exists, a warning message will be displayed.
             
 
             Args:
-                defaultfile (str, optional): Folder part: the FolderName from which to start. Default = the last selected folder.
-                    File part - the default file to open or save. Defaults to ScriptForge.cstSymEmpty.
-                mode (str, optional): "OPEN" (input file) or "SAVE" (output file). Defaults to "OPEN".
-                filter (str, optional): by default only files having the given suffix will be displayed. Default = all suffixes.
-                    The filter combo box will contain the given SuffixFilter (if not ``*``) and ``*.*``.Defaults to "".
+                defaultfile (str, optional): This argument is a string composed of a folder and file name.
+                mode (str, optional): A string value that can be either "OPEN" (for input files) or
+                    "SAVE" (for output files). The default value is "OPEN".
+                filter (str, optional): The extension of the files displayed when the dialog is opened (default = no filter).
+
+            Note:
+                ``defaultfile`` notes:
+                    - The folder part indicates the folder that will be shown when the dialog opens (default = the last selected folder).
+                    - The file part designates the default file to open or save.
 
             Returns:
                 str: The selected FileName in URL format or "" if the dialog was cancelled.
+
+            See Also:
+                `PickFile <https://tinyurl.com/ybxpt7eo#PickFile>`_
             """
         def PickFolder(self, defaultfolder: str = ..., freetext: str = ...) -> str:
             """
@@ -1635,8 +1698,29 @@ class SFScriptForge:
             Returns:
                 str: The selected FolderName in URL or operating system format.
                 A zero-length string if the dialog was cancelled.
+
+            See Also:
+                `PickFolder <https://tinyurl.com/ybxpt7eo#PickFolder>`_
             """
-        def SubFolders(self, foldername: str, filter: str = ...) -> Any: ...
+        def SubFolders(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
+            """
+            Returns a zero-based array of strings corresponding to the folders stored
+            in a given ``foldername``.
+
+            The list may be filtered with wildcards.
+
+            Args:
+                foldername (str): A string representing a folder. The folder must exist.
+                    foldername must not designate a file.
+                filter (str, optional): A string containing wildcards ("?" and "*") that will
+                    be applied to the resulting list of folders (default = "").
+
+            Returns:
+                tuple: tuple of strings corresponding to the folders stored in a given foldername.
+
+            See Also:
+                `SubFolders <https://tinyurl.com/ybxpt7eo#SubFolders>`_
+            """
         @classmethod
         def _ConvertFromUrl(cls, filename: str) -> str: ...
         # _ConvertFromUrl Alias for same function in FileSystem Basic module
@@ -1696,23 +1780,6 @@ class SFScriptForge:
             `ScriptForge.L10N service <https://tinyurl.com/y77mbtp9>`_
         """
 
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.L10N"]
-        servicesynonyms: Tuple[str, str] = ...
-        serviceproperties: dict = ...
-
-        # region Methods
-        # 7.4
-        # @classmethod
-        # def ReviewServiceArgs(
-        #     cls,
-        #     foldername: str = "",
-        #     locale: str = "",
-        #     encoding: str = "UTF-8",
-        #     locale2: str = "",
-        #     encoding2: str = "UTF-8",
-        # ) -> Tuple[str, str, str, str, str]:
         @classmethod
         def ReviewServiceArgs(
             cls, foldername: str = ..., locale: str = ..., encoding: str = ...
@@ -1724,19 +1791,28 @@ class SFScriptForge:
             self, context: str = ..., msgid: str = ..., comment: str = ...
         ) -> bool:
             """
-            Add a new entry in the list of localizable text strings.
+            Adds a new entry in the list of localizable strings. It must not exist yet.
+
+            The method returns ``True`` if successful.
 
             Args:
-                context (str, optional): when not empty, the key to retrieve the translated string via GetText. Defaults to "".
-                msgid (str, optional): the untranslated string, i.e. the text appearing in the program code. Must not be empty.
-                    The key to retrieve the translated string via GetText when Context is empty.
-                    May contain placeholders (%1 ... %9) for dynamic arguments to be inserted in the text at run-time.
-                    If the string spans multiple lines, insert escape sequences (\\n) where relevant. Defaults to "".
-                comment (str, optional): the so-called "extracted-comments" intended to inform/help translators.
-                    If the string spans multiple lines, insert escape sequences (\\n) where relevant. Defaults to "".
+                context (str, optional): The key to retrieve the translated string with the GetText method.
+                    This parameter has a default value of "".
+                msgid (str, optional): The untranslated string, which is the text appearing in the program code.
+                comment (str, optional): Optional comment to be added alongside the string to help translators.
+
+            Note:
+                ``msgid`` must not be empty. The ``msgid`` becomes the key to retrieve the translated
+                string via GetText method when context is empty.
+
+                The ``msgid`` string may contain any number of placeholders (%1 %2 %3 ...) for dynamically
+                modifying the string at runtime.
 
             Returns:
                 bool: True if successful.
+
+            See Also:
+                `AddText <https://tinyurl.com/y77mbtp9#AddText>`_
             """
         def AddTextsFromDialog(self, dialog: object) -> bool:
             """
@@ -1756,6 +1832,9 @@ class SFScriptForge:
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `AddTextsFromDialog <https://tinyurl.com/y77mbtp9#AddTextsFromDialog>`_
             """
         def ExportToPOTFile(
             self, filename: str, header: str = ..., encoding: str = ...
@@ -1769,7 +1848,7 @@ class SFScriptForge:
             Args:
                 filename (str): the complete file name to export to. If it exists, is overwritten without warning.
                 header (str, optional): Comments that will appear on top of the generated file. Do not include any leading "#".
-                    If the string spans multiple lines, insert escape sequences (\n) where relevant.
+                    If the string spans multiple lines, insert escape sequences (\\n) where relevant.
                     A standard header will be added anyway. Defaults to "".
                 encoding (str, optional):  The character set that should be used. Defaults to "UTF-8".
 
@@ -1777,24 +1856,42 @@ class SFScriptForge:
                 bool: True if successful.
             
             Note:
-                ``encoding`` is one of the following `Character Sets <https://www.iana.org/assignments/character-sets/character-sets.xhtml>'_
+                ``encoding`` is one of the following `Character Sets <https://www.iana.org/assignments/character-sets/character-sets.xhtml>`_
                 
                 LibreOffice does not implement all existing encoding sets.
+
+            See Also:
+                `ExportToPOTFile <https://tinyurl.com/y77mbtp9#ExportToPOTFile>`_
             """
         def GetText(self, msgid: Any, *args: Any) -> str:
             """
-            Get the translated string corresponding with the given argument.
+            Gets the translated string corresponding to the given ``msgid`` argument.
+
+            A list of arguments may be specified to replace the placeholders (%1, %2, ...)
+            in the string.
+
+            If no translated string is found, the method returns the untranslated string
+            after replacing the placeholders with the specified arguments.
 
             Args:
-                msgid (Any): the identifier of the string or the untranslated string.
-                    Either
-                        - the untranslated text (MsgId)
-                        - the reference to the untranslated text (Context)
-                        - both (Context|MsgId) : the pipe character is essential
+                msgid (Any): The untranslated string, which is the text appearing
+                    in the program code. It must not be empty. It may contain any
+                    number of placeholders (%1 %2 %3 ...) that can be used to
+                    dynamically insert text at runtime.
+                args (Any): Values to be inserted into the placeholders. Any variable type is allowed, however only strings, numbers and dates will be considered.
 
             Returns:
                 str: The translated string. If not found the MsgId string or the Context string
                 anyway the substitution is done
+
+            Note:
+                Besides using a single ``msgid`` string, this method also accepts the following formats:
+                    - the untranslated text (MsgId)
+                    - the reference to the untranslated text (Context)
+                    - both (Context|MsgId) : the pipe character is essential
+
+            See Also:
+                `GetText <https://tinyurl.com/y77mbtp9#GetText>`_
             """
         # endregion Methods
         
@@ -1835,12 +1932,6 @@ class SFScriptForge:
         See Also:
             `ScriptForge.Platform service <https://tinyurl.com/ybuvx3v4>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.Platform"]
-        servicesynonyms: Tuple[str, str] = ...
-        serviceproperties: dict = ...
         # Python helper functions
         py: str = ...
         # region Properties
@@ -1857,7 +1948,7 @@ class SFScriptForge:
         def CurrentUser(self) -> str:
             """Gets the name of logged in user"""
         @property
-        def Fonts(sefl) -> Tuple[str, ...]:
+        def Fonts(self) -> Tuple[str, ...]:
             """
             Gets tuple of strings containing the names of all available fonts.
             """
@@ -1921,56 +2012,6 @@ class SFScriptForge:
         # endregion Properties
     # endregion SF_Platform CLASS
     
-    # region SF_Region CLASS
-    # 7.4
-    # class SF_Region(SFServices, metaclass=_Singleton):
-    #     """
-    #     The "Region" service gathers a collection of functions about languages, countries and timezones
-    #         - Locales
-    #         - Currencies
-    #         - Numbers and dates formatting
-    #         - Calendars
-    #         - Timezones conversions
-    #         - Numbers transformed to text
-    #     """
-
-    #     # Mandatory class properties for service registration
-    #     serviceimplementation: str = ...
-    #     servicename: str = ...
-    #     servicesynonyms: Tuple[str, str] = ...
-    #     serviceproperties: dict = ...
-    #     # Next functions are implemented in Basic as read-only properties with 1 argument
-    #     def Country(self, region: str = "") -> str: ...
-    #     def Currency(self, region: str = "") -> str: ...
-    #     def DatePatterns(self, region: str = "") -> Any: ...
-    #     def DateSeparator(self, region: str = "") -> str: ...
-    #     def DayAbbrevNames(self, region: str = "") -> Any: ...
-    #     def DayNames(self, region: str = "") -> Any: ...
-    #     def DayNarrowNames(self, region: str = "") -> Any: ...
-    #     def DecimalPoint(self, region: str = "") -> str: ...
-    #     def Language(self, region: str = "") -> str: ...
-    #     def ListSeparator(self, region: str = "") -> str: ...
-    #     def MonthAbbrevNames(self, region: str = "") -> Any: ...
-    #     def MonthNames(self, region: str = "") -> Any: ...
-    #     def MonthNarrowNames(self, region: str = "") -> Any: ...
-    #     def ThousandSeparator(self, region: str = "") -> str: ...
-    #     def TimeSeparator(self, region: str = "") -> str: ...
-    #     # Usual methods
-    #     def DSTOffset(
-    #         self, localdatetime: Any, timezone: str, locale: str = ""
-    #     ) -> int: ...
-    #     def LocalDateTime(
-    #         self, utcdatetime: Any, timezone: str, locale: str = ""
-    #     ) -> datetime.datetime: ...
-    #     def Number2Text(self, number: Union[int, float], locale="") -> str: ...
-    #     def TimeZoneOffset(self, timezone: str, locale: str = "") -> int: ...
-    #     def UTCDateTime(
-    #         self, localdatetime: datetime.datetime, timezone: str, locale: str = ""
-    #     ) -> datetime.datetime: ...
-    #     def UTCNow(self, timezone: str, locale: str = "") -> datetime.datetime: ...
-    # endregion SF_Region CLASS
-    
-    # region SF_Session CLASS
     class SF_Session(SFServices, metaclass=_Singleton):
         """
         The Session service gathers various general-purpose methods about:
@@ -1981,11 +2022,6 @@ class SFScriptForge:
             `ScriptForge.Session service <https://tinyurl.com/yaf7co37>`_
         """
         # region CONST
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.Session"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
 
         # Class constants               Where to find an invoked library ?
         SCRIPTISEMBEDDED: Literal["document"]  # in the document
@@ -2009,45 +2045,106 @@ class SFScriptForge:
             cls, scope: str = ..., script: str = ..., *args: Any
         ) -> Any:
             """
-            Execute the Basic script given as a string and return the value returned by the script.
+            Execute the Basic script given its name and location and fetch its result if any.
+
+            If the script returns nothing, which is the case of procedures defined with Sub,
+            the returned value is Empty.
 
             Args:
-                scope (str, optional): "Application" (default) or "Document" (NOT case-sensitive). Defaults to "".
-                script (str, optional): library.module.method (Case sensitive). Defaults to "".
-                    library => The library may be not loaded yet.
-                    module => Must not be a class module.
-                    method => Sub or Function.
+                scope (str, optional): "String specifying where the script is stored.
+                script (str, optional): String specifying the script to be called in the format
+                    "library.module.method" as a case-sensitive string.
+                args (any, optional): The arguments to be passed to the called script.
+
+            Note:
+                Arg ``scope`` can be either:
+                    - "document" (constant ``session.SCRIPTISEMBEDDED``)
+                    - "application" (constant ``session.SCRIPTISAPPLICATION``).
+
+                Arg ``script`` can be:
+                    - The library is loaded in memory if necessary.
+                    - The module must not be a class module.
+                    - The method may be a ``Sub`` or a ``Function``.
 
             Returns:
                 Any: The value returned by the call to the script
             
             See Also:
-                `Scripting Framework URI Specification <https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification`_
+                `ExecuteBasicScript <https://tinyurl.com/yaf7co37#ExecuteBasicScript>`_
+
+                `Scripting Framework URI Specification <https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification>`_
             """
         @classmethod
-        def ExecuteCalcFunction(cls, calcfunction: str, *args: Any) -> Any: ...
+        def ExecuteCalcFunction(cls, calcfunction: str, *args: Any) -> Any:
+            """
+            Execute a Calc function using its English name and based on the given arguments.
+            If the arguments are arrays, the function is executed as an
+            `array formula <https://tinyurl.com/5xtjus4a>`_.
+
+            Args:
+                calcfunction (str): The name of the Calc function to be called, in English.
+                args (any, optional): The arguments to be passed to the called Calc function.
+                    Each argument must be either a string, a numeric value or an array of arrays
+                    combining those types.
+
+            Example:
+                .. code::
+
+                    >>> session.ExecuteCalcFunction("AVERAGE", 1, 5, 3, 7) # 4
+                    >>> session.ExecuteCalcFunction("ABS", ((-1, 2, 3), (4, -5, 6), (7, 8, -9)))[2][2] # 9
+                    >>> session.ExecuteCalcFunction("LN", -3)
+
+            Returns:
+                Any: results of function.
+
+            See Also:
+                `ExecuteCalcFunction <https://tinyurl.com/yaf7co37#ExecuteCalcFunction>`_
+            """
         @classmethod
         def ExecutePythonScript(
             cls, scope: str = ..., script: str = ..., *args: Any
         ) -> Any:
             """
-            Execute the Python script given as a string and return the value returned by the script.
+            Execute the Python script given its location and name, fetch its result if any.
+            Result can be a single value or an array of values.
+
+            If the script is not found, or if it returns nothing, the returned value is Empty.
+
+            The LibreOffice Application Programming Interface (API) Scripting Framework
+            supports inter-language script execution between Python and Basic, or other
+            supported programming languages for that matter. Arguments can be passed back and
+            forth across calls, provided that they represent primitive data types that both
+            languages recognize, and assuming that the Scripting Framework converts them appropriately.
+
 
             Args:
-                scope (str, optional): one of the SCRIPTIS... public constants above (default = "share"). Defaults to "".
-                script (str, optional): (Case sensitive). Defaults to "".
-                    "library/module.py$method" or "module.py$method"
-                    or "myExtension.oxt|myScript|module.py$method".
-                    library => The library may be not loaded yet.
-                    myScript => The directory containing the python module.
-                    module.py => The python module.
-                    method => The python function.
+                scope (str, optional): One of the applicable constants listed. See Note
+                script (str, optional): Either "library/module.py$method" or "module.py$method"
+                    or "myExtension.oxt|myScript|module.py$method" as a case-sensitive string.
+
+            Note:
+                Arg ``scope`` `constants <https://tinyurl.com/yaf7co37#constants>`_:
+                    - SCRIPTISEMBEDDED
+                    - SCRIPTISAPPLICATION
+                    - SCRIPTISPERSONAL
+                    - SCRIPTISPERSOXT
+                    - SCRIPTISSHARED
+                    - SCRIPTISSHAROXT
+                    - SCRIPTISOXT
+
+                Arg ``script`` values:
+                    - library: The folder path to the Python module.
+                    - myScript: The folder containing the Python module.
+                    - module.py: The Python module.
+                    - method: The Python function.
 
             Returns:
                 Any: The value(s) returned by the call to the script. If > 1 values, enclosed in a tuple.
             
             See Also:
-                `Scripting Framework URI Specification <https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification`_
+                `ExecutePythonScript <https://tinyurl.com/yaf7co37#ExecutePythonScript>`_
+
+                `Scripting Framework URI Specification <https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification>`_
             """
         def HasUnoMethod(self, unoobject: object, methodname: str) -> bool:
             """
@@ -2072,6 +2169,9 @@ class SFScriptForge:
 
             Returns:
                 bool: False when the property is not found or when an argument is invalid
+
+            See Also:
+                `HasUnoProperty <https://tinyurl.com/yaf7co37#HasUnoProperty>`_
             """
         @classmethod
         def OpenURLInBrowser(cls, url: str) -> None:
@@ -2080,6 +2180,9 @@ class SFScriptForge:
 
             Args:
                 url (str): The URL to open in the browser
+
+            See Also:
+                `OpenURLInBrowser <https://tinyurl.com/yaf7co37#OpenURLInBrowser>`_
             """
         def RunApplication(self, command: Any, parameters: str) -> bool:
             """
@@ -2096,11 +2199,14 @@ class SFScriptForge:
                 bool: True if success
 
             Example:
-                .. code-block:: python
+                .. code::
                 
                     session.RunApplication"Notepad.exe")
                     session.RunApplication("C:\myFolder\myDocument.odt")
                     session.RunApplication("kate", "/home/me/install.txt") # Linux
+
+            See Also:
+                `RunApplication <https://tinyurl.com/yaf7co37#RunApplication>`_
             """
         def SendMail(
             self,
@@ -2110,7 +2216,7 @@ class SFScriptForge:
             subject: str = ...,
             body: str = ...,
             filenames: str = ...,
-            editmessage=...,
+            editmessage:bool=...,
         ) -> None:
             """
             Send a message (with or without attachments) to recipients from the user's mail client.
@@ -2124,6 +2230,9 @@ class SFScriptForge:
                 body (str, optional): the unformatted text of the message. Defaults to ''.
                 filenames (str, optional): a comma-separated list of filenames to attach to the mail. SF_FileSystem naming conventions apply. Defaults to ''.
                 editmessage (bool, optional): when True (default) the message is editable before being sent. Defaults to True.
+
+            See Also:
+                `SendMail <https://tinyurl.com/yaf7co37#SendMail>`_
             """
         def UnoObjectType(self, unoobject: object) -> str:
             """
@@ -2136,28 +2245,35 @@ class SFScriptForge:
             Returns:
                 str: com.sun.star. ... as a string or
                 a zero-length string if identification was not successful
+
+            See Also:
+                `UnoObjectType <https://tinyurl.com/yaf7co37#UnoObjectType>`_
             """
-        def UnoMethods(self, unoobject: object) -> tuple:
+        def UnoMethods(self, unoobject: object) -> Tuple[str, ...]:
             """
             Returns a tuple of the methods callable from an UNO object.
-            Code-snippet derived from XRAY.
 
             Args:
                 unoobject (object):  the object to identify
 
             Returns:
-                tuple: A zero-based sorted tuple. May be empty
+                Tuple[str, ...]: A zero-based sorted tuple. May be empty
+
+            See Also:
+                `UnoMethods <https://tinyurl.com/yaf7co37#UnoMethods>`_
             """
-        def UnoProperties(self, unoobject: object) -> tuple:
+        def UnoProperties(self, unoobject: object) -> Tuple[str, ...]:
             """
             Returns a tuple of the properties of an UNO object.
-             Code-snippet derived from XRAY.
 
             Args:
                 unoobject (object):  the object to identify
 
             Returns:
-                tuple: A zero-based sorted tuple. May be empty
+                Tuple[str, ...]: A zero-based sorted tuple. May be empty
+
+            See Also:
+                `UnoProperties <https://tinyurl.com/yaf7co37#UnoProperties>`_
             """
         def WebService(self, uri: str) -> str:
             """
@@ -2170,11 +2286,14 @@ class SFScriptForge:
                 str: The web page content of the URI
 
             Example:
-                .. code-block:: python
+                .. code::
 
                     session.WebService(
                         "wiki.documentfoundation.org/api.php?hidebots=1&days=7&limit=50&action=feedrecentchanges&feedformat=rss"
                         )
+
+            See Also:
+                `WebService <https://tinyurl.com/yaf7co37#WebService>`_
             """
         # endregion Methods
     # endregion SF_Session CLASS
@@ -2189,30 +2308,35 @@ class SFScriptForge:
         See Also:
             `ScriptForge.String service <https://tinyurl.com/y9hm6agu>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.String"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # region Methods
         @classmethod
         def HashStr(cls, inputstr: str, algorithm: str) -> str:
             """
-            Return an hexadecimal string representing a checksum of the given input string
+            Return a hexadecimal string representing a checksum of the given input string
 
             Args:
                 inputstr (str): the string to be hashed
-                algorithm (str): The hashing algorithm to use  ``MD5``, ``SHA1``, ``SHA224``, ``SHA256``, ``SHA384`` and ``SHA512``
+                algorithm (str): The hashing algorithm to use.
 
             Returns:
                 str: The requested checksum as a string. Hexadecimal digits are lower-cased.
                 A zero-length string when an error occurred
-            
+            Note:
+                Arg ``algorithm`` support algorithms are:
+                    - MD5
+                    - SHA1
+                    - SHA224
+                    - SHA256
+                    - SHA384
+                    - SHA512
+
             Example:
                 .. code-block:: python
 
                     SF_String.HashStr("œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬", "MD5")	# 616eb9c513ad07cd02924b4d285b9987
+
+            See Also:
+                `HashStr <https://tinyurl.com/y9hm6agu#HashStr>`_
             """
         def IsADate(self, inputstr: str, dateformat: str = ...) -> bool:
             """
@@ -2228,10 +2352,12 @@ class SFScriptForge:
                 False otherwise or if the date format is invalid
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsADate("2019-12-31", "YYYY-MM-DD"))
                     True
+            See Also:
+                `IsADate <https://tinyurl.com/y9hm6agu#IsADate>`_
             """
         def IsEmail(self, inputstr: str) -> bool:
             """
@@ -2244,10 +2370,13 @@ class SFScriptForge:
                 bool: True if the string contains an email address and there is at least one character, False otherwise.
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsEmail("first.last@something.org"))
                     True
+
+            See Also:
+                `IsEmail <https://tinyurl.com/y9hm6agu#IsEmail>`_
             """
         def IsFileName(self, inputstr: str, osname: str = ...) -> bool:
             """
@@ -2280,10 +2409,13 @@ class SFScriptForge:
                 bool: True if the string contains a valid IBAN number. The comparison is not case-sensitive
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsIBAN("BR15 0000 0000 0000 1093 2840 814 P2"))
                     True
+
+            See Also:
+                `IsIBAN <https://tinyurl.com/y9hm6agu#IsIBAN>`_
             """
         def IsIPv4(self, inputstr: str) -> bool:
             """
@@ -2296,10 +2428,13 @@ class SFScriptForge:
                 bool: True if the string contains a valid IPv4 address and there is at least one character, False otherwise
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsIPv4("192.168.1.50"))
                     True
+
+            See Also:
+                `IsIPv4 <https://tinyurl.com/y9hm6agu#IsIPv4>`_
             """
         def IsLike(
             self, inputstr: str, pattern: str, casesensitive: bool = ...
@@ -2310,31 +2445,33 @@ class SFScriptForge:
             Args:
                 inputstr (str): the input string
                 pattern (str):  the pattern as a string.
-                    Admitted wildcard are:
-
-                        the ``?`` represents any single character
-
-                        the ``*`` represents zero, one, or multiple characters
-
                 casesensitive (bool, optional): case sensitive. Defaults to False.
+
+            Note:
+                Arg ``pattern`` wildcards:
+                    - the ``?`` represents any single character
+                    - the ``*`` represents zero, one, or multiple characters
 
             Returns:
                 bool: True if a match is found.
                 Zero-length input or pattern strings always return False
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsLike("aAbB", "?A*"))
                     True
-                    >>> print(	SF_String.IsLike("C:\a\b\c\f.odb", "?:*.*"))
+                    >>> print(	SF_String.IsLike("C:\\a\\b\\c\\f.odb", "?:*.*"))
                     True
+
+            See Also:
+                `IsLike <https://tinyurl.com/y9hm6agu#IsLike>`_
             """
         def IsSheetName(self, inputstr: str) -> bool:
             """
             Return True if the input string can serve as a valid Calc sheet name.
             
-            The sheet name must not contain the characters [ ] * ? : / \ 
+            The sheet name must not contain the characters ``[ ] * ? : / \``
             or the character ' (apostrophe) as first or last character.
 
             Args:
@@ -2344,17 +2481,20 @@ class SFScriptForge:
                 bool: True if the string is validated as a potential Calc sheet name, False otherwise
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsSheetName('1àbc + "def"'))
                     True
+
+            See Also:
+                `IsSheetName <https://tinyurl.com/y9hm6agu#IsSheetName>`_
             """
         def IsUrl(self, inputstr: str) -> bool:
             """
             Return True if the string is a valid absolute URL (Uniform Resource Locator).
             
             The parsing is done by the ParseStrict method of the URLTransformer UNO service.
-            `XURLTransformer Interface <https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1util_1_1XURLTransformer.html>`_
+            `XURLTransformer Interface <https://tinyurl.com/5yhwekmf>`_
 
             Args:
                 inputstr (str): the input string    
@@ -2363,10 +2503,13 @@ class SFScriptForge:
                 bool: True if the string contains a URL and there is at least one character, False otherwise
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.IsUrl("http://foo.bar/?q=Test%20URL-encoded%20stuff"))
                     True
+
+            See Also:
+                `IsUrl <https://tinyurl.com/y9hm6agu#IsUrl>`_
             """
         def SplitNotQuoted(
             self,
@@ -2392,12 +2535,15 @@ class SFScriptForge:
                 tuple: A tuple whose items are chunks of the input string, Delimiter not included
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> print(SF_String.SplitNotQuoted("abc def ghi"))
                     ["abc", "def", "ghi"]
                     >>> print(SF_String.SplitNotQuoted("abc,'"def,ghi"', ","))
                     ["abc", '"def,ghi"']
+
+            See Also:
+                `SplitNotQuoted <https://tinyurl.com/y9hm6agu#SplitNotQuoted>`_
             """
         def Wrap(self, inputstr, width=..., tabsize=...) -> Tuple[str, ...]:
             """
@@ -2412,8 +2558,11 @@ class SFScriptForge:
 
             Returns:
                 Tuple[str, ...]: Returns a zero-based tuple of output lines, without final newlines except the pre-existing line-breaks.
-                Tabs are expanded. Symbolic line breaks are replaced by their hard equivalents.
-                If the wrapped output has no content, the returned tuple is empty.
+                    Tabs are expanded. Symbolic line breaks are replaced by their hard equivalents.
+                    If the wrapped output has no content, the returned tuple is empty.
+
+            See Also:
+                `Wrap <https://tinyurl.com/y9hm6agu#Wrap>`_
             """
         # endregion Methods
     
@@ -2454,13 +2603,6 @@ class SFScriptForge:
         See Also:
             `ScriptForge.TextStream service <https://tinyurl.com/y9ubyoel>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.TextStream"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-
         # region Methods
         def CloseFile(self) -> bool:
             """
@@ -2468,6 +2610,9 @@ class SFScriptForge:
 
             Returns:
                 bool: True if the closure was successful.
+
+            See Also:
+                `CloseFile <https://tinyurl.com/y9ubyoel#CloseFile>`_
             """
         def ReadAll(self) -> str:
             """
@@ -2487,10 +2632,16 @@ class SFScriptForge:
             
             Returns:
                 str: The read line. The string may be empty.
+
+            See Also:
+                `ReadLine <https://tinyurl.com/y9ubyoel#ReadLine>`_
             """
         def SkipLine(self) -> None:
             """
             Skips the next line when reading a TextStream file.
+
+            See Also:
+                `SkipLine <https://tinyurl.com/y9ubyoel#SkipLine>`_
             """
         def WriteBlankLines(self, lines: int) -> None:
             """
@@ -2498,6 +2649,9 @@ class SFScriptForge:
 
             Args:
                 lines (int): the number of lines to write
+
+            See Also:
+                `WriteBlankLines <https://tinyurl.com/y9ubyoel#WriteBlankLines>`_
             """
         def WriteLine(self, line: str) -> None:
             """
@@ -2505,6 +2659,9 @@ class SFScriptForge:
 
             Args:
                 line (str): the line to write, may be empty.
+
+            See Also:
+                `WriteLine <https://tinyurl.com/y9ubyoel#WriteLine>`_
             """
         # endregion Methods
 
@@ -2533,7 +2690,7 @@ class SFScriptForge:
         @property
         def IOMode(self) -> str:
             """
-            Gets the input/output mode. Possible values are ``READ``, ``WRITE`` or ``APPEND``.
+            Gets the input/output mode. Possible values are READ, WRITE or APPEND.
             """
         @property
         def Line(self) -> int:
@@ -2553,23 +2710,23 @@ class SFScriptForge:
     # region SF_Timer CLASS
     class SF_Timer(SFServices):
         """
-        The "Timer" service measures the amount of time it takes to run user scripts.
-        """
+        The Timer service measures the amount of time it takes to run user scripts.
 
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.Timer"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # Force for each property to get its value from Basic
-        forceGetProperty: bool = True
+        A Timer measures durations. It can be:
+            - Started, to indicate when to start measuring time.
+            - Suspended, to pause measuring running time.
+            - Resumed, to continue tracking running time after the Timer has been suspended.
+            - Restarted, which will cancel previous measurements and start the Timer at zero.
+
+        See Also:
+            `ScriptForge.Timer service <https://tinyurl.com/2p84523z>`_
+        """
         # region Methods
         @classmethod
         def ReviewServiceArgs(cls, start: bool = ...) -> Tuple[bool]:
             """
             Transform positional and keyword arguments into positional only
             """
-            return (start,)
         def Continue(self) -> bool:
             """
             Continue a suspended timer.
@@ -2618,14 +2775,14 @@ class SFScriptForge:
             """
             Gets if the timer is started.
             
-            ``True`` when timer is started or suspended.
+            True when timer is started or suspended.
             """
         @property
         def IsSuspended(self) -> bool:
             """
             Gets if the timer is suspended.
             
-            ``True`` when timer is started and suspended.
+            True when timer is started and suspended.
             """
         @property
         def SuspendDuration(self) -> float:
@@ -2635,7 +2792,8 @@ class SFScriptForge:
         @property
         def TotalDuration(self) -> float:
             """
-            Gets the actual time elapsed since start or between start and stop (including suspensions and running time).
+            Gets the actual time elapsed since start or between start and stop
+            (including suspensions and running time).
             """
         # endregion Properties
     # endregion SF_Timer CLASS
@@ -2643,22 +2801,17 @@ class SFScriptForge:
     # region SF_UI CLASS
     class SF_UI(SFServices, metaclass=_Singleton):
         """
-            Singleton class for the identification and the manipulation of the
-            different windows composing the whole LibreOffice application:
-                - Windows selection
-                - Windows moving and resizing
-                - Statusbar settings
-                - Creation of new windows
-                - Access to the underlying "documents"
-            """
+        Singleton class for the identification and the manipulation of the
+        different windows composing the whole LibreOffice application:
+            - Windows selection
+            - Windows moving and resizing
+            - Statusbar settings
+            - Creation of new windows
+            - Access to the underlying "documents"
 
-        # region Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.UI"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # endregion Mandatory class properties for service registration
-
+        See Also:
+            `ScriptForge.UI service <https://tinyurl.com/sez3tpve>`_
+        """
         # region CONST
         MACROEXECALWAYS: Literal[2]
         MACROEXECNEVER: Literal[1]
@@ -2699,14 +2852,14 @@ class SFScriptForge:
             embeddeddatabase: str = ...,
             registrationname: str = ...,
             calcfilename: str = ...,
-        ) -> "SFDocuments.SF_Base":
+        ) -> SFDocuments.SF_Base:
             """
             Create a new LibreOffice Base document embedding an empty database of the given type.
 
             Args:
                 filename (str): Identifies the file to create. It must follow the SF_FileSystem.FileNaming notation.
                     If the file already exists, it is overwritten without warning.
-                embeddeddatabase (str, optional): either ``HSQLDB`` or ``FIREBIRD`` or ``CALC``. Defaults to ``HSQLDB``.
+                embeddeddatabase (str, optional): either HSQLDB or FIREBIRD or CALC. Defaults to HSQLDB.
                 registrationname (str, optional): the name used to store the new database in the databases register.
                     If "" (default), no registration takes place. If the name already exists it is overwritten without warning.
                     Defaults to ''.
@@ -2719,12 +2872,12 @@ class SFScriptForge:
             """
         def CreateDocument(
             self, documenttype: str = ..., templatefile: str = ..., hidden: bool = ...
-        ) -> "SFDocuments.SF_Base":
+        ) -> SFDocuments.SF_Base:
             """
             Create a new LibreOffice document of a given type or based on a given template.
 
             Args:
-                documenttype (str, optional): ``Calc``, ``Writer``, etc. If absent, a TemplateFile must be given. Defaults to ''.
+                documenttype (str, optional): Calc, Writer, etc. If absent, a TemplateFile must be given. Defaults to ''.
                 templatefile (str, optional): the full FileName of the template to build the new document on.
                     If the file does not exist, the argument is ignored.
                     The "FileSystem" service provides the TemplatesFolder and UserTemplatesFolder
@@ -2741,47 +2894,44 @@ class SFScriptForge:
 
             Returns:
                 Tuple[str, ...]: A tuple of filenames (in SF_FileSystem.FileNaming notation)
-                or of window titles for unsaved documents.
+                    or of window titles for unsaved documents.
             """
         def GetDocument(
-            self, windowname: str | XComponent | DatabaseDocument = ...
-        ) -> (SFDocuments.SF_Base
-              | SFDocuments.SF_Calc
-              | SFDocuments.SF_Chart
-              | SFDocuments.SF_Document
-              | SFDocuments.SF_Form
-              | SFDocuments.SF_Writer):
+            self, windowname: Union[str, XComponent, DatabaseDocument] = ...
+        ) -> Union[SFDocuments.SF_Base, SFDocuments.SF_Calc, SFDocuments.SF_Chart, SFDocuments.SF_Document, SFDocuments.SF_Form, SFDocuments.SF_Writer]:
             """
             Returns a Document object referring to the active window or the given window.
 
             Args:
-                windowname (Union[str, XComponent, DatabaseDocument], optional): when a string, see definitions. If absent the active window is considered.
-                    When an object, must be a UNO object of types ``XComponent`` or ``DatabaseDocument``.
+                windowname (str | XComponent | DatabaseDocument], optional): when a string, see definitions. If absent the active window is considered.
+                    When an object, must be a UNO object of types XComponent or DatabaseDocument.
                     Defaults to ''.
 
             Returns:
                 SFDocuments.SF_Document: document
             """
-        def Maximize(self, windowname: str | XWindow = ...) -> None:
+        def Maximize(self, windowname: Union[str, XWindow] = ...) -> None:
             """
             Maximizes the active window or the given window.
 
             Args:
-                windowname (str, XWindow, optional): see definitions. If absent the active window is considered. Defaults to ''.
+                windowname (str | XWindow, optional): see definitions.
+                    If absent the active window is considered. Defaults to ''.
             """
-        def Minimize(self, windowname: str | XWindow = ...) -> None:
+        def Minimize(self, windowname: Union[str, XWindow] = ...) -> None:
             """
             Minimizes the current window or the given window
 
             Args:
-                windowname (str, XWindow, optional): see definitions. If absent the active window is considered. Defaults to ''.
+                windowname (str | XWindow, optional): see definitions.
+                    If absent the active window is considered. Defaults to ''.
             """
         def OpenBaseDocument(
             self,
             filename: str = ...,
             registrationname: str = ...,
             macroexecution: int = ...,
-        ) -> "SFDocuments.SF_Base":
+        ) -> SFDocuments.SF_Base:
             """
             Open an existing LibreOffice Base document and return a SFDocuments.Document object.
 
@@ -2803,7 +2953,7 @@ class SFScriptForge:
             macroexecution: int = ...,
             filtername: str = ...,
             filteroptions: str = ...,
-        ) -> "SFDocuments.SF_Document":
+        ) -> SFDocuments.SF_Document:
             """
             Open an existing LibreOffice document with the given options.
 
@@ -2845,7 +2995,7 @@ class SFScriptForge:
 
             Args:
                 text (str, optional): The optional text to be displayed before the progress bar. Defaults to ''.
-                percentage (int, optional): The optional degree of progress between ``0`` and ``100``. Defaults to ``-1``.
+                percentage (int, optional): The optional degree of progress between 0 and 100. Defaults to -1.
             """
         def ShowProgressBar(
             self, title: str = ..., text: str = ..., percentage: int = ...
@@ -2858,14 +3008,14 @@ class SFScriptForge:
             Args:
                 title (str, optional): The title appearing on top of the dialog box (Default = "ScriptForge"). Defaults to ''.
                 text (str, optional): The optional text to be displayed above the progress bar. Defaults to ''.
-                percentage (int, optional): the degree of progress between ``0`` and ``100``. Defaults to ``-1``.
+                percentage (int, optional): the degree of progress between 0 and 100. Defaults to -1.
             """
-        def WindowExists(self, windowname: str | XWindow) -> bool:
+        def WindowExists(self, windowname: Union[str, XWindow]) -> bool:
             """
             Returns True if the specified window exists
 
             Args:
-                windowname (Union[str, XWindow]): window
+                windowname (str | XWindow): window
 
             Returns:
                 bool: True if the given window is found.
@@ -2894,12 +3044,6 @@ class SFDatabases:
         See Also:
             `SFDatabases.Database service <https://tinyurl.com/yd9y6xa7>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDatabases.Database"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # region Methods
         @classmethod
         def ReviewServiceArgs(
@@ -2913,12 +3057,16 @@ class SFDatabases:
             """
             Transform positional and keyword arguments into positional only
             """
-            return filename, registrationname, readonly, user, password
         def CloseDatabase(self) -> None:
-            """Close the current database connection"""
+            """
+            Close the current database connection
+
+            See Also:
+                `CloseDatabase <https://tinyurl.com/yd9y6xa7#CloseDatabase>`_
+            """
         def DAvg(
             self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        ) -> Union[float, None]:
             """
             Compute the aggregate function AVG() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -2930,10 +3078,13 @@ class SFDatabases:
 
             Returns:
                 Union[int, float, None]: result
+
+            See Also:
+                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DCount(
             self, expression: str, tablename: str, criteria: str = ...
-        ) -> int | None:
+        ) -> Union[int, None]:
             """
             Compute the aggregate function COUNT() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -2945,6 +3096,9 @@ class SFDatabases:
 
             Returns:
                 Union[int, None]: result
+
+            See Also:
+                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DLookup(
             self,
@@ -2965,10 +3119,13 @@ class SFDatabases:
 
             Returns:
                 Any: result
+
+            See Also:
+                `DLookup <https://tinyurl.com/yd9y6xa7#DLookup>`_
             """
         def DMax(
             self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        ) -> Union[float, None]:
             """
             Compute the aggregate function MAX() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -2979,10 +3136,13 @@ class SFDatabases:
                 criteria (str, optional): An optional WHERE clause without the word WHERE. Defaults to ''.
             Returns:
                 Union[int, float, None]: result
+
+            See Also:
+                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DMin(
             self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        ) -> Union[float, None]:
             """
             Compute the aggregate function MIN() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -2993,10 +3153,13 @@ class SFDatabases:
                 criteria (str, optional): An optional WHERE clause without the word WHERE. Defaults to ''.
             Returns:
                 Union[int, float, None]: result
+
+            See Also:
+                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DSum(
             self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        ) -> Union[float, None]:
             """
             Compute the aggregate function Sum() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3007,6 +3170,9 @@ class SFDatabases:
                 criteria (str, optional): An optional WHERE clause without the word WHERE. Defaults to ''.
             Returns:
                 Union[int, float, None]: result
+
+            See Also:
+                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def GetRows(
             self,
@@ -3027,7 +3193,10 @@ class SFDatabases:
 
             Returns:
                 list: a 2D list[row, column], even if only 1 column and/or 1 record.
-                An empty list if no records returned
+                    An empty list if no records returned
+
+            See Also:
+                `GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
             """
         def RunSql(self, sqlcommand: str, directsql: bool = ...) -> Any:
             """
@@ -3040,6 +3209,9 @@ class SFDatabases:
 
             Returns:
                 Any: result
+
+            See Also:
+                `RunSql <https://tinyurl.com/yd9y6xa7#RunSql>`_
             """
         # endregion Methods
 
@@ -3089,11 +3261,6 @@ class SFDialogs:
             `SFDialogs.Dialog service <https://tinyurl.com/yckkehha>`_
         """
         # region CONST
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDialogs.Dialog"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # Class constants used together with the Execute() method
         OKBUTTON: Literal[1]
         CANCELBUTTON: Literal[0]
@@ -3108,7 +3275,6 @@ class SFDialogs:
                 Transform positional and keyword arguments into positional only
                 Add the XComponentContext as last argument
                 """
-            return container, library, dialogname, ScriptForge.componentcontext
         def Activate(self) -> bool:
             """
             Set the focus on the current dialog instance
@@ -3116,10 +3282,13 @@ class SFDialogs:
 
             Returns:
                 bool: True if focusing is successful
+
+            See Also:
+                `Activate <https://tinyurl.com/yckkehha#Activate>`_
             """
         def Controls(
             self, controlname: str = ...
-        ) -> "Tuple[str, ...] | SFDialogs.SF_DialogControl":
+        ) -> Union[Tuple[str, ...], SFDialogs.SF_DialogControl]:
             """
             Retrun the list of the controls contained in the dialog or
             a dialog control object based on its name.
@@ -3128,8 +3297,11 @@ class SFDialogs:
                 controlname (str, optional): A valid control name as a case-sensitive string. If absent the list is returned. Defaults to ''.
 
             Returns:
-               Union[Tuple[str, ...], SFDialogs.SF_DialogControl]: A zero-base array of strings if ControlName is absent.
-               An instance of the SFDialogs.SF_DialogControl class if ControlName exists
+                Union[Tuple[str, ...], SFDialogs.SF_DialogControl]: A zero-base array of strings if ControlName is absent.
+                    An instance of the SFDialogs.SF_DialogControl class if ControlName exists
+
+            See Also:
+                `Controls <https://tinyurl.com/yckkehha#Controls>`_
             """
         def EndExecute(self, returnvalue: int) -> None:
             """
@@ -3141,6 +3313,9 @@ class SFDialogs:
 
             Args:
                 returnvalue (int): The value passed to the running Execute() method.
+
+            See Also:
+                `EndExecute <https://tinyurl.com/yckkehha#EndExecute>`_
             """
         def Execute(self, modal: bool = ...) -> int:
             """
@@ -3151,7 +3326,10 @@ class SFDialogs:
 
             Returns:
                 int: 0 = Cancel button pressed. 1 = OK button pressed.
-                Otherwise: the dialog stopped with an EndExecute statement executed from a dialog or control event.
+                    Otherwise: the dialog stopped with an EndExecute statement executed from a dialog or control event.
+
+            See Also:
+                `Execute <https://tinyurl.com/yckkehha#Execute>`_
             """
         def GetTextsFromL10N(self, l10n: SFScriptForge.SF_L10N) -> bool:
             """
@@ -3171,6 +3349,9 @@ class SFDialogs:
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `GetTextsFromL10N <https://tinyurl.com/yckkehha#GetTextsFromL10N>`_
             """
         def Terminate(self) -> bool:
             """
@@ -3179,6 +3360,9 @@ class SFDialogs:
 
             Returns:
                 bool: True if termination is successful.
+
+            See Also:
+                `Terminate <https://tinyurl.com/yckkehha#Terminate>`_
             """
         # endregion Methods
         
@@ -3195,6 +3379,119 @@ class SFDialogs:
         @property
         def Name(self) -> str:
             """Gets the name of the dialog"""
+        @property
+        def OnFocusGained(self) -> str:
+            """
+            Gets When receiving focus
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+
+        @property
+        def OnFocusLost(self) -> str:
+            """
+            Gets When losing focus
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+
+        @property
+        def OnKeyPressed(self) -> str:
+            """
+            Gets Key pressed
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+
+        @property
+        def OnKeyReleased(self) -> str:
+            """
+            Gets Key released
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseDragged(self) -> str:
+            """
+            Gets Mouse moved while key presses
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseEntered(self) -> str:
+            """
+            Gets Mouse inside
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseExited(self) -> str:
+            """
+            Gets Mouse outside
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseMoved(self) -> str:
+            """
+            Gets Mouse moved
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMousePressed(self) -> str:
+            """
+            Gets Mouse button pressed
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseReleased(self) -> str:
+            """
+            Gets Mouse button released
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
         @property
         def Page(self) -> int:
             """
@@ -3240,14 +3537,8 @@ class SFDialogs:
         A special attention is given to controls with type TreeControl.
 
         See Also:
-            `SFDialogs.DialogControl service <https://tinyurl.com/yb27tk36>'_
+            `SFDialogs.DialogControl service <https://tinyurl.com/yb27tk36>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDialogs.DialogControl"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
 
         # region Methods
         def AddSubNode(
@@ -3263,6 +3554,9 @@ class SFDialogs:
 
             Returns:
                 XMutableTreeNode: The new node UNO object: com.sun.star.awt.tree.XMutableTreeNode
+
+            See Also:
+                `AddSubNode <https://tinyurl.com/yb27tk36#AddSubNode>`_
             """
         def AddSubTree(
             self,
@@ -3285,28 +3579,31 @@ class SFDialogs:
             
             Notes:
                 FlatTree:
-
+                
                 .. code::
-
-                    Flat tree		>>>>		Resulting subtree
-                    A1	B1	C1					|__	A1
-                    A1	B1	C2						|__	B1
-                    A1	B2	C3							|__	C1
-                    A2	B3	C4							|__	C2
-                    A2	B3	C5						|__	B2
-                    A3	B4	C6							|__	C3
-                                                |__	A2
-                                                    |__	B3
-                                                        |__	C4
-                                                        |__	C5
-                                                |__	A3
-                                                    |__	B4
-                                                        |__	C6
+                
+					Flat tree		>>>>		Resulting subtree
+					A1	B1	C1					|__	A1
+					A1	B1	C2						|__	B1
+					A1	B2	C3							|__	C1
+					A2	B3	C4							|__	C2
+					A2	B3	C5						|__	B2
+					A3	B4	C6							|__	C3
+													|__	A2
+													|__	B3
+														|__	C4
+														|__	C5
+												|__	A3
+													|__	B4
+														|__	C6
 
                 Typically, such an array can be issued by the GetRows method applied on the SFDatabases.Database service
                 when an array item containing the text to be displayed is = "" or is empty/null,
                 no new subnode is created and the remainder of the row is skipped.
                 When AddSubTree() is called from a Python script, FlatTree may be an list of list.
+
+            See Also:
+                `AddSubTree <https://tinyurl.com/yb27tk36#AddSubTree>`_
             """
         def CreateRoot(
             self, displayvalue: str, datavalue: str = ...
@@ -3320,13 +3617,16 @@ class SFDialogs:
 
             Returns:
                 XMutableTreeNode: The new root node as a UNO object of type com.sun.star.awt.tree.XMutableTreeNode
+
+            See Also:
+                `CreateRoot <https://tinyurl.com/yb27tk36#CreateRoot>`_
             """
         def FindNode(
             self,
             displayvalue: str,
             datavalue: str = ScriptForge.cstSymEmpty,
             casesensitive: bool = False,
-        ) -> XMutableTreeNode | None:
+        ) -> Union[XMutableTreeNode, None]:
             """
             Traverses the tree and find recursively, starting from the root, a node meeting some criteria.
             Either (1 match is enough) having its DisplayValue like Dis playValue or
@@ -3343,6 +3643,9 @@ class SFDialogs:
 
             Returns:
                 Union[XMutableTreeNode, None]: The found node of type com.sun.star.awt.tree.XMutableTreeNode or None if not found.
+
+            See Also:
+                `FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
             """
         def SetFocus(self) -> bool:
             """
@@ -3351,6 +3654,9 @@ class SFDialogs:
 
             Returns:
                 bool: True if focusing is successful
+
+            See Also:
+                `SetFocus <https://tinyurl.com/yb27tk36#SetFocus>`_
             """
         def SetTableData(
             self, dataarray: tuple, widths: Tuple[int, ...] = ..., alignments: str = ...
@@ -3370,19 +3676,20 @@ class SFDialogs:
             Args:
                 dataarray (tuple): the set of data to display in the table control, including optional column/row headers
                     Is a 2D array in Basic, is a tuple of tuples when called from Python
-                widths (Tuple[int, ...], optional): the column's relative widths as a 1D array, each element corresponding with a column.
-                    If the array is shorter than the number of columns, the last value is kept for the next columns.
-                        Example:
-                            Widths = (1, 2)
-                        means that the first column is half as wide as all the other columns.
-                        When the argument is absent, the columns are evenly spread over the control.
-                    Defaults to (1,).
+                widths (Tuple[int, ...], optional): tuple containing the relative widths of each column.
+                    In other words, widths = Array(1, 2) means that the second column is twice as wide as
+                    the first one. If the number of values in the array is smaller than the number of
+                    columns in the table, then the last value in the array is used to define the width
+                    of the remaining columns.
                 alignments (str, optional): the column's horizontal alignment as a string with length = number of columns.
                     Possible characters are: L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
                     Defaults to ''.
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `SetTableData <https://tinyurl.com/yb27tk36#SetTableData>`_
             """
         def WriteLine(self, line: str = ...) -> bool:
             """
@@ -3394,6 +3701,9 @@ class SFDialogs:
 
             Returns:
                 bool: True if insertion is successful
+
+            See Also:
+                `WriteLine <https://tinyurl.com/yb27tk36#WriteLine>`_
             """
         # endregion Methods
 
@@ -3413,12 +3723,12 @@ class SFDialogs:
             Gets/Sets the text associated with the control.
 
             Applicable Controls:
-                * Button
-                * CheckBox
-                * FixedLine
-                * FixedText
-                * GroupBox
-                * RadioButton
+                - Button
+                - CheckBox
+                - FixedLine
+                - FixedText
+                - GroupBox
+                - RadioButton
             """
         @property
         def ControlType(self) -> str:
@@ -3466,9 +3776,9 @@ class SFDialogs:
             For times: "24h short", "24h long", "12h short", "12h long".
 
             Applicable Controls:
-                * DateField
-                * TimeField
-                * FormattedField (read-only)
+                - DateField
+                - TimeField
+                - FormattedField (read-only)
             """
         @property
         def ListCount(self) -> int:
@@ -3476,9 +3786,9 @@ class SFDialogs:
             Gets the number of rows in a ListBox, a ComboBox or a TableControl.
             
             Applicable Controls:
-                * ComboBox
-                * ListBox
-                * TableControl  
+                - ComboBox
+                - ListBox
+                - TableControl
             """
         @property
         def ListIndex(self) -> int:
@@ -3486,9 +3796,9 @@ class SFDialogs:
             Gets/Sets which item is selected in a ListBox, a ComboBox or a TableControl.
             
             Applicable Controls:
-                * ComboBox
-                * ListBox
-                * TableControl  
+                - ComboBox
+                - ListBox
+                - TableControl
             """
         @property
         def Locked(self) -> bool:
@@ -3496,16 +3806,16 @@ class SFDialogs:
             Gets/Sets if the control is read-only.
             
             Applicable Controls:
-                * ComboBox
-                * CurrencyField
-                * DateField
-                * FileControl
-                * FormattedField
-                * ListBox
-                * NumericField
-                * PatternField
-                * TextField
-                * TimeField
+                - ComboBox
+                - CurrencyField
+                - DateField
+                - FileControl
+                - FormattedField
+                - ListBox
+                - NumericField
+                - PatternField
+                - TextField
+                - TimeField
             """
         @property
         def MultiSelect(self) -> bool:
@@ -3522,6 +3832,182 @@ class SFDialogs:
 
             Applicable Controls:
                 All
+            """
+        @property
+        def OnActionPerformed(self) -> str:
+            """
+            Gets Execute action
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnAdjustmentValueChanged(self) -> str:
+            """
+            Gets While adjusting
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnFocusGained(self) -> str:
+            """
+            Gets When receiving focus
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnFocusLost(self) -> str:
+            """
+            Gets When losing focus
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnItemStateChanged(self) -> str:
+            """
+            Gets Item status changed
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnKeyPressed(self) -> str:
+            """
+            Gets Key pressed
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnKeyReleased(self) -> str:
+            """
+            Gets Key released
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseDragged(self) -> str:
+            """
+            Gets Mouse moved while key presses
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseEntered(self) -> str:
+            """
+            Gets Mouse inside
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseExited(self) -> str:
+            """
+            Gets Mouse outside
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseMoved(self) -> str:
+            """
+            Gets Mouse moved
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMousePressed(self) -> str:
+            """
+            Gets Mouse button pressed
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnMouseReleased(self) -> str:
+            """
+            Gets Mouse button released
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnNodeExpanded(self) -> str:
+            """
+            Gets (Not in Basic IDE) when the expansion button is pressed on a node in a tree control
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnNodeSelected(self) -> str:
+            """
+            Gets (Not in Basic IDE) when a node in a tree control is selected
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+            """
+        @property
+        def OnTextChanged(self) -> str:
+            """
+            Gets Text modified
+
+            Returns:
+                str: A URI string with the reference to the script triggered by the event.
+
+            See Also:
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def Page(self) -> int:
@@ -3576,11 +4062,11 @@ class SFDialogs:
             Gets the text being displayed by the control.
 
             Applicable Controls:
-                * ComboBox
-                * FileControl
-                * FormattedField
-                * PatternField
-                * TextField
+                - ComboBox
+                - FileControl
+                - FormattedField
+                - PatternField
+                - TextField
             """
         @property
         def TipText(self) -> str:
@@ -3655,23 +4141,14 @@ class SFDocuments:
         """
         The methods and properties are generic for all types of documents: they are combined in the
         current SF_Document class
-            * saving, closing documents
-            * accessing their standard or custom properties
+            - saving, closing documents
+            - accessing their standard or custom properties
 
         Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
-
 
         See Also:
             `SFDocuments.Document service <https://tinyurl.com/ybujrgjk>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation = Literal["basic"]
-        servicename = Literal["SFDocuments.Document"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty: bool
         # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
@@ -3684,6 +4161,9 @@ class SFDocuments:
 
             Returns:
                 bool: True if the document could be activated; Otherwise, there is no change in the actual user interface.
+
+            See Also:
+                `Activate <https://tinyurl.com/ybujrgjk#Activate>`_
             """
         def CloseDocument(self, saveask: bool = ...) -> bool:
             """
@@ -3696,6 +4176,9 @@ class SFDocuments:
 
             Returns:
                 bool: False if the user declined to close
+
+            See Also:
+                `CloseDocument <https://tinyurl.com/ybujrgjk#CloseDocument>`_
             """
         def ExportAsPDF(
             self,
@@ -3717,6 +4200,9 @@ class SFDocuments:
 
             Returns:
                 bool: False if the document could not be saved
+
+            See Also:
+                `ExportAsPDF <https://tinyurl.com/ybujrgjk#ExportAsPDF>`_
             """
         def PrintOut(self, pages: str = ..., copies: int = ...) -> bool:
             """
@@ -3729,6 +4215,9 @@ class SFDocuments:
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `PrintOut <https://tinyurl.com/ybujrgjk#PrintOut>`_
             """
         def RunCommand(self, command: str) -> None:
             """
@@ -3737,8 +4226,11 @@ class SFDocuments:
             Args:
                 command (str): Case-sensitive. The command itself is not checked.
                     If nothing happens, then the command is probably wrong.
-                    A few typical commands - ``Save``, ``SaveAs``, ``ExportToPDF``, ``SetDocumentProperties``,
-                    ``Undo``, ``Copy``, ``Paste``, ``About``
+                    A few typical commands - Save, SaveAs, ExportToPDF, SetDocumentProperties,
+                    Undo, Copy, Paste, About
+
+            See Also:
+                `RunCommand <https://tinyurl.com/ybujrgjk#RunCommand>`_
             """
         def Save(self) -> bool:
             """
@@ -3747,6 +4239,9 @@ class SFDocuments:
 
             Returns:
                 bool: False if the document could not be saved.
+
+            See Also:
+                `Save <https://tinyurl.com/ybujrgjk#Save>`_
             """
         def SaveAs(
             self,
@@ -3770,6 +4265,9 @@ class SFDocuments:
 
             Returns:
                 bool: False if the document could not be saved.
+
+            See Also:
+                `SaveAs <https://tinyurl.com/ybujrgjk#SaveAs>`_
             """
         def SaveCopyAs(
             self,
@@ -3793,6 +4291,9 @@ class SFDocuments:
 
             Returns:
                 bool: False if the document could not be saved.
+
+            See Also:
+                `SaveCopyAs <https://tinyurl.com/ybujrgjk#SaveCopyAs>`_
             """
         def SetPrinter(
             self, printer: str = ..., orientation: str = ..., paperformat: str = ...
@@ -3804,11 +4305,23 @@ class SFDocuments:
                 printer (str, optional): the name of the printer queue where to print to.
                     When absent or space, the default printer is set. Defaults to ''.
                 orientation (str, optional): either "PORTRAIT" or "LANDSCAPE". Left unchanged when absent. Defaults to ''.
-                paperformat (str, optional): one of next values
-                    ``A3``, ``A4``, ``A5``, ``B4``, ``B5``, ``LETTER``, ``LEGAL``, ``TABLOID``. Defaults to ''.
+                paperformat (str, optional): Paper format, see note. Left unchanged when absent.
 
+            Note:
+                Arg ``paperformat`` accepted values:
+                    - A3
+                    - A4
+                    - A5
+                    - B4
+                    - B5
+                    - LETTER
+                    - LEGAL
+                    - TABLOID
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `SetPrinter <https://tinyurl.com/ybujrgjk#SetPrinter>`_
             """
         # endregion methods
         
@@ -3909,12 +4422,6 @@ class SFDocuments:
         See Also:
             `SFDocuments.Base service <https://tinyurl.com/ya4lp2mq>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation = Literal["basic"]
-        servicename = Literal["SFDocuments.Base"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = "") -> Tuple[str]:
@@ -3924,9 +4431,9 @@ class SFDocuments:
         def CloseDocument(self, saveask: bool = True) -> bool:
             """
             The closure of a Base document requires the closures of
-                * the connection => done in the CloseDatabase() method
-                * the data source
-                * the document itself => done in the superclass
+                - the connection => done in the CloseDatabase() method
+                - the data source
+                - the document itself => done in the superclass
 
             Args:
                 saveask (bool, optional): Ask to save. Defaults to True.
@@ -3944,6 +4451,9 @@ class SFDocuments:
 
             Returns:
                 bool: True if closure is successful.
+
+            See Also:
+                `CloseFormDocument <https://tinyurl.com/ya4lp2mq#CloseFormDocument>`_
             """
         def FormDocuments(self) -> Tuple[str, ...]:
             """
@@ -3952,10 +4462,13 @@ class SFDocuments:
             Returns:
                 Tuple[str, ...]: A tuple of strings.
                     Each entry is the full path name of a form document. The path separator is the slash ("/")
+
+            See Also:
+                `FormDocuments <https://tinyurl.com/ya4lp2mq#FormDocuments>`_
             """
         def GetDatabase(
             self, user: str = ..., password: str = ...
-        ) -> SFDatabases.SF_Database | None:
+        ) -> Union[SFDatabases.SF_Database, None]:
             """
             Returns a Database instance (service = SFDatabases.Database) giving access
             to the execution of SQL commands on the database defined and/or stored in
@@ -3967,6 +4480,9 @@ class SFDocuments:
 
             Returns:
                 SFDatabases.SF_Database | None: SF_Database or None.
+
+            See Also:
+                `GetDatabase <https://tinyurl.com/ya4lp2mq#GetDatabase>`_
             """
         def IsLoaded(self, formdocument: str) -> bool:
             """
@@ -3977,8 +4493,15 @@ class SFDocuments:
 
             Returns:
                 bool: True if the form document is currently open, otherwise False.
+
+            See Also:
+                `IsLoaded <https://tinyurl.com/ya4lp2mq#IsLoaded>`_
             """
-        def OpenFormDocument(self, formdocument: str, designmode=...) -> bool:
+
+        @overload
+        def OpenFormDocument(self, formdocument: str) -> bool: ...
+        @overload
+        def OpenFormDocument(self, formdocument: str, designmode: bool) -> bool:
             """
             Open the FormDocument given by its hierarchical name either in normal or in design mode.
             If the form document is already open, the form document is made active without changing its mode.
@@ -3989,6 +4512,9 @@ class SFDocuments:
 
             Returns:
                 bool: True if the form document could be opened; Otherwise False.
+
+            See Also:
+                `OpenFormDocument <https://tinyurl.com/ya4lp2mq#OpenFormDocument>`_
             """
         def PrintOut(
             self, formdocument: str, pages: str = ..., copies: int = ...
@@ -4005,6 +4531,9 @@ class SFDocuments:
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `PrintOut <https://tinyurl.com/ya4lp2mq#PrintOut>`_
             """
         def SetPrinter(
             self,
@@ -4020,11 +4549,24 @@ class SFDocuments:
                 formdocument (str, optional): a valid document form name as a case-sensitive string. Defaults to ''.
                 printer (str, optional): the name of the printer queue where to print to. When absent or space, the default printer is set. Defaults to ''.
                 orientation (str, optional): either ``PORTRAIT`` or ``LANDSCAPE``. Defaults to ''.
-                paperformat (str, optional): one of next values
-                    ``A3``, ``A4``, ``A5``, ``B4``, ``B5``, ``LETTER``, ``LEGAL``, ``TABLOID``. Defaults to ''.
+                paperformat (str, optional): Paper format, see note. Left unchanged when absent.
+
+            Note:
+                Arg ``paperformat`` accepted values:
+                    - A3
+                    - A4
+                    - A5
+                    - B4
+                    - B5
+                    - LETTER
+                    - LEGAL
+                    - TABLOID
 
             Returns:
                 bool: True when successful.
+
+            See Also:
+                `SetPrinter <https://tinyurl.com/ya4lp2mq#SetPrinter>`_
             """
         # endregion methods
     # endregion SF_Base CLASS
@@ -4039,14 +4581,6 @@ class SFDocuments:
         See Also:
            `SF_Calc Help <https://tinyurl.com/y7jwr7b7>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation = Literal["basic"]
-        servicename = Literal["SFDocuments.Calc"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty = True
         # region methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
@@ -4386,7 +4920,7 @@ class SFDocuments:
             an error message is inserted at the top of the newly pasted sheet.
 
             Args:
-                filename (str): Identifies the file to open. It must follow the ``SF_FileSystem.FileNaming``
+                filename (str): Identifies the file to open. It must follow the SF_FileSystem.FileNaming
                     notation. The file must not be protected with a password.
                 sheetname (str): The name of the sheet to be copied as a string.
                 newname (str): The name of the copied sheet to be inserted in the document.
@@ -4401,7 +4935,7 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help CopySheetFromFile <https://tinyurl.com/y7jwr7b7#CopySheetFromFile>`_
             """
-        def CopyToCell(self, sourcerange: str | Any, destinationcell: str) -> str:
+        def CopyToCell(self, sourcerange: Union[str, Any], destinationcell: str) -> str:
             """
             Copies a specified source range (values, formulas and formats) to a destination range or cell.
             The method reproduces the behaviour of a Copy/Paste operation from a range to a single cell.
@@ -4422,7 +4956,7 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help CopyToCell <https://tinyurl.com/y7jwr7b7#CopyToCell>`_
             """
-        def CopyToRange(self, sourcerange: str | Any, destinationrange: str) -> str:
+        def CopyToRange(self, sourcerange: Union[str, Any], destinationrange: str) -> str:
             """
             Copies downwards and/or rightwards a specified source range (values, formulas and formats)
             to a destination range. The method imitates the behaviour of a Copy/Paste operation from
@@ -4452,7 +4986,7 @@ class SFDocuments:
             range: str,
             columnheader: bool = ...,
             rowheader: bool = ...,
-        ) -> "SFDocuments.SF_Chart":
+        ) -> SFDocuments.SF_Chart:
             """
             Creates a new chart object showing the data in the specified range.
             The returned chart object can be further manipulated using the ``Chart service``.
@@ -4479,6 +5013,9 @@ class SFDocuments:
 
             Returns:
                 float: The average of the numeric values.
+
+            See Also:
+                `SF_Calc Help DAvg <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
         def DCount(self, range: str) -> float:
             """
@@ -4489,6 +5026,9 @@ class SFDocuments:
 
             Returns:
                 float: The number of numeric values.
+
+            See Also:
+                `SF_Calc Help DCount <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
         def DMax(self, range: str) -> float:
             """
@@ -4499,6 +5039,9 @@ class SFDocuments:
 
             Returns:
                 float: The greatest of the numeric values.
+
+            See Also:
+                `SF_Calc Help DMax <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
         def DMin(self, range: str) -> float:
             """
@@ -4509,6 +5052,9 @@ class SFDocuments:
 
             Returns:
                 float: The smallest of the numeric values.
+
+            See Also:
+                `SF_Calc Help DMin <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
         def DSum(self, range: str) -> float:
             """
@@ -4519,6 +5065,9 @@ class SFDocuments:
 
             Returns:
                 float: The sum of the numeric values.
+
+            See Also:
+                `SF_Calc Help DSum <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
         @overload
         def Forms(self, sheetname: str) -> Tuple[str]:
@@ -4535,7 +5084,7 @@ class SFDocuments:
                 `SF_Calc Help Forms <https://tinyurl.com/y7jwr7b7#Forms>`_
             """
         @overload
-        def Forms(self, sheetname: str, form: int) -> "SFDocuments.SF_Form":
+        def Forms(self, sheetname: str, form: int) -> SFDocuments.SF_Form:
             """
             Retruns a SFDocuments.Form service instance representing the form specified as argument.
 
@@ -4550,7 +5099,7 @@ class SFDocuments:
                 `SF_Calc Help Forms <https://tinyurl.com/y7jwr7b7#Forms>`_
             """
         @overload
-        def Forms(self, sheetname: str, form: str) -> "SFDocuments.SF_Form":
+        def Forms(self, sheetname: str, form: str) -> SFDocuments.SF_Form:
             """
             Retruns a SFDocuments.Form service instance representing the form specified as argument.
 
@@ -4621,7 +5170,7 @@ class SFDocuments:
             The method returns a string representing the modified range of cells.
 
             Args:
-                filename (str): Identifies the file to open. It must follow the ``SF_FileSystem.FileNaming`` notation.
+                filename (str): Identifies the file to open. It must follow the SF_FileSystem.FileNaming notation.
                 destinationcell (str): The destination cell to insert the imported data, as a string. If instead a range is given, only its top-left cell is considered.
                 filteroptions (str, optional): The arguments for the CSV input filter.
 
@@ -4630,15 +5179,15 @@ class SFDocuments:
                 The modified area depends only on the content of the source file.
             
             Note:
-                Default ``filteroptions`` makes the folowing assumptions.
-                * The input file encoding is UTF8.
-                * The field separator is a comma, a semi-colon or a Tab character.
-                * The string delimiter is the double quote (").
-                * All lines are included.
-                * Quoted strings are formatted as text.
-                * Special numbers are detected.
-                * All columns are presumed to be texts, except if recognized as valid numbers.
-                * The language is English/US, which implies that the decimal separator is "." and the thousands separator is ",".
+                Default ``filteroptions`` makes the folowing assumptions:
+                    - The input file encoding is UTF8.
+                    - The field separator is a comma, a semi-colon or a Tab character.
+                    - The string delimiter is the double quote (").
+                    - All lines are included.
+                    - Quoted strings are formatted as text.
+                    - Special numbers are detected.
+                    - All columns are presumed to be texts, except if recognized as valid numbers.
+                    - The language is English/US, which implies that the decimal separator is "." and the thousands separator is ",".
  
             See Also:
                 `SF_Calc Help ImportFromCSVFile <https://tinyurl.com/y7jwr7b7#ImportFromCSVFile>`_
@@ -4659,9 +5208,9 @@ class SFDocuments:
             imported contents. The size of the modified area is fully determined by the contents in the table or query.
 
             Args:
-                filename (str, optional): Identifies the file to open. It must follow the ``SF_FileSystem.FileNaming`` notation.
+                filename (str, optional): Identifies the file to open. It must follow the SF_FileSystem.FileNaming notation.
                 registrationname (str, optional): The name to use to find the database in the databases register.
-                    This argument is ignored if a ``filename`` is provided.
+                    This argument is ignored if a filename is provided.
                 destinationcell (str, optional): The destination of the imported data, as a string.
                     If a range is given, only its top-left cell is considered.
                 sqlcommand (str, optional): A table or query name (without surrounding quotes or square brackets)
@@ -4854,18 +5403,18 @@ class SFDocuments:
             Returns the input string after substituting its token characters by their values in a given range.
 
             Args:
-                inputstr (str): The string containing the tokens that will be replaced by the corresponding values in ``range``.
-                range (str): A ``RangeName`` from which values will be extracted. If it contains a sheet name, the sheet must exist.
+                inputstr (str): The string containing the tokens that will be replaced by the corresponding values in range.
+                range (str): A RangeName from which values will be extracted. If it contains a sheet name, the sheet must exist.
                 tokencharacter (str): Character used to identify tokens. By default "%" is the token character.
 
             Note:
                 Acceptable ``tokencharacter``:
                 
-                * ``%S`` - The sheet name containing the range, including single quotes when necessary.
-                * ``%R1`` - The row number of the top left cell of the range.
-                * ``%C1`` - The column letter of the top left cell of the range.    
-                * ``%R2`` - The row number of the bottom right cell of the range.
-                * ``%C2`` - The column letter of the bottom right cell of the range.
+                    - ``%S`` - The sheet name containing the range, including single quotes when necessary.
+                    - ``%R1`` - The row number of the top left cell of the range.
+                    - ``%C1`` - The column letter of the top left cell of the range.    
+                    - ``%R2`` - The row number of the bottom right cell of the range.
+                    - ``%C2`` - The column letter of the bottom right cell of the range.
 
             Returns:
                 str: The input string after substitution of the contained tokens.
@@ -4887,7 +5436,7 @@ class SFDocuments:
                 copies (int, optional): The number of copies. Default is 1.
 
             Returns:
-                bool: ``True`` if the sheet was successfully printed.
+                bool: True if the sheet was successfully printed.
 
             See Also:
                 `SF_Calc Help PrintOut <https://tinyurl.com/y7jwr7b7#PrintOut>`_
@@ -4900,7 +5449,7 @@ class SFDocuments:
                 sheetname (str): The name of the sheet to remove.
 
             Returns:
-                bool: ``True`` if the sheet could be removed successfully.
+                bool: True if the sheet could be removed successfully.
 
             See Also:
                 `SF_Calc Help RemoveSheet <https://tinyurl.com/y7jwr7b7#RemoveSheet>`_
@@ -4914,7 +5463,7 @@ class SFDocuments:
                 newname (str): the new name of the sheet. It must not exist yet.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Calc Help RenameSheet <https://tinyurl.com/y7jwr7b7#RenameSheet>`_
@@ -4966,20 +5515,21 @@ class SFDocuments:
 
             Returns:
                 str: A string representing the modified area as a range of cells.
-            
-            The full range is updated and the remainder of the sheet is left unchanged.
-            
-            If the given formula is a string, the unique formula is pasted along the
-            whole range with adjustment of the relative references.
-            
-            If the size of formula is smaller than the size of targetrange, then the
-            remaining cells are emptied.
-            
-            If the size of formula is larger than the size of targetrange, then the
-            formulas are only partially copied until it fills the size of targetrange.
-            
-            Vectors are always expanded vertically, except if targetrange has a height
-            of exactly 1 row.
+
+            Note:
+                The full range is updated and the remainder of the sheet is left unchanged.
+
+                If the given formula is a string, the unique formula is pasted along the
+                whole range with adjustment of the relative references.
+
+                If the size of formula is smaller than the size of ``targetrange``, then the
+                remaining cells are emptied.
+
+                If the size of formula is larger than the size of ``targetrange``, then the
+                formulas are only partially copied until it fills the size of ``targetrange``.
+
+                Vectors are always expanded vertically, except if ``targetrange`` has a height
+                of exactly 1 row.
 
             See Also:
                 `SF_Calc Help SetFormula <https://tinyurl.com/y7jwr7b7#SetFormula>`_
@@ -5044,7 +5594,7 @@ class SFDocuments:
 
             Returns:
                 str: a string representing the location of the remaining portion of the initial range.
-                If all cells in the original range have been deleted, then an empty string is returned.
+                    If all cells in the original range have been deleted, then an empty string is returned.
 
             See Also:
                 `SF_Calc Help ShiftLeft <https://tinyurl.com/y7jwr7b7#ShiftLeft>`_
@@ -5095,7 +5645,7 @@ class SFDocuments:
 
             Returns:
                 str: A string representing the location of the remaining portion of the initial range.
-                If all cells in the original range have been deleted, then an empty string is returned.
+                    If all cells in the original range have been deleted, then an empty string is returned.
 
             See Also:
                 `SF_Calc Help ShiftUp <https://tinyurl.com/y7jwr7b7#ShiftUp>`_
@@ -5159,12 +5709,6 @@ class SFDocuments:
         The SF_CalcReference class has as unique role to hold sheet and range references.
         They are implemented in Basic as Type ... End Type data structures
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDocuments.CalcReference"]
-        servicesynonyms: tuple
-        serviceproperties: dict
     # endregion SF_CalcReference CLASS
     
     # region SF_Chart CLASS
@@ -5178,12 +5722,6 @@ class SFDocuments:
         See Also:
            `SF_Chart Help <https://tinyurl.com/ydcexzky>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDocuments.Chart"]
-        servicesynonyms: tuple
-        serviceproperties: dict
         # region Methods
         def Resize(
             self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...
@@ -5224,12 +5762,18 @@ class SFDocuments:
                 filename (str): Identifies the path and file name where the image will be saved.
                     It must follow the notation defined in SF_FileSystem.FileNaming.
                 imagetype (str, optional): The name of the image type to be created.
-                    The following values are accepted:
-                    ``gif``, ``jpeg``, ``png``, ``svg`` and ``tiff``.. Defaults to ``png``.
                 overwrite (bool, optional): Specifies if the destination file can be overwritten. Defaults to False.
 
+            Note:
+                Arg ``imagetype`` accepted values:
+                    - gif
+                    - jpeg
+                    - png (default)
+                    - svg
+                    - tiff
+
             Returns:
-                bool: ``True`` if the image file could be successfully created.
+                bool: True if the image file could be successfully created.
 
             See Also:
                 `SF_Chart Help ExportToFile <https://tinyurl.com/ydcexzky#ExportToFile>`_
@@ -5241,16 +5785,17 @@ class SFDocuments:
         def ChartType(self) -> str:
             """
             Gets/Sets the chart type as a string that can assume one of the following values:
-            ``Pie``, ``Bar``, ``Donut``, ``Column``, ``Area``, ``Line``, ``XY``, ``Bubble``, ``Net``.
+            
+            Pie, Bar, Donut, Column, Area, Line, XY, Bubble, Net.
             """
         @property
         def Deep(self) -> bool:
             """
             Gets/Sets if the chart is three-dimensional.
             
-            When ``True`` indicates that the chart is three-dimensional and each series is arranged in the z-direction.
+            When True indicates that the chart is three-dimensional and each series is arranged in the z-direction.
             
-            When ``False`` series are arranged considering only two dimensions.
+            When False series are arranged considering only two dimensions.
             """
         
         @property
@@ -5258,9 +5803,9 @@ class SFDocuments:
             """
             Gets/Sets if the chart is displayed with 3D elements.
             
-            When setting as string the value must be either "Bar", ``Cylinder``, ``Cone`` or ``Pyramid``.
+            When setting as string the value must be either "Bar", "Cylinder", "Cone" or "Pyramid".
             
-            When ``True`` value is specified, then the chart is displayed using 3D bars.
+            When True value is specified, then the chart is displayed using 3D bars.
             """
         @property
         def Exploded(self) -> float:
@@ -5274,7 +5819,7 @@ class SFDocuments:
             """
             Gets/Sets if a filled net chart
             
-            When ``True``, specifies a filled net chart.
+            When True, specifies a filled net chart.
             
             Applicable to net charts only.
             """
@@ -5288,7 +5833,7 @@ class SFDocuments:
             """
             Gets/Sets percent
             
-            When ``True``, chart series are stacked and each category sums up to 100%.
+            When True, chart series are stacked and each category sums up to 100%.
             
             Applicable to Area, Bar, Bubble, Column and Net charts.
             """ 
@@ -5297,7 +5842,7 @@ class SFDocuments:
             """
             Gets/Sets whether or not the chart series are stacked.
             
-            When ``True``, chart series are stacked and each category sums up to 100%.
+            When True, chart series are stacked and each category sums up to 100%.
             
             Applicable to Area, Bar, Bubble, Column and Net charts.
             """ 
@@ -5326,12 +5871,12 @@ class SFDocuments:
         @property
         def XShape(self) -> XShape:
             """
-            Gets the ``com.sun.star.drawing.XShape`` object representing the shape of the chart.
+            Gets the com.sun.star.drawing.XShape object representing the shape of the chart.
             """
         @property
         def XTableChart(self) -> XTableChart:
             """
-            Gets the ``com.sun.star.table.XTableChart`` object representing the data being displayed in the chart.
+            Gets the com.sun.star.table.XTableChart object representing the data being displayed in the chart.
             """
         # endregion Properties
     # endregion SF_Chart CLASS
@@ -5348,13 +5893,6 @@ class SFDocuments:
         See Also:
             `SF_Form Help <https://tinyurl.com/y72zdzjy>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDocuments.Form"]
-        servicesynonyms: tuple
-        serviceproperties: dict
-
         # region Methods
         def Activate(self) -> bool:
             """
@@ -5366,7 +5904,7 @@ class SFDocuments:
                 * In Base documents: Sets the focus on the FormDocument the Form refers to.
 
             Returns:
-                bool: ``True`` if focusing was successful.
+                bool: True if focusing was successful.
 
             See Also:
                 `SF_Form Help Activate <https://tinyurl.com/y72zdzjy#Activate>`_
@@ -5376,7 +5914,7 @@ class SFDocuments:
             Closes the ``form`` document containing the actual Form instance. The ``Form`` instance is disposed.
 
             Returns:
-                bool: ``True`` if closure is successful.
+                bool: True if closure is successful.
 
             Note:
                 This method only closes form documents located in Base documents.
@@ -5423,7 +5961,9 @@ class SFDocuments:
                 password (str, optional): user password.
 
             Returns:
-                SFDatabases.SF_Database: _description_
+                SFDatabases.SF_Database: a SFDatabases.Database instance giving access to the execution of
+                    SQL commands on the database the current form is connected to and/or that is stored
+                    in the current Base document.
 
             See Also:
                 `SF_Form Help GetDatabase <https://tinyurl.com/y72zdzjy#GetDatabase>`_
@@ -5433,7 +5973,7 @@ class SFDocuments:
             The form cursor is positioned on the first record.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help MoveFirst <https://tinyurl.com/y72zdzjy#MoveFirst>`_
@@ -5443,7 +5983,7 @@ class SFDocuments:
             The form cursor is positioned on the last record.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help MoveLast <https://tinyurl.com/y72zdzjy#MoveLast>`_
@@ -5453,7 +5993,7 @@ class SFDocuments:
             The form cursor is positioned on the new record area.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help MoveNew <https://tinyurl.com/y72zdzjy#MoveNew>`_
@@ -5466,7 +6006,7 @@ class SFDocuments:
                 offset (int, optional): The number of records to go forward. Defaults to 1.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help MoveNext <https://tinyurl.com/y72zdzjy#MoveNext>`_
@@ -5479,7 +6019,7 @@ class SFDocuments:
                 offset (int, optional): The number of records to go backwards. Defaults to 1.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help MovePrevious <https://tinyurl.com/y72zdzjy#MovePrevious>`_
@@ -5490,7 +6030,7 @@ class SFDocuments:
             The cursor is positioned on the first record.
 
             Returns:
-                bool: ``True`` if successful.
+                bool: True if successful.
 
             See Also:
                 `SF_Form Help Requery <https://tinyurl.com/y72zdzjy#Requery>`_
@@ -5568,10 +6108,10 @@ class SFDocuments:
             Gets/Sets the current record in the dataset being viewed on a form.
             
             If the row number is positive, the cursor moves to the given row number
-            with respect to the beginning of the result set. Row count starts at ``1``.
+            with respect to the beginning of the result set. Row count starts at 1.
             If the given row number is negative, the cursor moves to an absolute
             row position with respect to the end of the result set.
-            Row ``-1`` refers to the last row in the result set.
+            Row -1 refers to the last row in the result set.
             """
         @property
         def Filter(self) -> bool:
@@ -5579,7 +6119,7 @@ class SFDocuments:
             Gets/Sets filter for subset.
             
             Specifies a subset of records to be displayed as a
-            ``SQL WHERE``-clause without the ``WHERE`` keyword.
+            SQL WHERE-clause without the WHERE keyword.
             """
         @property
         def LinkChildFields(self) -> str:
@@ -5600,7 +6140,7 @@ class SFDocuments:
         def OrderBy(self) -> str:
             """
             Gets/Sets in which order the records should be displayed
-            as a ``SQL`` ``ORDER BY`` clause without the`` ORDER BY`` keywords.
+            as a SQL ORDER BY clause without the ORDER BY keywords.
             """
         @property
         def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_Document:
@@ -5633,15 +6173,9 @@ class SFDocuments:
         See Also:
             `SF_FormControl Help <https://tinyurl.com/y8d9qlcl>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDocuments.FormControl"]
-        servicesynonyms: tuple
-        serviceproperties: dict
         # region Methods
         @overload
-        def Controls(self,) -> Tuple[str, ...]:
+        def Controls(self) -> Tuple[str, ...]:
             """
             Gets tuple containing the names of all controls
 
@@ -5670,7 +6204,7 @@ class SFDocuments:
             Sets the focus on the control.
 
             Returns:
-                bool: ``True`` if focusing was successful.
+                bool: True if focusing was successful.
 
             See Also:
                 `SF_FormControl Help SetFocus <https://tinyurl.com/y8d9qlcl#SetFocus>`_
@@ -5684,18 +6218,18 @@ class SFDocuments:
             Gets/Sets the action triggered when the button is clicked.
             
             Accepted values are:
-                * none
-                * submitForm
-                * resetForm
-                * refreshForm
-                * moveToFirst
-                * moveToLast
-                * moveToNext
-                * moveToPrev
-                * saveRecord
-                * moveToNew
-                * deleteRecord
-                * undoRecord
+                - none
+                - submitForm
+                - resetForm
+                - refreshForm
+                - moveToFirst
+                - moveToLast
+                - moveToNext
+                - moveToPrev
+                - saveRecord
+                - moveToNew
+                - deleteRecord
+                - undoRecord
 
             Applicable Controls:
                 Button
@@ -5706,11 +6240,11 @@ class SFDocuments:
             Gets/Sets the text displayed by the control.
 
             Applicable Controls:
-                * Button
-                * CheckBox
-                * FixedText
-                * GroupBox
-                * RadioButton
+                - Button
+                - CheckBox
+                - FixedText
+                - GroupBox
+                - RadioButton
             """
         @property
         def ControlSource(self) -> str:
@@ -5718,23 +6252,23 @@ class SFDocuments:
             Gets the rowset field mapped onto the current control.
             
             Applicable Controls:
-                * CheckBox
-                * ComboBox
-                * CurrencyField
-                * DateField
-                * FormattedField
-                * ImageControl
-                * ListBox
-                * NumericField
-                * PatternField
-                * RadioButton
-                * TextField
-                * TimeField
+                - CheckBox
+                - ComboBox
+                - CurrencyField
+                - DateField
+                - FormattedField
+                - ImageControl
+                - ListBox
+                - NumericField
+                - PatternField
+                - RadioButton
+                - TextField
+                - TimeField
             """
         @property
         def ControlType(self) -> str:
             """
-            Gets control type from one of the controls listed in ``ControlSource`` property.
+            Gets control type from one of the controls listed in ControlSource property.
             
             Applicable Controls:
                 All
@@ -5753,19 +6287,19 @@ class SFDocuments:
             Gets/Sets the default value used to initialize a control in a new record.
             
             Applicable Controls:
-                * CheckBox
-                * ComboBox
-                * CurrencyField
-                * DateField
-                * FileControl
-                * FormattedField
-                * ListBox
-                * NumericField
-                * PatternField
-                * RadioButton
-                * SpinButton
-                * TextField
-                * TimeField
+                - CheckBox
+                - ComboBox
+                - CurrencyField
+                - DateField
+                - FileControl
+                - FormattedField
+                - ListBox
+                - NumericField
+                - PatternField
+                - RadioButton
+                - SpinButton
+                - TextField
+                - TimeField
             """
         @property
         def Enabled(self) -> bool:
@@ -5781,35 +6315,35 @@ class SFDocuments:
             Gets/Sets the format used to display dates and times.
             
             Must be one of following strings for dates:
-                * "Standard (short)"
-                * "Standard (short YY)"
-                * "Standard (short YYYY)"
-                * "Standard (long)"
-                * "DD/MM/YY"
-                * "MM/DD/YY"
-                * "YY/MM/DD"
-                * "DD/MM/YYYY"
-                * "MM/DD/YYYY"
-                * "YYYY/MM/DD"
-                * "YY-MM-DD"
-                * "YYYY-MM-DD"
+                - "Standard (short)"
+                - "Standard (short YY)"
+                - "Standard (short YYYY)"
+                - "Standard (long)"
+                - "DD/MM/YY"
+                - "MM/DD/YY"
+                - "YY/MM/DD"
+                - "DD/MM/YYYY"
+                - "MM/DD/YYYY"
+                - "YYYY/MM/DD"
+                - "YY-MM-DD"
+                - "YYYY-MM-DD"
 
             Applicable Controls:
-                * DateField
-                * TimeField
-                * FormattedField (read-only)
+                - DateField
+                - TimeField
+                - FormattedField (read-only)
             """
         @property
-        def ListCount(sefl) -> int:
+        def ListCount(self) -> int:
             """
             Gets the number of rows in a ListBox or a ComboBox.
 
             Applicable Controls:
-                * ComboBox
-                * ListBox
+                - ComboBox
+                - ListBox
             """
         @property
-        def ListIndex(sefl) -> int:
+        def ListIndex(self) -> int:
             """
             Gets/Sets which item is selected in a ListBox or ComboBox.
 
@@ -5817,8 +6351,8 @@ class SFDocuments:
             is returned or only one item is set.
 
             Applicable Controls:
-                * ComboBox
-                * ListBox
+                - ComboBox
+                - ListBox
             """
         @property
         def ListSource(self) -> ListSourceType:
@@ -5828,8 +6362,8 @@ class SFDocuments:
             It must be one of the com.sun.star.form.ListSourceType.* constants.
 
             Applicable Controls:
-                * ComboBox
-                * ListBox
+                - ComboBox
+                - ListBox
             """
         @property
         def Locked(self) -> bool:
@@ -5837,18 +6371,18 @@ class SFDocuments:
             Gets/Sets if the control is read-only.
 
             Applicable Controls:
-                * ComboBox
-                * CurrencyField
-                * DateField
-                * FileControl
-                * FileControl
-                * FormattedField
-                * ImageControl
-                * ListBox
-                * NumericField
-                * PatternField
-                * TextField
-                * TimeField
+                - ComboBox
+                - CurrencyField
+                - DateField
+                - FileControl
+                - FileControl
+                - FormattedField
+                - ImageControl
+                - ListBox
+                - NumericField
+                - PatternField
+                - TextField
+                - TimeField
             """
         @property
         def MultiSelect(self) -> bool:
@@ -5865,6 +6399,111 @@ class SFDocuments:
 
             Applicable Controls:
                 All
+            """
+        @property
+        def OnActionPerformed(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnAdjustmentValueChanged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveAction(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveReset(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnApproveUpdate(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnChanged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnErrorOccurred(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnFocusGained(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnFocusLost(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnItemStateChanged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnKeyPressed(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnKeyReleased(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMouseDragged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMouseEntered(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMouseExited(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMouseMoved(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMousePressed(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnMouseReleased(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnResetted(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnTextChanged(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
+            """
+        @property
+        def OnUpdated(self) -> str:
+            """
+            Gets/Sets URI strings that define the script triggered by the event.
             """
         @property
         def Parent(self) -> SFDocuments.SF_Form | SFDocuments.SF_FormControl:
@@ -5886,9 +6525,9 @@ class SFDocuments:
             The filename must comply with the FileNaming attribute of the ``ScriptForge.FileSystem`` service.
 
             Applicable Controls:
-                * Button
-                * ImageButton
-                * ImageControl
+                - Button
+                - ImageButton
+                - ImageControl
             """
         @property
         def Required(self) -> bool:
@@ -5896,17 +6535,17 @@ class SFDocuments:
             Gets/Sets if a control is said required when the underlying data must not contain a null value.
 
             Applicable Controls:
-                * CheckBox
-                * ComboBox
-                * CurrencyField
-                * DateField
-                * ListBox
-                * NumericField
-                * PatternField
-                * RadioButton
-                * SpinButton
-                * TextField
-                * TimeField
+                - CheckBox
+                - ComboBox
+                - CurrencyField
+                - DateField
+                - ListBox
+                - NumericField
+                - PatternField
+                - RadioButton
+                - SpinButton
+                - TextField
+                - TimeField
             """
         @property
         def Text(self) -> str:
@@ -5914,13 +6553,13 @@ class SFDocuments:
             Gets the text being displayed by the control.
 
             Applicable Controls:
-                * ComboBox
-                * DateField
-                * FileControl
-                * FormattedField
-                * PatternField
-                * TextField
-                * TimeField
+                - ComboBox
+                - DateField
+                - FileControl
+                - FormattedField
+                - PatternField
+                - TextField
+                - TimeField
             """
         @property
         def TipText(self) -> str:
@@ -5982,16 +6621,6 @@ class SFDocuments:
         See Also:
             `SF_Writer Help <https://tinyurl.com/y7kv226a>`_
         """
-
-        # region Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFDocuments.Writer"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # endregion Mandatory class properties for service registration
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty: bool
-
         # region Methods
         @classmethod
         def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
@@ -6051,14 +6680,14 @@ class SFDocuments:
                 pages (str, optional): The pages to print as a string, like in the user interface.
                     Example: "1-4;10;15-18". Default = all pages
                 copies (int, optional): The number of copies. Defaults to 1.
-                printbackground (bool, optional): Prints the background image when ``True``. Defaults to ``True``.
-                printblankpages (bool, optional): When ``False``, omits empty pages. Defaults to ``False``.
-                printevenpages (bool, optional): Prints even pages when ``True``. Defaults to ``True``.
-                printoddpages (bool, optional): Print odd pages when ``True``. Defaults to ``True``.
-                printimages (bool, optional): Print graphic objects when ``True``. Defaults to ``True``.
+                printbackground (bool, optional): Prints the background image when True. Defaults to True.
+                printblankpages (bool, optional): When False, omits empty pages. Defaults to False.
+                printevenpages (bool, optional): Prints even pages when True. Defaults to True.
+                printoddpages (bool, optional): Print odd pages when True. Defaults to True.
+                printimages (bool, optional): Print graphic objects when True. Defaults to True.
 
             Returns:
-                bool: ``True`` when successful.
+                bool: True when successful.
 
             See Also:
                 `SF_Writer Help PrintOut <https://tinyurl.com/y7kv226a#PrintOut>`_
@@ -6087,12 +6716,6 @@ class SFWidgets:
         See Also:
             `SF_PopupMenu Help <https://tinyurl.com/y7ngmoa8>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["SFWidgets.PopupMenu"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # region Methods
         @classmethod
         def ReviewServiceArgs(
@@ -6180,7 +6803,7 @@ class SFWidgets:
             See Also:
                 `SF_PopupMenu Help AddRadioButton <https://tinyurl.com/y7ngmoa8#AddRadioButton>`_
             """
-        def Execute(self, returnid: bool = ...) -> int | str:
+        def Execute(self, returnid: bool = ...) -> Union[int, str]:
             """
             Displays the popup menu and waits for a user action.
             
@@ -6190,11 +6813,14 @@ class SFWidgets:
             Otherwise an empty string ``''`` is returned.
 
             Args:
-                returnid (bool, optional): If ``True`` the selected item ID is returned.
-                    If ``False`` the method returns the item's name. Defaults to ``True``.
+                returnid (bool, optional): If True the selected item ID is returned.
+                    If False the method returns the item's name. Defaults to True.
 
             Returns:
                 int | str: The item clicked by the user.
+
+            See Also:
+                `SF_PopupMenu Help Execute <https://tinyurl.com/y7ngmoa8#Execute>`_
             """
         # endregion Methods
         
@@ -6202,19 +6828,19 @@ class SFWidgets:
         @property
         def SubmenuCharacter(self) -> str:
             """
-            Gets/Sets the character or string that defines how menu items are nested. The default character is ``>``.
+            Gets/Sets the character or string that defines how menu items are nested. The default character is >.
             """
         @property
         def ShortcutCharacter(self) -> str:
             """
-            Gets/Sets the character used to define the access key of a menu item. The default character is ``~``.
+            Gets/Sets the character used to define the access key of a menu item. The default character is ~.
             """
         # endregion Properties
     # endregion SF_PopupMenu CLASS
 # endregion SFWidgets CLASS    (alias of SFWidgets Basic library)
 
 # region CreateScriptService()
-def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices | Any:
+def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> Union[SFServices, Any]:
     """
     A service being the name of a collection of properties and methods,
     this method returns either
@@ -6229,8 +6855,6 @@ def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices |
     Args:
         service (str): the name of the service as a string 'library.service' - cased exactly
             or one of its synonyms
-    
-    Other Args:
         args (any, optional): the arguments to pass to the service constructor
     
      Returns:
@@ -6238,8 +6862,8 @@ def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices |
     """
 # endregion CreateScriptService()
 
-createScriptService: SFServices | Any
-createscriptservice: SFServices | Any
+createScriptService: Union[SFServices, Any]
+createscriptservice: Union[SFServices, Any]
 
 # ######################################################################
 # Lists the scripts, that shall be visible inside the Basic/Python IDE
