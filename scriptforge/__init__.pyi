@@ -414,7 +414,7 @@ class SFScriptForge:
                     string "" are considered as normal text.
 
             See Also:
-                `ImportFromCSVFile <https://tinyurl.com/yuc67r32#ImportFromCSVFile>`_
+                `SF_Array Help ImportFromCSVFile <https://tinyurl.com/yuc67r32#ImportFromCSVFile>`_
             """
     # endregion SF_Array CLASS
 
@@ -469,7 +469,7 @@ class SFScriptForge:
                 This method exposes the Basic builtin function `Basic CDate <https://tinyurl.com/2p8sc4sy>`_ to Python scripts.
 
             See Also:
-                `CDate <https://tinyurl.com/ycv7q52r#CDate>`_
+                `SF_Basic Help CDate <https://tinyurl.com/ycv7q52r#CDate>`_
             """
         @staticmethod
         def CDateFromUnoDateTime(
@@ -490,7 +490,7 @@ class SFScriptForge:
                     - com.sun.star.util.Date
                     - com.sun.star.util.Time
             See Also:
-                `CDateFromUnoDateTime <https://tinyurl.com/ycv7q52r#CDateFromUnoDateTime>`_
+                `SF_Basic Help CDateFromUnoDateTime <https://tinyurl.com/ycv7q52r#CDateFromUnoDateTime>`_
             """
         @staticmethod
         def CDateToUnoDateTime(
@@ -509,7 +509,7 @@ class SFScriptForge:
                 When arg ``date`` is a ``float`` it is considered a ``time.time`` value.
 
             See Also:
-                `CDateToUnoDateTime <https://tinyurl.com/ycv7q52r#CDateToUnoDateTime>`_
+                `SF_Basic Help CDateToUnoDateTime <https://tinyurl.com/ycv7q52r#CDateToUnoDateTime>`_
             """
         @classmethod
         def ConvertFromUrl(cls, url: str) -> str:
@@ -528,7 +528,7 @@ class SFScriptForge:
                     a = bas.ConvertFromUrl('file:////boot.sys')
 
             See Also:
-                `ConvertFromUrl <https://tinyurl.com/ycv7q52r#ConvertFromUrl>`_
+                `SF_Basic Help ConvertFromUrl <https://tinyurl.com/ycv7q52r#ConvertFromUrl>`_
             """
         @classmethod
         def ConvertToUrl(cls, systempath: str) -> str:
@@ -549,7 +549,7 @@ class SFScriptForge:
                     'file:///C:/boot.sys'
 
             See Also:
-                `ConvertToUrl <https://tinyurl.com/ycv7q52r#ConvertToUrl>`_
+                `SF_Basic Help ConvertToUrl <https://tinyurl.com/ycv7q52r#ConvertToUrl>`_
             """
         @classmethod
         def CreateUnoService(cls, servicename: str) -> XInterface:
@@ -568,7 +568,7 @@ class SFScriptForge:
                     a = bas.CreateUnoService('com.sun.star.i18n.CharacterClassification')
 
             See Also:
-                `CreateUnoService <https://tinyurl.com/ycv7q52r#CreateUnoService>`_
+                `SF_Basic Help CreateUnoService <https://tinyurl.com/ycv7q52r#CreateUnoService>`_
             """
         @classmethod
         def DateAdd(
@@ -603,7 +603,7 @@ class SFScriptForge:
                     - s - Second
 
             See Also:
-                `DateAdd <https://tinyurl.com/ycv7q52r#DateAdd>`_
+                `SF_Basic Help DateAdd <https://tinyurl.com/ycv7q52r#DateAdd>`_
             """
         @classmethod
         def DateDiff(
@@ -654,7 +654,7 @@ class SFScriptForge:
                     - 3 - Week 1 is the first week containing only days of the new year
 
             See Also:
-                `DateDiff <https://tinyurl.com/ycv7q52r#DateDiff>`_
+                `SF_Basic Help DateDiff <https://tinyurl.com/ycv7q52r#DateDiff>`_
 
            Returns:
                int: A Number
@@ -716,7 +716,7 @@ class SFScriptForge:
                     - 3 - Week 1 is the first week containing only days of the new year
 
             See Also:
-                `DatePart <https://tinyurl.com/ycv7q52r#DatePart>`_
+                `SF_Basic Help DatePart <https://tinyurl.com/ycv7q52r#DatePart>`_
             """
         @classmethod
         def DateValue(cls, string: str) -> Union[datetime.datetime, Any]:
@@ -761,7 +761,7 @@ class SFScriptForge:
                     '6,328.20'
 
             See Also:
-                `Format <https://tinyurl.com/ycv7q52r#Format>`_
+                `SF_Basic Help Format <https://tinyurl.com/ycv7q52r#Format>`_
             """
         @classmethod
         def GetDefaultContext(cls) -> XComponentContext:
@@ -769,7 +769,7 @@ class SFScriptForge:
             Gets the default context of the process service factory, if existent, else returns a null reference.
 
             See Also:
-                `GetDefaultContext <https://tinyurl.com/ycv7q52r#GetDefaultContext>`_
+                `SF_Basic Help GetDefaultContext <https://tinyurl.com/ycv7q52r#GetDefaultContext>`_
             """
 
         @classmethod
@@ -789,7 +789,7 @@ class SFScriptForge:
                     1
 
             See Also:
-                `GetGuiType <https://tinyurl.com/ycv7q52r#GetGuiType>`_
+                `SF_Basic Help GetGuiType <https://tinyurl.com/ycv7q52r#GetGuiType>`_
             """
         @classmethod
         def GetPathSeparator(cls) -> str:
@@ -802,7 +802,7 @@ class SFScriptForge:
                 str: os path separator
 
             See Also:
-                `GetPathSeparator <https://tinyurl.com/ycv7q52r#GetPathSeparator>`_
+                `SF_Basic Help GetPathSeparator <https://tinyurl.com/ycv7q52r#GetPathSeparator>`_
             """
         @classmethod
         def GetSystemTicks(cls) -> int:
@@ -816,7 +816,7 @@ class SFScriptForge:
                 int: system ticks
 
             See Also:
-                `GetSystemTicks <https://tinyurl.com/ycv7q52r#GetSystemTicks>`_
+                `SF_Basic Help GetSystemTicks <https://tinyurl.com/ycv7q52r#GetSystemTicks>`_
             """
         class GlobalScope(metaclass=_Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
@@ -829,7 +829,7 @@ class SFScriptForge:
                     XLibraryContainer: Uno object.
 
                 See Also:
-                `BasicLibraries <https://tinyurl.com/ycv7q52r#BasicLibraries>`_
+                `SF_Basic Help BasicLibraries <https://tinyurl.com/ycv7q52r#BasicLibraries>`_
                 """
             @classmethod
             def DialogLibraries(cls) -> XLibraryContainer:
@@ -840,7 +840,7 @@ class SFScriptForge:
                     DialogLibraryContainer: Uno object
 
                 See Also:
-                `DialogLibraries <https://tinyurl.com/ycv7q52r#DialogLibraries>`_
+                `SF_Basic Help DialogLibraries <https://tinyurl.com/ycv7q52r#DialogLibraries>`_
                 """
         @classmethod
         def InputBox(
@@ -872,7 +872,7 @@ class SFScriptForge:
                 str: string.
 
             See Also:
-                `InputBox <https://tinyurl.com/ycv7q52r#InputBox>`_
+                `SF_Basic Help InputBox <https://tinyurl.com/ycv7q52r#InputBox>`_
             """
         @classmethod
         def MsgBox(cls, prompt: str, buttons: int = ..., title: str = ...) -> int:
@@ -927,7 +927,7 @@ class SFScriptForge:
                     1
 
             See Also:
-                `MsgBox <https://tinyurl.com/ycv7q52r#MsgBox>`_
+                `SF_Basic Help MsgBox <https://tinyurl.com/ycv7q52r#MsgBox>`_
             """
         @classmethod
         def Now(cls) -> datetime.datetime:
@@ -935,7 +935,7 @@ class SFScriptForge:
             Gets the current system date and time as a ``datetime.datetime`` Python native object.
 
             See Also:
-                `Now <https://tinyurl.com/ycv7q52r#Now>`_
+                `SF_Basic Help Now <https://tinyurl.com/ycv7q52r#Now>`_
             """
         @classmethod
         def RGB(cls, red: int, green: int, blue: int) -> int:
@@ -951,7 +951,7 @@ class SFScriptForge:
                 int: an integer color value consisting of red, green, and blue components.
 
             See Also:
-                `RGB <https://tinyurl.com/ycv7q52r#RGB>`_
+                `SF_Basic Help RGB <https://tinyurl.com/ycv7q52r#RGB>`_
             """
 
         @overload
@@ -967,7 +967,7 @@ class SFScriptForge:
                 unoobject (object):A variable or UNO object.
 
             See Also:
-                `Xray <https://tinyurl.com/ycv7q52r#Xray>`_
+                `SF_Basic Help Xray <https://tinyurl.com/ycv7q52r#Xray>`_
             """
         # endregion Methods
 
@@ -985,7 +985,7 @@ class SFScriptForge:
                 XComponent | None: the current component or None when not a document
 
             See Also:
-                `ThisComponent <https://tinyurl.com/ycv7q52r#ThisComponent>`_
+                `SF_Basic Help ThisComponent <https://tinyurl.com/ycv7q52r#ThisComponent>`_
             """
         thisComponent, thiscomponent = ThisComponent, ThisComponent
         @property
@@ -999,7 +999,7 @@ class SFScriptForge:
                     None when not a Base document or one of its subcomponents
 
             See Also:
-                `ThisDatabaseDocument <https://tinyurl.com/ycv7q52r#ThisDatabaseDocument>`_
+                `SF_Basic Help ThisDatabaseDocument <https://tinyurl.com/ycv7q52r#ThisDatabaseDocument>`_
             """
         thisDatabaseDocument, thisdatabasedocument = (
             ThisDatabaseDocument,
@@ -1048,7 +1048,7 @@ class SFScriptForge:
                 List[PropertyValue]: List of property values.
 
             See Also:
-                `ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
+                `SF_Dictionary Help ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
             """
         def ImportFromPropertyValues(
             self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = False
@@ -1067,7 +1067,7 @@ class SFScriptForge:
                 bool: True when successful
 
             See Also:
-                `ImportFromPropertyValues <https://tinyurl.com/y9quuboc#ImportFromPropertyValues>`_
+                `SF_Dictionary Help ImportFromPropertyValues <https://tinyurl.com/y9quuboc#ImportFromPropertyValues>`_
             """
     # endregion SF_Dictionary CLASS
     
@@ -1108,7 +1108,7 @@ class SFScriptForge:
                     Python's builtin locals() function.
 
             See Also:
-                `PythonShell <https://tinyurl.com/y8ezar7q#PythonShell>`_
+                `SF_Exception Help PythonShell <https://tinyurl.com/y8ezar7q#PythonShell>`_
             """
         @classmethod
         def RaiseFatal(cls, errorcode: str, *args: Any) -> None:
@@ -1169,7 +1169,7 @@ class SFScriptForge:
                 str: The path concatenated with the file name after insertion of a path separator, if necessary
 
             See Also:
-                `BuildPath <https://tinyurl.com/ybxpt7eo#BuildPath>`_
+                `SF_FileSystem Help BuildPath <https://tinyurl.com/ybxpt7eo#BuildPath>`_
             """
         def CompareFiles(
             self, filename1: str, filename2: str, comparecontents: bool = ...
@@ -1190,7 +1190,7 @@ class SFScriptForge:
                 bool: True when the files seem identical
 
             See Also:
-                `CompareFiles <https://tinyurl.com/ybxpt7eo#CompareFiles>`_
+                `SF_FileSystem Help CompareFiles <https://tinyurl.com/ybxpt7eo#CompareFiles>`_
             """
         def CopyFile(
             self, source: str, destination: str, overwrite: bool = ...
@@ -1220,7 +1220,7 @@ class SFScriptForge:
                 - Wildcard characters are not allowed in ``destination``.
 
             See Also:
-                `CopyFile <https://tinyurl.com/ybxpt7eo#CopyFile>`_
+                `SF_FileSystem Help CopyFile <https://tinyurl.com/ybxpt7eo#CopyFile>`_
             """
         def CopyFolder(
             self, source: str, destination: str, overwrite: bool = ...
@@ -1255,7 +1255,7 @@ class SFScriptForge:
                     No attempt is made to roll back or undo any changes made before an error occurs.
 
             See Also:
-                `CopyFolder <https://tinyurl.com/ybxpt7eo#CopyFolder>`_
+                `SF_FileSystem Help CopyFolder <https://tinyurl.com/ybxpt7eo#CopyFolder>`_
             """
         def CreateFolder(self, foldername: str) -> bool:
             """
@@ -1271,7 +1271,7 @@ class SFScriptForge:
                 False otherwise including when FolderName is a file.
 
             See Also:
-                `CreateFolder <https://tinyurl.com/ybxpt7eo#CreateFolder>`_
+                `SF_FileSystem Help CreateFolder <https://tinyurl.com/ybxpt7eo#CreateFolder>`_
             """
         def CreateTextFile(
             self, filename: str, overwrite: bool = ..., encoding: str = ...
@@ -1287,7 +1287,7 @@ class SFScriptForge:
                 encoding (str, optional): The character set to be used. The default encoding is "UTF-8".
 
             See Also:
-                `CreateTextFile <https://tinyurl.com/ybxpt7eo#CreateTextFile>`_
+                `SF_FileSystem Help CreateTextFile <https://tinyurl.com/ybxpt7eo#CreateTextFile>`_
             """
         def DeleteFile(self, filename: str) -> bool:
             """
@@ -1313,7 +1313,7 @@ class SFScriptForge:
                     No attempt is made to roll back or undo any changes made before an error occurs.
 
             See Also:
-                `DeleteFile <https://tinyurl.com/ybxpt7eo#DeleteFile>`_
+                `SF_FileSystem Help DeleteFile <https://tinyurl.com/ybxpt7eo#DeleteFile>`_
             """
         def DeleteFolder(self, foldername: str) -> bool:
             """
@@ -1336,7 +1336,7 @@ class SFScriptForge:
                 bool: True if at least one folder has been deleted. False if an error occurred.
 
             See Also:
-                `DeleteFolder <https://tinyurl.com/ybxpt7eo#DeleteFolder>`_
+                `SF_FileSystem Help DeleteFolder <https://tinyurl.com/ybxpt7eo#DeleteFolder>`_
             """
         # 7.4
         # def ExtensionFolder(self, extension: str) -> str:
@@ -1362,7 +1362,7 @@ class SFScriptForge:
                     False otherwise including when FileName is a folder
 
             See Also:
-                `FileExists <https://tinyurl.com/ybxpt7eo#FileExists>`_
+                `SF_FileSystem Help FileExists <https://tinyurl.com/ybxpt7eo#FileExists>`_
             """
         def Files(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
             """
@@ -1387,7 +1387,7 @@ class SFScriptForge:
                     ('file:///c:/Windows/winhlp32.exe',)
 
             See Also:
-                `Files <https://tinyurl.com/ybxpt7eo#Files>`_
+                `SF_FileSystem Help Files <https://tinyurl.com/ybxpt7eo#Files>`_
             """
         def FolderExists(self, foldername: str) -> bool:
             """
@@ -1417,7 +1417,7 @@ class SFScriptForge:
                 str: The BaseName of the given argument in native operating system format. May be empty.
 
             See Also:
-                `GetBaseName <https://tinyurl.com/ybxpt7eo#GetBaseName>`_
+                `SF_FileSystem Help GetBaseName <https://tinyurl.com/ybxpt7eo#GetBaseName>`_
             """
         def GetExtension(self, filename: str) -> str:
             """
@@ -1437,7 +1437,7 @@ class SFScriptForge:
                     'exe'
 
             See Also:
-                `GetExtension <https://tinyurl.com/ybxpt7eo#GetExtension>`_
+                `SF_FileSystem Help GetExtension <https://tinyurl.com/ybxpt7eo#GetExtension>`_
             """
         def GetFileLen(self, filename: str) -> int:
             """
@@ -1457,7 +1457,7 @@ class SFScriptForge:
                     '201728'
 
             See Also:
-                `GetFileLen <https://tinyurl.com/ybxpt7eo#GetFileLen>`_
+                `SF_FileSystem Help GetFileLen <https://tinyurl.com/ybxpt7eo#GetFileLen>`_
             """
         def GetFileModified(self, filename: str) -> datetime.datetime:
             """
@@ -1476,7 +1476,7 @@ class SFScriptForge:
                     2022-04-03 21:12:26
 
             See Also:
-                `GetFileModified <https://tinyurl.com/ybxpt7eo#GetFileModified>`_
+                `SF_FileSystem Help GetFileModified <https://tinyurl.com/ybxpt7eo#GetFileModified>`_
             """
         def GetName(self, filename: str) -> str:
             """
@@ -1497,7 +1497,7 @@ class SFScriptForge:
                    Notepad.exe
 
             See Also:
-                `GetName <https://tinyurl.com/ybxpt7eo#GetName>`_
+                `SF_FileSystem Help GetName <https://tinyurl.com/ybxpt7eo#GetName>`_
             """
         def GetParentFolderName(self, filename: str) -> str:
             """
@@ -1518,7 +1518,7 @@ class SFScriptForge:
                    file:///C:/Windows/
 
             See Also:
-                `GetParentFolderName <https://tinyurl.com/ybxpt7eo#GetParentFolderName>`_
+                `SF_FileSystem Help GetParentFolderName <https://tinyurl.com/ybxpt7eo#GetParentFolderName>`_
             """
         def GetTempName(self) -> str:
             """
@@ -1563,7 +1563,7 @@ class SFScriptForge:
                     bbe80313cf12098d3fc4d8a42e9dbb33
 
             See Also:
-                `HashFile <https://tinyurl.com/ybxpt7eo#HashFile>`_
+                `SF_FileSystem Help HashFile <https://tinyurl.com/ybxpt7eo#HashFile>`_
             """
         def MoveFile(self, source: str, destination: str) -> bool:
             """
@@ -1589,7 +1589,7 @@ class SFScriptForge:
                 bool: True if at least one file has been moved. False if an error occurred.
 
             See Also:
-                `MoveFile <https://tinyurl.com/ybxpt7eo#MoveFile>`_
+                `SF_FileSystem Help MoveFile <https://tinyurl.com/ybxpt7eo#MoveFile>`_
             """
         def MoveFolder(self, source: str, destination: str) -> bool:
             """
@@ -1613,7 +1613,7 @@ class SFScriptForge:
                 bool: True if at least one folder has been moved. False if an error occurred.
 
             See Also:
-                `MoveFolder <https://tinyurl.com/ybxpt7eo#MoveFolder>`_
+                `SF_FileSystem Help MoveFolder <https://tinyurl.com/ybxpt7eo#MoveFolder>`_
             """
         def OpenTextFile(
             self,
@@ -1659,7 +1659,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `OpenTextFile <https://tinyurl.com/ybxpt7eo#OpenTextFile>`_
+                `SF_FileSystem Help OpenTextFile <https://tinyurl.com/ybxpt7eo#OpenTextFile>`_
             """
         def PickFile(
             self, defaultfile: str = ..., mode: str = ..., filter: str = ...,
@@ -1685,7 +1685,7 @@ class SFScriptForge:
                 str: The selected FileName in URL format or "" if the dialog was cancelled.
 
             See Also:
-                `PickFile <https://tinyurl.com/ybxpt7eo#PickFile>`_
+                `SF_FileSystem Help PickFile <https://tinyurl.com/ybxpt7eo#PickFile>`_
             """
         def PickFolder(self, defaultfolder: str = ..., freetext: str = ...) -> str:
             """
@@ -1700,7 +1700,7 @@ class SFScriptForge:
                 A zero-length string if the dialog was cancelled.
 
             See Also:
-                `PickFolder <https://tinyurl.com/ybxpt7eo#PickFolder>`_
+                `SF_FileSystem Help PickFolder <https://tinyurl.com/ybxpt7eo#PickFolder>`_
             """
         def SubFolders(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
             """
@@ -1719,7 +1719,7 @@ class SFScriptForge:
                 tuple: tuple of strings corresponding to the folders stored in a given foldername.
 
             See Also:
-                `SubFolders <https://tinyurl.com/ybxpt7eo#SubFolders>`_
+                `SF_FileSystem Help SubFolders <https://tinyurl.com/ybxpt7eo#SubFolders>`_
             """
         @classmethod
         def _ConvertFromUrl(cls, filename: str) -> str: ...
@@ -1730,12 +1730,13 @@ class SFScriptForge:
         @property
         def FileNaming(self) -> str:
             """
-            Gets/Sets the current files and folders notation, either ``ANY``, ``URL`` or ``SYS``:
-            * "ANY": (default) the methods of the FileSystem service accept both URL
+            Gets/Sets the current files and folders notation, either ANY, URL or SYS:
+            
+            - "ANY": (default) the methods of the FileSystem service accept both URL
                 and current operating system's notation for input arguments but always return URL strings.
-            * "URL": the methods of the FileSystem service expect URL notation for input arguments
+            - "URL": the methods of the FileSystem service expect URL notation for input arguments
                 and return URL strings.
-            * "SYS": the methods of the FileSystem service expect current operating system's notation
+            - "SYS": the methods of the FileSystem service expect current operating system's notation
                 for both input arguments and return strings.
 
             Once set, the FileNaming property remains unchanged either until the end of the
@@ -1812,7 +1813,7 @@ class SFScriptForge:
                 bool: True if successful.
 
             See Also:
-                `AddText <https://tinyurl.com/y77mbtp9#AddText>`_
+                `SF_L10N Help AddText <https://tinyurl.com/y77mbtp9#AddText>`_
             """
         def AddTextsFromDialog(self, dialog: object) -> bool:
             """
@@ -1834,7 +1835,7 @@ class SFScriptForge:
                 bool: True when successful.
 
             See Also:
-                `AddTextsFromDialog <https://tinyurl.com/y77mbtp9#AddTextsFromDialog>`_
+                `SF_L10N Help AddTextsFromDialog <https://tinyurl.com/y77mbtp9#AddTextsFromDialog>`_
             """
         def ExportToPOTFile(
             self, filename: str, header: str = ..., encoding: str = ...
@@ -1861,7 +1862,7 @@ class SFScriptForge:
                 LibreOffice does not implement all existing encoding sets.
 
             See Also:
-                `ExportToPOTFile <https://tinyurl.com/y77mbtp9#ExportToPOTFile>`_
+                `SF_L10N Help ExportToPOTFile <https://tinyurl.com/y77mbtp9#ExportToPOTFile>`_
             """
         def GetText(self, msgid: Any, *args: Any) -> str:
             """
@@ -1891,7 +1892,7 @@ class SFScriptForge:
                     - both (Context|MsgId) : the pipe character is essential
 
             See Also:
-                `GetText <https://tinyurl.com/y77mbtp9#GetText>`_
+                `SF_L10N Help GetText <https://tinyurl.com/y77mbtp9#GetText>`_
             """
         # endregion Methods
         
@@ -2336,7 +2337,7 @@ class SFScriptForge:
                     SF_String.HashStr("œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬", "MD5")	# 616eb9c513ad07cd02924b4d285b9987
 
             See Also:
-                `HashStr <https://tinyurl.com/y9hm6agu#HashStr>`_
+                `SF_String Help HashStr <https://tinyurl.com/y9hm6agu#HashStr>`_
             """
         def IsADate(self, inputstr: str, dateformat: str = ...) -> bool:
             """
@@ -2357,7 +2358,7 @@ class SFScriptForge:
                     >>> print(SF_String.IsADate("2019-12-31", "YYYY-MM-DD"))
                     True
             See Also:
-                `IsADate <https://tinyurl.com/y9hm6agu#IsADate>`_
+                `SF_String Help IsADate <https://tinyurl.com/y9hm6agu#IsADate>`_
             """
         def IsEmail(self, inputstr: str) -> bool:
             """
@@ -2376,7 +2377,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsEmail <https://tinyurl.com/y9hm6agu#IsEmail>`_
+                `SF_String Help IsEmail <https://tinyurl.com/y9hm6agu#IsEmail>`_
             """
         def IsFileName(self, inputstr: str, osname: str = ...) -> bool:
             """
@@ -2415,7 +2416,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsIBAN <https://tinyurl.com/y9hm6agu#IsIBAN>`_
+                `SF_String Help IsIBAN <https://tinyurl.com/y9hm6agu#IsIBAN>`_
             """
         def IsIPv4(self, inputstr: str) -> bool:
             """
@@ -2434,7 +2435,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsIPv4 <https://tinyurl.com/y9hm6agu#IsIPv4>`_
+                `SF_String Help IsIPv4 <https://tinyurl.com/y9hm6agu#IsIPv4>`_
             """
         def IsLike(
             self, inputstr: str, pattern: str, casesensitive: bool = ...
@@ -2465,7 +2466,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsLike <https://tinyurl.com/y9hm6agu#IsLike>`_
+                `SF_String Help IsLike <https://tinyurl.com/y9hm6agu#IsLike>`_
             """
         def IsSheetName(self, inputstr: str) -> bool:
             """
@@ -2487,7 +2488,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsSheetName <https://tinyurl.com/y9hm6agu#IsSheetName>`_
+                `SF_String Help IsSheetName <https://tinyurl.com/y9hm6agu#IsSheetName>`_
             """
         def IsUrl(self, inputstr: str) -> bool:
             """
@@ -2509,7 +2510,7 @@ class SFScriptForge:
                     True
 
             See Also:
-                `IsUrl <https://tinyurl.com/y9hm6agu#IsUrl>`_
+                `SF_String Help IsUrl <https://tinyurl.com/y9hm6agu#IsUrl>`_
             """
         def SplitNotQuoted(
             self,
@@ -2543,7 +2544,7 @@ class SFScriptForge:
                     ["abc", '"def,ghi"']
 
             See Also:
-                `SplitNotQuoted <https://tinyurl.com/y9hm6agu#SplitNotQuoted>`_
+                `SF_String Help SplitNotQuoted <https://tinyurl.com/y9hm6agu#SplitNotQuoted>`_
             """
         def Wrap(self, inputstr, width=..., tabsize=...) -> Tuple[str, ...]:
             """
@@ -2562,7 +2563,7 @@ class SFScriptForge:
                     If the wrapped output has no content, the returned tuple is empty.
 
             See Also:
-                `Wrap <https://tinyurl.com/y9hm6agu#Wrap>`_
+                `SF_String Help Wrap <https://tinyurl.com/y9hm6agu#Wrap>`_
             """
         # endregion Methods
     
@@ -2612,7 +2613,7 @@ class SFScriptForge:
                 bool: True if the closure was successful.
 
             See Also:
-                `CloseFile <https://tinyurl.com/y9ubyoel#CloseFile>`_
+                `SF_TextStream Help CloseFile <https://tinyurl.com/y9ubyoel#CloseFile>`_
             """
         def ReadAll(self) -> str:
             """
@@ -2634,14 +2635,14 @@ class SFScriptForge:
                 str: The read line. The string may be empty.
 
             See Also:
-                `ReadLine <https://tinyurl.com/y9ubyoel#ReadLine>`_
+                `SF_TextStream Help ReadLine <https://tinyurl.com/y9ubyoel#ReadLine>`_
             """
         def SkipLine(self) -> None:
             """
             Skips the next line when reading a TextStream file.
 
             See Also:
-                `SkipLine <https://tinyurl.com/y9ubyoel#SkipLine>`_
+                `SF_TextStream Help SkipLine <https://tinyurl.com/y9ubyoel#SkipLine>`_
             """
         def WriteBlankLines(self, lines: int) -> None:
             """
@@ -2651,7 +2652,7 @@ class SFScriptForge:
                 lines (int): the number of lines to write
 
             See Also:
-                `WriteBlankLines <https://tinyurl.com/y9ubyoel#WriteBlankLines>`_
+                `SF_TextStream Help WriteBlankLines <https://tinyurl.com/y9ubyoel#WriteBlankLines>`_
             """
         def WriteLine(self, line: str) -> None:
             """
@@ -2661,7 +2662,7 @@ class SFScriptForge:
                 line (str): the line to write, may be empty.
 
             See Also:
-                `WriteLine <https://tinyurl.com/y9ubyoel#WriteLine>`_
+                `SF_TextStream Help WriteLine <https://tinyurl.com/y9ubyoel#WriteLine>`_
             """
         # endregion Methods
 
@@ -2971,7 +2972,7 @@ class SFScriptForge:
 
             Returns:
                 SFDocuments.SF_Document: A SFDocuments.SF_Document object or one of its subclasses.
-                ``None`` if the opening failed, including when due to a user decision.
+                None if the opening failed, including when due to a user decision.
             """
         def Resize(
             self, left: int = ..., top: int = ..., width: int = ..., height: int = ...
@@ -3062,7 +3063,7 @@ class SFDatabases:
             Close the current database connection
 
             See Also:
-                `CloseDatabase <https://tinyurl.com/yd9y6xa7#CloseDatabase>`_
+                `SF_Database Help CloseDatabase <https://tinyurl.com/yd9y6xa7#CloseDatabase>`_
             """
         def DAvg(
             self, expression: str, tablename: str, criteria: str = ...
@@ -3080,7 +3081,7 @@ class SFDatabases:
                 Union[int, float, None]: result
 
             See Also:
-                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
+                `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DCount(
             self, expression: str, tablename: str, criteria: str = ...
@@ -3098,7 +3099,7 @@ class SFDatabases:
                 Union[int, None]: result
 
             See Also:
-                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
+                `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DLookup(
             self,
@@ -3121,7 +3122,7 @@ class SFDatabases:
                 Any: result
 
             See Also:
-                `DLookup <https://tinyurl.com/yd9y6xa7#DLookup>`_
+                `SF_Database Help DLookup <https://tinyurl.com/yd9y6xa7#DLookup>`_
             """
         def DMax(
             self, expression: str, tablename: str, criteria: str = ...
@@ -3138,7 +3139,7 @@ class SFDatabases:
                 Union[int, float, None]: result
 
             See Also:
-                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
+                `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DMin(
             self, expression: str, tablename: str, criteria: str = ...
@@ -3155,7 +3156,7 @@ class SFDatabases:
                 Union[int, float, None]: result
 
             See Also:
-                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
+                `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def DSum(
             self, expression: str, tablename: str, criteria: str = ...
@@ -3172,7 +3173,7 @@ class SFDatabases:
                 Union[int, float, None]: result
 
             See Also:
-                `DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
+                `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
         def GetRows(
             self,
@@ -3196,7 +3197,7 @@ class SFDatabases:
                     An empty list if no records returned
 
             See Also:
-                `GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
+                `SF_Database Help GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
             """
         def RunSql(self, sqlcommand: str, directsql: bool = ...) -> Any:
             """
@@ -3211,7 +3212,7 @@ class SFDatabases:
                 Any: result
 
             See Also:
-                `RunSql <https://tinyurl.com/yd9y6xa7#RunSql>`_
+                `SF_Database Help RunSql <https://tinyurl.com/yd9y6xa7#RunSql>`_
             """
         # endregion Methods
 
@@ -3284,7 +3285,7 @@ class SFDialogs:
                 bool: True if focusing is successful
 
             See Also:
-                `Activate <https://tinyurl.com/yckkehha#Activate>`_
+                `SF_Dialog Help Activate <https://tinyurl.com/yckkehha#Activate>`_
             """
         def Controls(
             self, controlname: str = ...
@@ -3301,7 +3302,7 @@ class SFDialogs:
                     An instance of the SFDialogs.SF_DialogControl class if ControlName exists
 
             See Also:
-                `Controls <https://tinyurl.com/yckkehha#Controls>`_
+                `SF_Dialog Help Controls <https://tinyurl.com/yckkehha#Controls>`_
             """
         def EndExecute(self, returnvalue: int) -> None:
             """
@@ -3315,7 +3316,7 @@ class SFDialogs:
                 returnvalue (int): The value passed to the running Execute() method.
 
             See Also:
-                `EndExecute <https://tinyurl.com/yckkehha#EndExecute>`_
+                `SF_Dialog Help EndExecute <https://tinyurl.com/yckkehha#EndExecute>`_
             """
         def Execute(self, modal: bool = ...) -> int:
             """
@@ -3329,7 +3330,7 @@ class SFDialogs:
                     Otherwise: the dialog stopped with an EndExecute statement executed from a dialog or control event.
 
             See Also:
-                `Execute <https://tinyurl.com/yckkehha#Execute>`_
+                `SF_Dialog Help Execute <https://tinyurl.com/yckkehha#Execute>`_
             """
         def GetTextsFromL10N(self, l10n: SFScriptForge.SF_L10N) -> bool:
             """
@@ -3351,7 +3352,7 @@ class SFDialogs:
                 bool: True when successful.
 
             See Also:
-                `GetTextsFromL10N <https://tinyurl.com/yckkehha#GetTextsFromL10N>`_
+                `SF_Dialog Help GetTextsFromL10N <https://tinyurl.com/yckkehha#GetTextsFromL10N>`_
             """
         def Terminate(self) -> bool:
             """
@@ -3362,7 +3363,7 @@ class SFDialogs:
                 bool: True if termination is successful.
 
             See Also:
-                `Terminate <https://tinyurl.com/yckkehha#Terminate>`_
+                `SF_Dialog Help Terminate <https://tinyurl.com/yckkehha#Terminate>`_
             """
         # endregion Methods
         
@@ -3388,7 +3389,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
 
         @property
@@ -3400,7 +3401,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
 
         @property
@@ -3412,7 +3413,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
 
         @property
@@ -3424,7 +3425,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMouseDragged(self) -> str:
@@ -3435,7 +3436,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMouseEntered(self) -> str:
@@ -3446,7 +3447,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMouseExited(self) -> str:
@@ -3457,7 +3458,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMouseMoved(self) -> str:
@@ -3468,7 +3469,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMousePressed(self) -> str:
@@ -3479,7 +3480,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def OnMouseReleased(self) -> str:
@@ -3490,7 +3491,7 @@ class SFDialogs:
                 str: A URI string with the reference to the script triggered by the event.
 
             See Also:
-            `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
+                `scripting framework URI specification <https://tinyurl.com/mr4y8k2s>`_.
             """
         @property
         def Page(self) -> int:
@@ -3556,7 +3557,7 @@ class SFDialogs:
                 XMutableTreeNode: The new node UNO object: com.sun.star.awt.tree.XMutableTreeNode
 
             See Also:
-                `AddSubNode <https://tinyurl.com/yb27tk36#AddSubNode>`_
+                `SF_DialogControl Help AddSubNode <https://tinyurl.com/yb27tk36#AddSubNode>`_
             """
         def AddSubTree(
             self,
@@ -3603,7 +3604,7 @@ class SFDialogs:
                 When AddSubTree() is called from a Python script, FlatTree may be an list of list.
 
             See Also:
-                `AddSubTree <https://tinyurl.com/yb27tk36#AddSubTree>`_
+                `SF_DialogControl Help AddSubTree <https://tinyurl.com/yb27tk36#AddSubTree>`_
             """
         def CreateRoot(
             self, displayvalue: str, datavalue: str = ...
@@ -3619,7 +3620,7 @@ class SFDialogs:
                 XMutableTreeNode: The new root node as a UNO object of type com.sun.star.awt.tree.XMutableTreeNode
 
             See Also:
-                `CreateRoot <https://tinyurl.com/yb27tk36#CreateRoot>`_
+                `SF_DialogControl Help CreateRoot <https://tinyurl.com/yb27tk36#CreateRoot>`_
             """
         def FindNode(
             self,
@@ -3645,7 +3646,7 @@ class SFDialogs:
                 Union[XMutableTreeNode, None]: The found node of type com.sun.star.awt.tree.XMutableTreeNode or None if not found.
 
             See Also:
-                `FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
+                `SF_DialogControl Help FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
             """
         def SetFocus(self) -> bool:
             """
@@ -3656,7 +3657,7 @@ class SFDialogs:
                 bool: True if focusing is successful
 
             See Also:
-                `SetFocus <https://tinyurl.com/yb27tk36#SetFocus>`_
+                `SF_DialogControl Help SetFocus <https://tinyurl.com/yb27tk36#SetFocus>`_
             """
         def SetTableData(
             self, dataarray: tuple, widths: Tuple[int, ...] = ..., alignments: str = ...
@@ -3689,7 +3690,7 @@ class SFDialogs:
                 bool: True when successful.
 
             See Also:
-                `SetTableData <https://tinyurl.com/yb27tk36#SetTableData>`_
+                `SF_DialogControl Help SetTableData <https://tinyurl.com/yb27tk36#SetTableData>`_
             """
         def WriteLine(self, line: str = ...) -> bool:
             """
@@ -3703,7 +3704,7 @@ class SFDialogs:
                 bool: True if insertion is successful
 
             See Also:
-                `WriteLine <https://tinyurl.com/yb27tk36#WriteLine>`_
+                `SF_DialogControl Help WriteLine <https://tinyurl.com/yb27tk36#WriteLine>`_
             """
         # endregion Methods
 
@@ -4163,7 +4164,7 @@ class SFDocuments:
                 bool: True if the document could be activated; Otherwise, there is no change in the actual user interface.
 
             See Also:
-                `Activate <https://tinyurl.com/ybujrgjk#Activate>`_
+                `SF_Document Help Activate <https://tinyurl.com/ybujrgjk#Activate>`_
             """
         def CloseDocument(self, saveask: bool = ...) -> bool:
             """
@@ -4178,7 +4179,7 @@ class SFDocuments:
                 bool: False if the user declined to close
 
             See Also:
-                `CloseDocument <https://tinyurl.com/ybujrgjk#CloseDocument>`_
+                `SF_Document Help CloseDocument <https://tinyurl.com/ybujrgjk#CloseDocument>`_
             """
         def ExportAsPDF(
             self,
@@ -4202,7 +4203,7 @@ class SFDocuments:
                 bool: False if the document could not be saved
 
             See Also:
-                `ExportAsPDF <https://tinyurl.com/ybujrgjk#ExportAsPDF>`_
+                `SF_Document Help ExportAsPDF <https://tinyurl.com/ybujrgjk#ExportAsPDF>`_
             """
         def PrintOut(self, pages: str = ..., copies: int = ...) -> bool:
             """
@@ -4217,7 +4218,7 @@ class SFDocuments:
                 bool: True when successful.
 
             See Also:
-                `PrintOut <https://tinyurl.com/ybujrgjk#PrintOut>`_
+                `SF_Document Help PrintOut <https://tinyurl.com/ybujrgjk#PrintOut>`_
             """
         def RunCommand(self, command: str) -> None:
             """
@@ -4230,7 +4231,7 @@ class SFDocuments:
                     Undo, Copy, Paste, About
 
             See Also:
-                `RunCommand <https://tinyurl.com/ybujrgjk#RunCommand>`_
+                `SF_Document Help RunCommand <https://tinyurl.com/ybujrgjk#RunCommand>`_
             """
         def Save(self) -> bool:
             """
@@ -4241,7 +4242,7 @@ class SFDocuments:
                 bool: False if the document could not be saved.
 
             See Also:
-                `Save <https://tinyurl.com/ybujrgjk#Save>`_
+                `SF_Document Help Save <https://tinyurl.com/ybujrgjk#Save>`_
             """
         def SaveAs(
             self,
@@ -4267,7 +4268,7 @@ class SFDocuments:
                 bool: False if the document could not be saved.
 
             See Also:
-                `SaveAs <https://tinyurl.com/ybujrgjk#SaveAs>`_
+                `SF_Document Help SaveAs <https://tinyurl.com/ybujrgjk#SaveAs>`_
             """
         def SaveCopyAs(
             self,
@@ -4293,7 +4294,7 @@ class SFDocuments:
                 bool: False if the document could not be saved.
 
             See Also:
-                `SaveCopyAs <https://tinyurl.com/ybujrgjk#SaveCopyAs>`_
+                `SF_Document Help SaveCopyAs <https://tinyurl.com/ybujrgjk#SaveCopyAs>`_
             """
         def SetPrinter(
             self, printer: str = ..., orientation: str = ..., paperformat: str = ...
@@ -4321,7 +4322,7 @@ class SFDocuments:
                 bool: True when successful.
 
             See Also:
-                `SetPrinter <https://tinyurl.com/ybujrgjk#SetPrinter>`_
+                `SF_Document Help SetPrinter <https://tinyurl.com/ybujrgjk#SetPrinter>`_
             """
         # endregion methods
         
@@ -4453,7 +4454,7 @@ class SFDocuments:
                 bool: True if closure is successful.
 
             See Also:
-                `CloseFormDocument <https://tinyurl.com/ya4lp2mq#CloseFormDocument>`_
+                `SF_Base Help CloseFormDocument <https://tinyurl.com/ya4lp2mq#CloseFormDocument>`_
             """
         def FormDocuments(self) -> Tuple[str, ...]:
             """
@@ -4464,7 +4465,7 @@ class SFDocuments:
                     Each entry is the full path name of a form document. The path separator is the slash ("/")
 
             See Also:
-                `FormDocuments <https://tinyurl.com/ya4lp2mq#FormDocuments>`_
+                `SF_Base Help FormDocuments <https://tinyurl.com/ya4lp2mq#FormDocuments>`_
             """
         def GetDatabase(
             self, user: str = ..., password: str = ...
@@ -4482,7 +4483,7 @@ class SFDocuments:
                 SFDatabases.SF_Database | None: SF_Database or None.
 
             See Also:
-                `GetDatabase <https://tinyurl.com/ya4lp2mq#GetDatabase>`_
+                `SF_Base Help GetDatabase <https://tinyurl.com/ya4lp2mq#GetDatabase>`_
             """
         def IsLoaded(self, formdocument: str) -> bool:
             """
@@ -4495,7 +4496,7 @@ class SFDocuments:
                 bool: True if the form document is currently open, otherwise False.
 
             See Also:
-                `IsLoaded <https://tinyurl.com/ya4lp2mq#IsLoaded>`_
+                `SF_Base Help IsLoaded <https://tinyurl.com/ya4lp2mq#IsLoaded>`_
             """
 
         @overload
@@ -4514,7 +4515,7 @@ class SFDocuments:
                 bool: True if the form document could be opened; Otherwise False.
 
             See Also:
-                `OpenFormDocument <https://tinyurl.com/ya4lp2mq#OpenFormDocument>`_
+                `SF_Base Help OpenFormDocument <https://tinyurl.com/ya4lp2mq#OpenFormDocument>`_
             """
         def PrintOut(
             self, formdocument: str, pages: str = ..., copies: int = ...
@@ -4533,7 +4534,7 @@ class SFDocuments:
                 bool: True when successful.
 
             See Also:
-                `PrintOut <https://tinyurl.com/ya4lp2mq#PrintOut>`_
+                `SF_Base Help PrintOut <https://tinyurl.com/ya4lp2mq#PrintOut>`_
             """
         def SetPrinter(
             self,
@@ -4566,7 +4567,7 @@ class SFDocuments:
                 bool: True when successful.
 
             See Also:
-                `SetPrinter <https://tinyurl.com/ya4lp2mq#SetPrinter>`_
+                `SF_Base Help SetPrinter <https://tinyurl.com/ya4lp2mq#SetPrinter>`_
             """
         # endregion methods
     # endregion SF_Base CLASS
