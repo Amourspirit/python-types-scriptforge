@@ -1,37 +1,37 @@
 # region IMPORTS
+from __future__ import annotations
 import datetime
 import time
 from numbers import Number
-from typing import Any, Optional, List, Tuple, TypeVar, overload, TYPE_CHECKING, Union
+from typing import Any, Optional, List, Tuple, TypeVar, overload, Union
 from typing_extensions import Literal
-if TYPE_CHECKING:
-    from com.sun.star.awt import XWindow
-    from com.sun.star.awt import XControl
-    from com.sun.star.awt import XControlModel
-    from com.sun.star.awt.tree import XMutableTreeNode
-    from com.sun.star.awt.tree import XMutableTreeDataModel
-    from com.sun.star.beans import PropertyValue
-    from com.sun.star.chart import XDiagram
-    from com.sun.star.document import XEmbeddedScripts
-    from com.sun.star.drawing import XShape
-    from com.sun.star.form import XForm
-    from com.sun.star.frame import XDesktop
-    from com.sun.star.lang import XComponent
-    from com.sun.star.script import XLibraryContainer
-    from com.sun.star.script.provider import XScriptProvider
-    from com.sun.star.sheet import XSheetCellCursor
-    from com.sun.star.sheet import XSpreadsheet
-    from com.sun.star.sdb import DatabaseDocument
-    from com.sun.star.sdbc import XConnection as UNOXConnection
-    from com.sun.star.sdbc import XDatabaseMetaData
-    from com.sun.star.table import XCellRange
-    from com.sun.star.table import XTableChart
-    from com.sun.star.uno import XInterface
-    from com.sun.star.uno import XComponentContext
-    from com.sun.star.util import DateTime as UNODateTime
-    from com.sun.star.util import Date as UNODate
-    from com.sun.star.util import Time as UNOTime
-    from com.sun.star.form import ListSourceType
+from com.sun.star.awt import XWindow
+from com.sun.star.awt import XControl
+from com.sun.star.awt import XControlModel
+from com.sun.star.awt.tree import XMutableTreeNode
+from com.sun.star.awt.tree import XMutableTreeDataModel
+from com.sun.star.beans import PropertyValue
+from com.sun.star.chart import XDiagram
+from com.sun.star.document import XEmbeddedScripts
+from com.sun.star.drawing import XShape
+from com.sun.star.form import XForm
+from com.sun.star.frame import XDesktop
+from com.sun.star.lang import XComponent
+from com.sun.star.script import XLibraryContainer
+from com.sun.star.script.provider import XScriptProvider
+from com.sun.star.sheet import XSheetCellCursor
+from com.sun.star.sheet import XSpreadsheet
+from com.sun.star.sdb import DatabaseDocument
+from com.sun.star.sdbc import XConnection as UNOXConnection
+from com.sun.star.sdbc import XDatabaseMetaData
+from com.sun.star.table import XCellRange
+from com.sun.star.table import XTableChart
+from com.sun.star.uno import XInterface
+from com.sun.star.uno import XComponentContext
+from com.sun.star.util import DateTime as UNODateTime
+from com.sun.star.util import Date as UNODate
+from com.sun.star.util import Time as UNOTime
+from com.sun.star.form import ListSourceType
 # endregion IMPORTS
 
 # region Types
@@ -956,7 +956,7 @@ class SFScriptForge:
 
         @overload
         @classmethod
-        def Xray(cls) -> None:
+        def Xray(cls) -> None: ...
         @overload
         @classmethod
         def Xray(cls, unoobject: object) -> None:
