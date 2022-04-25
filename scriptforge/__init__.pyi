@@ -1,7 +1,8 @@
 # region IMPORTS
 import datetime
 import time
-from typing import Any, Optional, List, Tuple, TypeVar, overload, TYPE_CHECKING
+from numbers import Number
+from typing import Any, Optional, List, Tuple, TypeVar, overload, TYPE_CHECKING, Union
 from typing_extensions import Literal
 if TYPE_CHECKING:
     from com.sun.star.awt import XWindow
@@ -16,6 +17,7 @@ if TYPE_CHECKING:
     from com.sun.star.form import XForm
     from com.sun.star.frame import XDesktop
     from com.sun.star.lang import XComponent
+    from com.sun.star.script import XLibraryContainer
     from com.sun.star.script.provider import XScriptProvider
     from com.sun.star.sheet import XSheetCellCursor
     from com.sun.star.sheet import XSpreadsheet
@@ -64,7 +66,7 @@ class ScriptForge(object, metaclass=_Singleton):
     hostname: str
     port: int
     componentcontext: XComponentContext
-    scriptprovider: Any
+    scriptprovider: XScriptProvider
     SCRIPTFORGEINITDONE: bool
     # endregion Class attributes
 
@@ -100,11 +102,11 @@ class ScriptForge(object, metaclass=_Singleton):
     objCLASS: Literal[2]
     objUNO: Literal[3]
     # endregion VarType() constants
-    # regoin Special argument symbols
+    # region Special argument symbols
     cstSymEmpty: Literal["+++EMPTY+++"]
     cstSymNull: Literal["+++NULL+++"]
     cstSymMissing: Literal["+++MISSING+++"]
-    # endregoin Special argument symbols
+    # endregion Special argument symbols
     # Predefined references for services implemented as standard Basic modules
     servicesmodules: dict
     def __init__(self, hostname: str = ..., port: int = ...):
@@ -146,25 +148,28 @@ class ScriptForge(object, metaclass=_Singleton):
         """
         Create a UNO object corresponding with the given Python or Basic script
         The execution is done with the invoke() method applied on the created object
-        Implicit scope: Either
-            "application"            a shared library                               (BASIC)
-            "share"                  a library of LibreOffice Macros                (PYTHON)
+        Implicit scope: Either::
+
+            "application"   a shared library                (BASIC)
+            "share"         a library of LibreOffice Macros (PYTHON)
 
         Args:
-            script (str): Either
-                [@][scope#][library.]module.method - Must not be a class module or method
-                
-                [@] means that the targeted method accepts ParamArray arguments (Basic only)
-                
-                [scope#][directory/]module.py$method - Must be a method defined at module level
-        
+            script (str): See Note
+
+        Note:
+            Arg ``script`` is Eithor:
+
+            - [@][scope#][library.]module.method - Must not be a class module or method
+            - [@] means that the targeted method accepts ParamArray arguments (Basic only)
+            - [scope#][directory/]module.py$method - Must be a method defined at module level
+
         Returns:
             Any:the value returned by the invoked script, or an error if the script was not found
         """
     @classmethod
     def InvokeBasicService(
         cls, basicobject: object, flags: int, method: str, *args: Any
-    ) -> tuple | list:
+    ) -> Union[tuple, datetime.datetime]:
         """
         Execute a given Basic script and interpret its result
         This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
@@ -179,26 +184,30 @@ class ScriptForge(object, metaclass=_Singleton):
         
         Returns:
             Union[tuple, list]: The invoked Basic counterpart script (with InvokeSimpleScript()) will return a tuple
-            
-            [0]     The returned value - scalar, object reference or a tuple
-            
-            [1]     The Basic VarType() of the returned value
-                    Null, Empty and Nothing have different vartypes but return all None to Python
-                    
-            Additionally, when [0] is a tuple:
-            [2]     Number of dimensions in Basic
-            
-            Additionally, when [0] is a UNO or Basic object:
-            [2]     Module (1), Class instance (2) or UNO (3)
-            
-            [3]     The object's ObjectType
-            
-            [4]     The object's ServiceName
-            
-            [5]     The object's name
+
+        Note:
+
+            Return info:
+
+                [0]     The returned value - scalar, object reference or a tuple
+
+                [1]     The Basic VarType() of the returned value
+                        Null, Empty and Nothing have different vartypes but return all None to Python
+
+                Additionally, when [0] is a tuple:
+                    [2]     Number of dimensions in Basic
+
+                Additionally, when [0] is a UNO or Basic object:
+                    [2]     Module (1), Class instance (2) or UNO (3)
+
+                    [3]     The object's ObjectType
+
+                    [4]     The object's ServiceName
+
+                    [5]     The object's name
             
             When an error occurs Python receives None as a scalar. This determines the occurrence of a failure
-            The method returns either
+            The method returns either:
                 - the 0th element of the tuple when scalar, tuple or UNO object
                 - a new Service() object or one of its subclasses otherwise
         """
@@ -212,12 +221,16 @@ class ScriptForge(object, metaclass=_Singleton):
 
         1) Fill the propertysynonyms dictionary with the synonyms of the properties listed in serviceproperties
             Example:
+                .. code::
+
                     serviceproperties = dict(ConfigFolder = False, InstallFolder = False)
                     propertysynonyms = dict(configfolder = 'ConfigFolder', installfolder = 'InstallFolder',
                                             configFolder = 'ConfigFolder', installFolder = 'InstallFolder')
 
         2) Define new method attributes synonyms of the original methods
             Example:
+                .. code::
+
                 def CopyFile(...):
                     # etc ...
                 copyFile, copyfile = CopyFile, CopyFile
@@ -271,15 +284,15 @@ class SFServices:
                     True = editable, False = read-only
                 a list named 'localProperties' reserved to properties for internal use
                     e.g. oDlg.Controls() is a method that uses '_Controls' to hold the list of available controls
-            When
-                forceGetProperty = False    # Standard behaviour
+            When:
+                    forceGetProperty = False    # Standard behaviour
             read-only serviceproperties are buffered in Python after their 1st get request to Basic
             Otherwise set it to True to force a recomputation at each property getter invocation
             If there is a need to handle a specific property in a specific manner:
                 @property
                 def myProperty(self):
                     return self.GetProperty('myProperty')
-        2   The methods
+        2.   The methods
             a usual def: statement
                 def myMethod(self, arg1, arg2 = ''):
                     return self.Execute(self.vbMethod, 'myMethod', arg1, arg2)
@@ -315,7 +328,7 @@ class SFServices:
     forceGetProperty: bool = False
     """Define the default behaviour for read-only properties: buffer their values in Python"""
     propertysynonyms: dict = ...
-    """Empty dictionary for lower/camelcased homonyms or pr operties"""
+    """Empty dictionary for lower/camelcased homonyms or properties"""
     internal_attributes: tuple
     # Shortcuts to script provider interfaces
     SIMPLEEXEC: Any
@@ -348,7 +361,7 @@ class SFServices:
         """
         Dispose
         """
-    def ExecMethod(self, flags: int = ..., methodname: str = ..., *args) -> Any: ...
+    def ExecMethod(self, flags: int = ..., methodname: str = ..., *args: Any) -> Any: ...
     def GetProperty(self, propertyname: str, arg=None):
         """
         Get the given property from the Basic world
@@ -372,23 +385,36 @@ class SFScriptForge:
         Provides a collection of methods for manipulating and transforming arrays of one dimension (vectors)
         and arrays of two dimensions (matrices). This includes set operations, sorting,
         importing to and exporting from text files.
-        The Python version of the service provides a single method: ImportFromCSVFile
-        
+        The Python version of the service provides a single method: ``ImportFromCSVFile()``
+
+        Note:
+            Because Python has built-in list and tuple support, most of the methods in the Array
+            service are available for Basic scripts only. The only exception is ``ImportFromCSVFile()``
+            which is supported in both Basic and Python.
+
         See Also:
             `Array Help <https://tinyurl.com/y8b7bq2d>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.Array"]
-        servicesynonyms: Tuple[str, str] = ...
-        serviceproperties: dict = ...
         def ImportFromCSVFile(
             self, filename: str, delimiter: str = ..., dateformat: str = ...
         ) -> Any:
             """
             Difference with the Basic version: dates are returned in their iso format,
             not as any of the datetime objects.
+
+            Args:
+                filename (str): The name of the text file containing the data.
+                    The name must be expressed according to the current FileNaming property of the
+                    SF_FileSystem service.
+                delimiter (str, optional): A single character, usually, a comma, a semicolon or a TAB character
+                    (Default = ",").
+                dateformat (str, optional): A special mechanism handles dates when dateformat is either
+                    "YYYY-MM-DD", "DD-MM-YYYY" or "MM-DD-YYYY". The dash (-) may be replaced by a dot (.),
+                    a slash (/) or a space. Other date formats will be ignored. Dates defaulting to an empty
+                    string "" are considered as normal text.
+
+            See Also:
+                `ImportFromCSVFile <https://tinyurl.com/yuc67r32#ImportFromCSVFile>`_
             """
     # endregion SF_Array CLASS
 
@@ -406,12 +432,6 @@ class SFScriptForge:
         See Also:
            `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
         """
-        # region Class required
-        serviceimplementation: Literal["python"]
-        servicename: Literal["ScriptForge.Basic"]
-        servicesynonyms: Tuple[str, str] = ...
-        # endregion Class required
-
         # region CONST
         # Basic helper functions invocation
         module: Literal["SF_PythonHelper"]
@@ -440,36 +460,56 @@ class SFScriptForge:
 
         # region Methods
         @classmethod
-        def CDate(cls, datevalue: Any) -> datetime.datetime | object: ...
+        def CDate(cls, datevalue: Any) -> Union[datetime.datetime, object]:
+            """
+            Converts a numeric expression or a string to a datetime.datetime Python native object.
+
+            datevalue: (Any): a numeric expression or a string representing a date.
+            Note:
+                This method exposes the Basic builtin function `Basic CDate <https://tinyurl.com/2p8sc4sy>`_ to Python scripts.
+
+            See Also:
+                `CDate <https://tinyurl.com/ycv7q52r#CDate>`_
+            """
         @staticmethod
         def CDateFromUnoDateTime(
-            unodate: UNODateTime | UNODate | UNOTime,
-        ) -> datetime.datetime | object:
+            unodate: Union[UNODateTime, UNODate, UNOTime],
+        ) -> Union[datetime.datetime, object]:
             """
             Converts a UNO date/time representation to a datetime.datetime Python native object
             
             Args:
-                unodate (UNODateTime, UNODate, UNOTime): com.sun.star.util.DateTime, com.sun.star.util.Date or com.sun.star.util.Time
+                unodate (UNODateTime, UNODate, UNOTime): uno date object.
 
             Returns:
                 Union[datetime, object]: the equivalent datetime.datetime
+
+            Note:
+                Arg ``unodate`` can be one of the following:
+                    - com.sun.star.util.DateTime
+                    - com.sun.star.util.Date
+                    - com.sun.star.util.Time
+            See Also:
+                `CDateFromUnoDateTime <https://tinyurl.com/ycv7q52r#CDateFromUnoDateTime>`_
             """
         @staticmethod
         def CDateToUnoDateTime(
-            date: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
-        ) -> UNODateTime | Any:
+            date: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+        ) -> Union[UNODateTime, Any]:
             """
             Converts a date representation into the ccom.sun.star.util.DateTime date format
 
             Args:
-                date (Union[float, time.localtime, datetime, date, time ]): datetime like object
+                date (float |time.localtime | datetime | date | time ]): datetime like object
 
             Returns:
                 UNODateTime: a com.sun.star.util.DateTime
+
+            Note:
+                When arg ``date`` is a ``float`` it is considered a ``time.time`` value.
+
+            See Also:
+                `CDateToUnoDateTime <https://tinyurl.com/ycv7q52r#CDateToUnoDateTime>`_
             """
         @classmethod
         def ConvertFromUrl(cls, url: str) -> str:
@@ -483,9 +523,12 @@ class SFScriptForge:
                 str: The same file name in native operating system notation
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     a = bas.ConvertFromUrl('file:////boot.sys')
+
+            See Also:
+                `ConvertFromUrl <https://tinyurl.com/ycv7q52r#ConvertFromUrl>`_
             """
         @classmethod
         def ConvertToUrl(cls, systempath: str) -> str:
@@ -499,11 +542,14 @@ class SFScriptForge:
                 str: The same file name in URL format
             
             Exampe:
-                .. code-block:: python
+                .. code::
                 
                     >>> a = bas.ConvertToUrl('C:\\boot.sys')
                     >>> print(a)
                     'file:///C:/boot.sys'
+
+            See Also:
+                `ConvertToUrl <https://tinyurl.com/ycv7q52r#ConvertToUrl>`_
             """
         @classmethod
         def CreateUnoService(cls, servicename: str) -> XInterface:
@@ -517,52 +563,112 @@ class SFScriptForge:
                 XInterface: A UNO object
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     a = bas.CreateUnoService('com.sun.star.i18n.CharacterClassification')
+
+            See Also:
+                `CreateUnoService <https://tinyurl.com/ycv7q52r#CreateUnoService>`_
             """
         @classmethod
         def DateAdd(
             cls,
-            interval: Any,
+            interval: str,
             number: int,
-            date: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
-        ) -> UNODateTime | Any: ...
+            date: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+        ) -> Union[UNODateTime, Any]:
+            """
+            Adds a date or time interval to a given date/time a number of times and returns the resulting date.
+
+            Args:
+                interval (str): A string expression from the following table, specifying the date or time interval.
+                number (int): A numerical expression specifying how often the interval value will be added when
+                    positive or subtracted when negative.
+                date (Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time]): A given
+                    datetime.datetime value, the interval value will be added number times to this datetime.datetime value.
+            Returns:
+                datetime.datetime: A datetime.datetime value.
+
+            Note:
+                Arg ``interval`` valid expression values:
+                    - yyyy - year
+                    - q - Quarter
+                    - m - Month
+                    - y - Day of year
+                    - w - Weekday
+                    - ww - Week of year
+                    - d - Day
+                    - h - Hour
+                    - n - Minute
+                    - s - Second
+
+            See Also:
+                `DateAdd <https://tinyurl.com/ycv7q52r#DateAdd>`_
+            """
         @classmethod
         def DateDiff(
             cls,
-            interval: Any,
-            date1: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
-            date2: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
-            firstdayofweek: int = 1,
-            firstweekofyear: int = 1,
-        ) -> Any: ...
+            interval: str,
+            date1: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+            date2: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+            firstdayofweek: int = ...,
+            firstweekofyear: int = ...,
+        ) -> int:
+            """
+            Gets the number of date or time intervals between two given date/time values.
+
+            Args:
+                interval (str): A string expression specifying the date interval, as detailed in above DateAdd method.
+                date1 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The first datetime.datetime values to be compared.
+                date2 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The second datetime.datetime values to be compared.
+                firstdayofweek (int, optional): An optional parameter that specifies the starting day of a week.
+                firstweekofyear (int, optional): An optional parameter that specifies the starting week of a year.
+
+            Note:
+                Arg ``interval`` valid expression values:
+                    - yyyy - year
+                    - q - Quarter
+                    - m - Month
+                    - y - Day of year
+                    - w - Weekday
+                    - ww - Week of year
+                    - d - Day
+                    - h - Hour
+                    - n - Minute
+                    - s - Second
+
+                Arg ``firstdayofweek`` values:
+                    - 0 - Use system default value
+                    - 1 - Sunday (default)
+                    - 2 - Monday
+                    - 3 - Tuesday
+                    - 4 - Wednesday
+                    - 5 - Thursday
+                    - 6 - Friday
+                    - 7 - Saturday
+
+                Arg ``firstweekofyear`` values:
+                    - 0 - Use system default value
+                    - 1 - Week 1 is the week with January, 1st (default)
+                    - 2 - Week 1 is the first week containing four or more days of that year
+                    - 3 - Week 1 is the first week containing only days of the new year
+
+            See Also:
+                `DateDiff <https://tinyurl.com/ycv7q52r#DateDiff>`_
+
+           Returns:
+               int: A Number
+           """
         @classmethod
         def DatePart(
             cls,
             interval: str,
-            date: time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time
-            | str,
-            firstdayofweek: int = 1,
-            firstweekofyear: int = 1,
+            date: Union[time.struct_time, datetime.datetime, datetime.date, datetime.time, str],
+            firstdayofweek: int = ...,
+            firstweekofyear: int = ...,
         ) -> int:
             """
-            Convenient function to replicate VBA DatePart()
+            Gets a specified part of a date.
 
             Args:
                 interval (str): The unit of the date interval. See Note.
@@ -581,31 +687,44 @@ class SFScriptForge:
                     98
 
             Note:
-                Interval Table:
-                
-                +----------+--------------+
-                | Setting  | Description  |
-                +==========+==============+
-                | yyyy     | Year         |
-                | q        | Quarter      |
-                | m        | Month        |
-                | y        | Day of year  |
-                | d        | Day          |
-                | w        | Weekday      |
-                | ww       | Week         |
-                | h        | Hour         |
-                | n        | Minute       |
-                | s        | Second       |
-                +----------+--------------+
+                Arg ``interval`` valid expression values:
+                    - yyyy - year
+                    - q - Quarter
+                    - m - Month
+                    - y - Day of year
+                    - w - Weekday
+                    - ww - Week of year
+                    - d - Day
+                    - h - Hour
+                    - n - Minute
+                    - s - Second
 
+                Arg ``firstdayofweek`` values:
+                    - 0 - Use system default value
+                    - 1 - Sunday (default)
+                    - 2 - Monday
+                    - 3 - Tuesday
+                    - 4 - Wednesday
+                    - 5 - Thursday
+                    - 6 - Friday
+                    - 7 - Saturday
+
+                Arg ``firstweekofyear`` values:
+                    - 0 - Use system default value
+                    - 1 - Week 1 is the week with January, 1st (default)
+                    - 2 - Week 1 is the first week containing four or more days of that year
+                    - 3 - Week 1 is the first week containing only days of the new year
+
+            See Also:
+                `DatePart <https://tinyurl.com/ycv7q52r#DatePart>`_
             """
         @classmethod
-        def DateValue(cls, string: str) -> datetime.datetime | Any:
+        def DateValue(cls, string: str) -> Union[datetime.datetime, Any]:
             """
-            Convenient function to replicate VBA DateValue()
+            Computes a date value from a date string.
 
             Args:
-                string (str): a date as a string
+                string (str): String expression that contains the date that you want to calculate.
 
             Returns:
                 Union[datetime.datetime, object]: The converted date
@@ -616,16 +735,19 @@ class SFScriptForge:
                     >>> a = bas.DateValue('2021-02-18')
                     >>> print(a)
                     datetime.datetime(2021, 2, 18, 0, 0)
+
+            See Also:
+                `DateValue <https://tinyurl.com/ycv7q52r#DateValue>`_
             """
         @classmethod
         def Format(
-            cls, expression: datetime.datetime | float, format: str = ...
+            cls, expression: Union[datetime.datetime, Number], format: str = ...
         ) -> str:
             """
-            Formats a string 
+            Converts a number to a string, and then formats it according to the format that you specify.
 
             Args:
-                expression (Union[datetime.datetime, int, float]): a date or a number
+                expression (datetime.datetime | Number): Numeric expression that you want to convert to a formatted string.
                 format (str, optional): the format to apply. Defaults to "".
 
             Returns:
@@ -637,13 +759,25 @@ class SFScriptForge:
                     >>> a =  bas.Format(6328.2, '##,##0.00')
                     >>> print(a)
                     '6,328.20'
+
+            See Also:
+                `Format <https://tinyurl.com/ycv7q52r#Format>`_
             """
         @classmethod
-        def GetDefaultContext(cls) -> XComponentContext: ...
+        def GetDefaultContext(cls) -> XComponentContext:
+            """
+            Gets the default context of the process service factory, if existent, else returns a null reference.
+
+            See Also:
+                `GetDefaultContext <https://tinyurl.com/ycv7q52r#GetDefaultContext>`_
+            """
+
         @classmethod
         def GetGuiType(cls) -> int:
             """
-            Gets gui type
+            Gets a numerical value that specifies the graphical user interface.
+
+            This function is only provided for backward compatibility with previous versions.
 
             Returns:
                 int: The GetGuiType value, 1 for Windows, 4 for UNIX
@@ -653,90 +787,188 @@ class SFScriptForge:
                 
                     >>> print(bas.GetGuiType())
                     1
+
+            See Also:
+                `GetGuiType <https://tinyurl.com/ycv7q52r#GetGuiType>`_
             """
         @classmethod
-        def GetPathSeparator(cls) -> str: ...
+        def GetPathSeparator(cls) -> str:
+            """
+            Gets the operating system-dependent directory separator used to specify file paths.
+
+            Use os.pathsep from os Python module to identify the path separator.
+
+            Returns:
+                str: os path separator
+
+            See Also:
+                `GetPathSeparator <https://tinyurl.com/ycv7q52r#GetPathSeparator>`_
+            """
         @classmethod
         def GetSystemTicks(cls) -> int:
             """
-            Convenient function to replicate VBA GetSystemTicks()
+            Gets the number of system ticks provided by the operating system.
+
+            You can use this function to optimize certain processes.
+            Use this method to estimate time in milliseconds:
 
             Returns:
-                int: _description_
+                int: system ticks
+
+            See Also:
+                `GetSystemTicks <https://tinyurl.com/ycv7q52r#GetSystemTicks>`_
             """
         class GlobalScope(metaclass=_Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
-            def BasicLibraries(cls) -> Any: ...
+            def BasicLibraries(cls) -> XLibraryContainer:
+                """
+                Gets the UNO object containing all shared Basic libraries and modules.
+                This method is the Python equivalent to GlobalScope.BasicLibraries in Basic scripts.
+
+                Returns:
+                    XLibraryContainer: Uno object.
+
+                See Also:
+                `BasicLibraries <https://tinyurl.com/ycv7q52r#BasicLibraries>`_
+                """
             @classmethod
-            def DialogLibraries(cls) -> Any: ...
+            def DialogLibraries(cls) -> XLibraryContainer:
+                """
+                Gets the UNO object containing all shared dialog libraries.
+
+                Returns:
+                    DialogLibraryContainer: Uno object
+
+                See Also:
+                `DialogLibraries <https://tinyurl.com/ycv7q52r#DialogLibraries>`_
+                """
         @classmethod
         def InputBox(
             cls,
             prompt: str,
-            title: str = "",
-            default: str = "",
-            xpostwips: int = -1,
-            ypostwips: int = -1,
-        ) -> Any: ...
-        @classmethod
-        def MsgBox(cls, prompt: str, buttons: int = ..., title: int = ...) -> int:
+            title: str = ...,
+            default: str = ...,
+            xpostwips: int = ...,
+            ypostwips: int = ...,
+        ) -> str:
             """
-            Displays a dialogue box containing a message and returns a value.
+            Displays an input box.
+
+            Args:
+                prompt (str): String expression displayed as the message in the dialog box.
+                title (str): String expression displayed in the title bar of the dialog box.
+                default (str): String expression displayed in the text box as default if
+                    no other input is given.
+                xpostwips (int): Integer expression that specifies the horizontal position of the dialog.
+                    The position is an absolute coordinate and does not refer to the window of LibreOffice.
+                ypostwips: Integer expression that specifies the vertical position of the dialog.
+                    The position is an absolute coordinate and does not refer to the window of LibreOffice.
+
+            Note:
+                If ``xpostwips`` and ``ypostwips`` are omitted, the dialog is centered on the screen.
+                The position is specified in `twips <https://tinyurl.com/j3bueabr#twips>`_.
+
+            Returns:
+                str: string.
+
+            See Also:
+                `InputBox <https://tinyurl.com/ycv7q52r#InputBox>`_
+            """
+        @classmethod
+        def MsgBox(cls, prompt: str, buttons: int = ..., title: str = ...) -> int:
+            """
+            Displays a dialogue box containing a message and returns an optional value.
             
-            Convenient function to replicate VBA MsgBox()
+            MB_xx constants help specify the dialog type, the number and type of buttons to display,
+            plus the icon type. By adding their respective values they form bit patterns, that define the
+            ``MsgBox`` dialog appearance.
 
             Args:
                 prompt (str): String expression displayed as a message in the dialog box.
                 buttons (int, optional):Any integer expression that specifies the dialog type, as well as the number and type of buttons to display, and the icon type. buttons represents a combination of bit patterns, that is, a combination of elements can be defined by adding their respective values. Defaults to 0.
-                
-                    +----------------------+----------------+------------------------------------------------+
-                    | Named con            | Integer value  | Definition                                     |
-                    +======================+================+================================================+
-                    | MB_OK                | 0              | Display OK button only.                        |
-                    | MB_OKCANCEL          | 1              | Display OK and Cancel buttons.                 |
-                    | MB_ABORTRETRYIGNORE  | 2              | Display Abort, Retry, and Ignore buttons.      |
-                    | MB_YESNOCANCEL       | 3              | Display Yes, No, and Cancel buttons.           |
-                    | MB_YESNO             | 4              | Display Yes and No buttons.                    |
-                    | MB_RETRYCANCEL       | 5              | Display Retry and Cancel buttons.              |
-                    | MB_ICONSTOP          | 16             | Add the Stop icon to the dialog.               |
-                    | MB_ICONQUESTION      | 32             | Add the Question icon to the dialog.           |
-                    | MB_ICONEXCLAMATION   | 48             | Add the Exclamation Point icon to the dialog.  |
-                    | MB_ICONINFORMATION   | 64             | Add the Information icon to the dialog.        |
-                    | 128                  | 128            | First button in the dialog as default button.  |
-                    | MB_DEFBUTTON2        | 256            | Second button in the dialog as default button. |
-                    | MB_DEFBUTTON3        | 512            | Third button in the dialog as default button.  |
-                    +----------------------+----------------+------------------------------------------------+
+                title (str, optional): String expression displayed in the title bar of the dialog. Defaults to "".
 
-                title (int, optional): String expression displayed in the title bar of the dialog. Defaults to "".
+            Note:
+                Arg ``buttons`` constants
+                ::
+                    Named constant          Integer value   Definition
+                    MB_OK                   0               Display OK button only.
+                    MB_OKCANCEL             1               Display OK and Cancel buttons.
+                    MB_ABORTRETRYIGNORE     2               Display Abort, Retry, and Ignore buttons.
+                    MB_YESNOCANCEL          3               Display Yes, No, and Cancel buttons.
+                    MB_YESNO                4               Display Yes and No buttons.
+                    MB_RETRYCANCEL          5               Display Retry and Cancel buttons.
+                    MB_ICONSTOP             16              Add the Stop icon to the dialog.
+                    MB_ICONQUESTION         32              Add the Question icon to the dialog.
+                    MB_ICONEXCLAMATION      48              Add the Exclamation Point icon to the dialog.
+                    MB_ICONINFORMATION      64              Add the Information icon to the dialog.
+                    MB_DEFBUTTON1           128             First button in the dialog as default button.
+                    MB_DEFBUTTON2           256             Second button in the dialog as default button.
+                    MB_DEFBUTTON3           512             Third button in the dialog as default button.
+
+                **Return Value**
+                ::
+                    Named constant   Integer value   Definition
+                    IDOK             1              OK
+                    IDCANCEL         2              Cancel
+                    IDABORT          3              Abort
+                    IDRETRY          4              Retry
+                    IDIGNORE         5              Ignore
+                    IDYES            6              Yes
+                    IDNO             7              No
 
             Returns:
                 int: The pressed button as int.
-
-                    +-----------------+-----------------+-------------+
-                    | Named constant  | Integer value   | Definition  |
-                    +=================+=================+=============+
-                    | IDOK            | 1               | OK          |
-                    | IDCANCEL        | 2               | Cancel      |
-                    | IDABORT         | 3               | Abort       |
-                    | IDRETRY         | 4               | Retry       |
-                    | IDIGNORE        | 5               | Ignore      |
-                    | IDYES           | 6               | Yes         |
-                    | IDNO            | 7               | No          |
-                    +-----------------+-----------------+-------------+
-
             Example:
                 .. code-block:: python
                 
                     >>> a = bas.MsgBox ('Please press a button:', bas.MB_ICONEXCLAMATION, 'Dear User')
                     >>> print(a)
                     1
+
+            See Also:
+                `MsgBox <https://tinyurl.com/ycv7q52r#MsgBox>`_
             """
         @classmethod
-        def Now(cls) -> datetime.datetime: ...
+        def Now(cls) -> datetime.datetime:
+            """
+            Gets the current system date and time as a ``datetime.datetime`` Python native object.
+
+            See Also:
+                `Now <https://tinyurl.com/ycv7q52r#Now>`_
+            """
         @classmethod
-        def RGB(cls, red: int, green: int, blue: int) -> int: ...
+        def RGB(cls, red: int, green: int, blue: int) -> int:
+            """
+            Gets an integer color value consisting of red, green, and blue components.
+
+            Args:
+                red (int): Any integer expression that represents the red component (0-255) of the composite color.
+                green (int): Any integer expression that represents the green component (0-255) of the composite color.
+                blue (int): Any integer expression that represents the blue component (0-255) of the composite color.
+
+            Returns:
+                int: an integer color value consisting of red, green, and blue components.
+
+            See Also:
+                `RGB <https://tinyurl.com/ycv7q52r#RGB>`_
+            """
+
+        @overload
         @classmethod
-        def Xray(cls, unoobject: object | None = ...) -> Any: ...
+        def Xray(cls) -> None:
+        @overload
+        @classmethod
+        def Xray(cls, unoobject: object) -> None:
+            """
+            Inspect Uno objects or variables.
+
+            Args:
+                unoobject (object):A variable or UNO object.
+
+            See Also:
+                `Xray <https://tinyurl.com/ycv7q52r#Xray>`_
+            """
         # endregion Methods
 
         # region Properties
@@ -744,25 +976,30 @@ class SFScriptForge:
         def StarDesktop(self) -> XDesktop: ...
         starDesktop, stardesktop = StarDesktop, StarDesktop
         @property
-        def ThisComponent(self) -> XComponent:
+        def ThisComponent(self) -> Union[XComponent, None]:
             """
-            When the current component is the Basic IDE, the ThisComponent object returns
-            in Basic the component owning the currently run user script.
-            Above behaviour cannot be reproduced in Python.
+            If the current component refers to a LibreOffice document, this method
+            returns the UNO object representing the document.
             
             Returns:
-                XComponent: the current component or None when not a document
+                XComponent | None: the current component or None when not a document
+
+            See Also:
+                `ThisComponent <https://tinyurl.com/ycv7q52r#ThisComponent>`_
             """
         thisComponent, thiscomponent = ThisComponent, ThisComponent
         @property
-        def ThisDatabaseDocument(self) -> XEmbeddedScripts | None:
+        def ThisDatabaseDocument(self) -> Union[XEmbeddedScripts, None]:
             """
-            When the current component is the Basic IDE, the ThisDatabaseDocument object returns
-            in Basic the database owning the currently run user script.
-            Above behaviour cannot be reproduced in Python.
+            If the script is being executed from a Base document or any of its subcomponents
+            this method returns the main component of the Base instance.
             
             Returns:
-                 Union[XEmbeddedScripts, None]: the current Base (main) component or None when not a Base document or one of its subcomponents
+                 XEmbeddedScripts | None: the current Base (main) component or
+                    None when not a Base document or one of its subcomponents
+
+            See Also:
+                `ThisDatabaseDocument <https://tinyurl.com/ycv7q52r#ThisDatabaseDocument>`_
             """
         thisDatabaseDocument, thisdatabasedocument = (
             ThisDatabaseDocument,
@@ -795,29 +1032,31 @@ class SFScriptForge:
                 `ScriptForge.Dictionary service <https://tinyurl.com/y9quuboc>`_
             """
 
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["python"]
-        servicename: Literal["ScriptForge.Dictionary"]
-        servicesynonyms: Tuple[str, str] = ...
         def __init__(self, dic: Optional[dict] = None) -> None: ...
         def ConvertToPropertyValues(self) -> List[PropertyValue]:
             """
             Store the content of the dictionary in an array of PropertyValues.
-            Each entry in the list is a com.sun.star.beans.PropertyValue.
-            he key is stored in Name, the value is stored in Value.
+            Each entry in the list is a ``com.sun.star.beans.PropertyValue``.
+            the key is stored in Name, the ``value`` is stored in ``Value``.
 
-            If one of the items has a type datetime, it is converted to a com.sun.star.util.DateTime structure.
-            If one of the items is an empty list, it is converted to None.
+            If one of the items has a type ``datetime``, it is converted to a ``com.sun.star.util.DateTime``
+            structure. If one of the items is an empty list, it is converted to ``None``.
 
             The resulting list is empty when the dictionary is empty.
+
+            Returns:
+                List[PropertyValue]: List of property values.
+
+            See Also:
+                `ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
             """
         def ImportFromPropertyValues(
             self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = False
         ) -> bool:
             """
-            Inserts the contents of an array of PropertyValue objects into the current dictionary.
-            PropertyValue Names are used as keys in the dictionary, whereas Values contain the corresponding values.
-            Date-type values are converted to datetime.datetime instances.
+            Inserts the contents of an array of ``PropertyValue`` objects into the current dictionary.
+            ``PropertyValue`` Names are used as keys in the dictionary, whereas Values contain
+            the corresponding values. Date-type values are converted to ``datetime.datetime`` instances.
 
             Args:
                 propertyvalues (Tuple[PropertyValue, ...]): tuple containing com.sun.star.beans.PropertyValue objects
@@ -826,6 +1065,9 @@ class SFScriptForge:
 
             Returns:
                 bool: True when successful
+
+            See Also:
+                `ImportFromPropertyValues <https://tinyurl.com/y9quuboc#ImportFromPropertyValues>`_
             """
     # endregion SF_Dictionary CLASS
     
@@ -844,12 +1086,6 @@ class SFScriptForge:
         See Also:
             `ScriptForge.Exception service <https://tinyurl.com/y8ezar7q>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.Exception"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
         # region Methods
         def Console(self, modal: bool = ...) -> Any: ...
         def ConsoleClear(self, keep: int = ...) -> Any: ...
@@ -859,13 +1095,20 @@ class SFScriptForge:
         @classmethod
         def PythonShell(cls, variables: dict | None = ...) -> None:
             """
-            Open an APSO python shell window - Thanks to its authors Hanya/Tsutomu Uchino/Hubert Lambert
-            
+            Opens an APSO Python shell as a non-modal window.
+            The Python script keeps running after the shell is opened.
+            The output from ``print`` statements inside the script are shown in the shell.
+
+            Only a single instance of the APSO Python shell can be opened at any time.
+            Hence, if a Python shell is already open, then calling this method will have no effect.
+
             Args:
-                variables (dict, None): Typical use
-                    
-                    PythonShell.({**globals(), **locals()})
-                    to push the global and local dictionaries to the shell window
+                variables (dict, None): a Python dictionary with variable names and values that will be
+                    passed on to the APSO Python shell. By default, all local variables are passed using
+                    Python's builtin locals() function.
+
+            See Also:
+                `PythonShell <https://tinyurl.com/y8ezar7q#PythonShell>`_
             """
         @classmethod
         def RaiseFatal(cls, errorcode: str, *args: Any) -> None:
@@ -883,7 +1126,7 @@ class SFScriptForge:
             """
             Gets/Sets the error message text.
 
-            Default value is `''` or a string containing the Basic run-time error message.
+            Default value is '' or a string containing the Basic run-time error message.
             """
         @property
         def Number(self) -> int:
@@ -910,38 +1153,33 @@ class SFScriptForge:
         See Also:
             `ScriptForge.FileSystem service <https://tinyurl.com/ybxpt7eo>`_
         """
-
-        # Mandatory class properties for service registration
-        serviceimplementation: Literal["basic"]
-        servicename: Literal["ScriptForge.FileSystem"]
-        servicesynonyms: Tuple[str, str]
-        serviceproperties: dict
-        # Force for each property to get its value from Basic - due to FileNaming updatability
-        forceGetProperty: bool = True
-        # Open TextStream constants
-        ForReading: Literal[1]
-        ForWriting: Literal[2]
-        ForAppending: Literal[8]
-        # region Methods
+          # region Methods
         def BuildPath(self, foldername: str, name: str) -> str:
             """
-            Combines a folder path and the name of a file and returns the combination with a valid path separator.
-            Inserts an additional path separator between the foldername and the name, only if necessary.
+            Joins a folder path and the name of a file and returns the full file name with a
+            valid path separator. The path separator is added only if necessary.
 
             Args:
-                foldername (str): Path with which Name is combined. Path need not specify an existing folder
-                name (str): To be appended to the existing path.
+                foldername (str): The path with which name will be combined.
+                    The specified path does not need to be an existing folder.
+                name (str): The name of the file to be appended to foldername. This parameter uses
+                    the notation of the current operating system.
 
             Returns:
                 str: The path concatenated with the file name after insertion of a path separator, if necessary
+
+            See Also:
+                `BuildPath <https://tinyurl.com/ybxpt7eo#BuildPath>`_
             """
         def CompareFiles(
             self, filename1: str, filename2: str, comparecontents: bool = ...
         ) -> bool:
             """
-            Compare 2 files and return True if they seem identical.
-            The comparison may be based on the file attributes, like modification time,
-            or on their contents.
+            Compare 2 files and return ``True`` if they seem identical.
+
+            Depending on the value of the ``comparecontents`` argument,
+            the comparison between both files can be either based only on
+            file attributes (such as the last modified date), or based on the file contents.
 
             Args:
                 filename1 (str): The 1st file to compare
@@ -950,12 +1188,16 @@ class SFScriptForge:
 
             Returns:
                 bool: True when the files seem identical
+
+            See Also:
+                `CompareFiles <https://tinyurl.com/ybxpt7eo#CompareFiles>`_
             """
         def CopyFile(
             self, source: str, destination: str, overwrite: bool = ...
         ) -> bool:
             """
-            Copies one or more files from one location to another
+            Copies one or more files from one location to another.
+            Returns ``True`` if at least one file has been copied or ``False`` if an error occurred.
 
             Args:
                 source (str): FileName or NamePattern which can include wildcard characters, for one or more files to be copied
@@ -968,16 +1210,30 @@ class SFScriptForge:
 
             Returns:
                 bool: True if at least one file has been copied.
-                False if an error occurred.
+                    False if an error occurred.
                     An error also occurs if a source using wildcard characters doesn't match any files.
                     The method stops on the first error it encounters.
                     No attempt is made to roll back or undo any changes made before an error occurs.
+
+            Note:
+                - If ``destination`` does not exist, it is created.
+                - Wildcard characters are not allowed in ``destination``.
+
+            See Also:
+                `CopyFile <https://tinyurl.com/ybxpt7eo#CopyFile>`_
             """
         def CopyFolder(
             self, source: str, destination: str, overwrite: bool = ...
         ) -> bool:
             """
             Copies one or more folders from one location to another.
+            Returns ``True`` if at least one folder has been copied or ``False`` if an error occurred.
+
+            An error will also occur if the ``source`` parameter uses wildcard characters and does
+            not match any folders.
+
+            The method stops immediately after it encounters an error.
+            The method does not roll back nor does it undo changes made before the error occurred.
 
             Args:
                 source (str): FolderName or NamePattern which can include wildcard characters, for one or more folders to be copied
@@ -988,16 +1244,24 @@ class SFScriptForge:
                 overwrite (bool, optional): If True (default), folders and their content may be overwritten. Defaults to True.
                     CopyFile will fail if Destination has the read-only attribute set, regardless of the value of Overwrite.
 
+            Note:
+                - If ``destination`` does not exist, it is created.
+                - Wildcard characters are not allowed in ``destination``.
+
             Returns:
                 bool: True if at least one folder has been copied. False if an error occurred.
-                An error also occurs if a source using wildcard characters doesn't match any folders.
-                The method stops on the first error it encounters.
-                No attempt is made to roll back or undo any changes made before an error occurs.
+                    An error also occurs if a source using wildcard characters doesn't match any folders.
+                    The method stops on the first error it encounters.
+                    No attempt is made to roll back or undo any changes made before an error occurs.
+
+            See Also:
+                `CopyFolder <https://tinyurl.com/ybxpt7eo#CopyFolder>`_
             """
         def CreateFolder(self, foldername: str) -> bool:
             """
-            Return True if the given folder name could be created successfully.
-            The parent folder does not need to exist beforehand.
+            Creates the specified FolderName. Returns ``True`` if the folder could be successfully created.
+
+            If the specified folder has a parent folder that does not exist, it is created.
 
             Args:
                 foldername (str): a string representing the folder to create. It must not exist
@@ -1005,35 +1269,74 @@ class SFScriptForge:
             Returns:
                 bool: True if FolderName is a valid folder name, does not exist and creation was successful.
                 False otherwise including when FolderName is a file.
+
+            See Also:
+                `CreateFolder <https://tinyurl.com/ybxpt7eo#CreateFolder>`_
             """
         def CreateTextFile(
             self, filename: str, overwrite: bool = ..., encoding: str = ...
-        ) -> Any: ...
-        def DeleteFile(self, filename: str) -> bool:
+        ) -> SFScriptForge.SF_TextStream:
             """
-            Deletes one or more files
+            Creates a specified file and returns a TextStream service instance that can be used to write to the file.
+
+            The method returns ``None`` if an error occurred.
 
             Args:
-                filename (str): FileName or NamePattern which can include wildcard characters, for one or more files to be deleted.
+                filename (str): The name of the file to be created.
+                overwrite (bool, optional): Boolean value that determines if filename can be overwritten (default = True).
+                encoding (str, optional): The character set to be used. The default encoding is "UTF-8".
+
+            See Also:
+                `CreateTextFile <https://tinyurl.com/ybxpt7eo#CreateTextFile>`_
+            """
+        def DeleteFile(self, filename: str) -> bool:
+            """
+            Deletes one or more files.
+
+            Returns ``True`` if at least one file has been deleted or ``False`` if an error occurred.
+
+            An error will also occur if the ``filename`` parameter uses wildcard characters and does not match any files.
+
+            The files to be deleted must not be readonly.
+
+            The method stops immediately after it encounters an error.
+            The method does not roll back nor does it undo changes made before the error occurred.
+
+            Args:
+                filename (str): FileName or NamePattern which can include wildcard characters,
+                    for one or more files to be deleted.
 
             Returns:
                 bool: True if at least one file has been deleted. False if an error occurred.
-                An error also occurs if a FileName using wildcard characters doesn't match any files.
-                The method stops on the first error it encounters.
-                No attempt is made to roll back or undo any changes made before an error occurs.
+                    An error also occurs if a FileName using wildcard characters doesn't match any files.
+                    The method stops on the first error it encounters.
+                    No attempt is made to roll back or undo any changes made before an error occurs.
+
+            See Also:
+                `DeleteFile <https://tinyurl.com/ybxpt7eo#DeleteFile>`_
             """
         def DeleteFolder(self, foldername: str) -> bool:
             """
-            Deletes one or more Folders
+            Deletes one or more folders.
+
+            Returns ``True`` if at least one folder has been deleted or ``False`` if an error occurred.
+
+            An error will also occur if the ``foldername`` parameter uses wildcard characters and
+            does not match any folders.
+
+            The folders to be deleted must not be readonly.
+
+            The method stops immediately after it encounters an error.
+            The method does not roll back nor does it undo changes made before the error occurred.
 
             Args:
                 foldername (str): FolderName or NamePattern which can include wildcard characters, for one or more Folders to be deleted.
 
             Returns:
                 bool: True if at least one folder has been deleted. False if an error occurred.
-                An error also occurs if a FolderName using wildcard characters doesn't match any folders.
-                The method stops on the first error it encounters.
-                No attempt is made to roll back or undo any changes made before an error occurs
+
+            See Also:
+                `DeleteFolder <https://tinyurl.com/ybxpt7eo#DeleteFolder>`_
             """
         # 7.4
         # def ExtensionFolder(self, extension: str) -> str:
@@ -1049,18 +1352,25 @@ class SFScriptForge:
         #     """
         def FileExists(self, filename: str) -> bool:
             """
-            Return True if the given file exists
+            Return ``True`` if the given file exists
 
             Args:
                 filename (str): a string representing a file
 
             Returns:
                 bool: True if FileName is a valid File name and it exists.
-                False otherwise including when FileName is a folder
+                    False otherwise including when FileName is a folder
+
+            See Also:
+                `FileExists <https://tinyurl.com/ybxpt7eo#FileExists>`_
             """
         def Files(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
             """
-            Return an tuple of the FileNames stored in the given folder. The folder must exist
+            Gets a tuple of the FileNames stored in the given folder. The folder must exist
+
+            If the argument ``foldername`` specifies a folder that does not exist, an exception is raised.
+
+            The resulting tuple may be filtered with wildcards.
 
             Args:
                 foldername (str): the folder to explore
@@ -1070,22 +1380,30 @@ class SFScriptForge:
                 Tuple[str, ...]: An tuple of strings, each entry is the FileName of an existing file
             
             Example:
-                .. code-block:: python
+                .. code::
                 
                     >>> a = session.Files("c:\\Windows", "win*.exe")
                     >>> print(a)
                     ('file:///c:/Windows/winhlp32.exe',)
+
+            See Also:
+                `Files <https://tinyurl.com/ybxpt7eo#Files>`_
             """
         def FolderExists(self, foldername: str) -> bool:
             """
-            Return True if the given folder name exists
+            Return ``True`` if the given folder name exists
+
+            If the ``foldername`` parameter is actually an existing file name, the method returns ``False``.
 
             Args:
                 foldername (str): a string representing a folder
 
             Returns:
                 bool: True if FolderName is a valid folder name and it exists.
-                False otherwise including when FolderName is a file.
+                    False otherwise including when FolderName is a file.
+
+            See Also:
+                `FolderExists <https://tinyurl.com/ybxpt7eo#FolderExists>`_
             """
         def GetBaseName(self, filename: str) -> str:
             """
@@ -2967,21 +3285,23 @@ class SFDialogs:
             
             Notes:
                 FlatTree:
-                ::
-                Flat tree		>>>>		Resulting subtree
-                A1	B1	C1					|__	A1		
-                A1	B1	C2						|__	B1	
-                A1	B2	C3							|__	C1
-                A2	B3	C4							|__	C2
-                A2	B3	C5						|__	B2
-                A3	B4	C6							|__	C3
-                                            |__	A2
-                                                |__	B3
-                                                    |__	C4
-                                                    |__	C5
-                                            |__	A3
-                                                |__	B4
-                                                    |__	C6
+
+                .. code::
+
+                    Flat tree		>>>>		Resulting subtree
+                    A1	B1	C1					|__	A1
+                    A1	B1	C2						|__	B1
+                    A1	B2	C3							|__	C1
+                    A2	B3	C4							|__	C2
+                    A2	B3	C5						|__	B2
+                    A3	B4	C6							|__	C3
+                                                |__	A2
+                                                    |__	B3
+                                                        |__	C4
+                                                        |__	C5
+                                                |__	A3
+                                                    |__	B4
+                                                        |__	C6
 
                 Typically, such an array can be issued by the GetRows method applied on the SFDatabases.Database service
                 when an array item containing the text to be displayed is = "" or is empty/null,
