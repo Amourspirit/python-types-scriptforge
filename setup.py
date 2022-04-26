@@ -4,7 +4,7 @@ import os
 from setuptools import setup
 # from scriptforge_stubs import __version__
 PKG_NAME = 'types-scriptforge'
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -24,7 +24,7 @@ setup(
     author=":Barry-Thomas-Paul: Moss",
     author_email='bigbytetech@gmail.com',
     license="Apache Software License",
-    keywords=['libreoffice', 'openoffice', 'sourceforge', 'typings', 'uno', 'ooouno', 'pyuno'],
+    keywords=['libreoffice', 'openoffice', 'scriptforge', 'typings', 'uno', 'ooouno', 'pyuno'],
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Environment :: Other Environment",
