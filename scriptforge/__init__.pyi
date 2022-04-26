@@ -4662,7 +4662,7 @@ class SFDocuments:
             Returns:
                 int: The last used row in a given range or sheet.
             """
-        def Range(self, rangename: range) -> object:
+        def Range(self, rangename: str) -> SFDocuments.SF_CalcReference:
             """
             Returns a (internal) range object
 
