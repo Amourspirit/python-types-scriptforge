@@ -24,7 +24,7 @@ setup(
     author=":Barry-Thomas-Paul: Moss",
     author_email='bigbytetech@gmail.com',
     license="Apache Software License",
-    keywords=['libreoffice', 'openoffice', 'sciiptforge', 'typings', 'uno', 'ooouno', 'pyuno'],
+    keywords=['libreoffice', 'openoffice', 'scriptforge', 'typings', 'uno', 'ooouno', 'pyuno'],
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Environment :: Other Environment",
