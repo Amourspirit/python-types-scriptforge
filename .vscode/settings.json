@@ -1,5 +1,7 @@
 {
-    "python.defaultInterpreterPath": "${workspaceFolder}/env",
+    "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
+    "python.defaultInterpreterPath": "${workspaceRoot}/env/bin/python",
     "autoDocstring.docstringFormat": "google",
     "editor.bracketPairColorization.enabled": true,
     "editor.guides.bracketPairs": "active",
