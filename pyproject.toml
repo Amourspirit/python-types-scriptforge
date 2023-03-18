@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "types-scriptforge"
+version = "2.0.0"
+description = "Type annotations for LibreOffice API"
+# name regex
+# https://github.com/python-poetry/poetry-core/commit/01602122f9b2a4cc927d94c543efb5020dfa3817
+authors = [":Barry-Thomas-Paul: Moss <bigbytetech@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.rst"
+homepage = "https://github.com/Amourspirit/python-types-scriptforge"
+repository = "https://github.com/Amourspirit/python-types-scriptforge"
+classifiers=[
+        "Environment :: Other Environment",
+        "Intended Audience :: Developers",
+        "Operating System :: OS Independent",
+        "Topic :: Office/Business",
+        "Typing :: Typed",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ]
+packages = [
+    { include = "scriptforge-stubs" }
+]
+keywords = ["libreoffice", "openoffice", "scriptforge", "typings", "uno", "ooouno", "pyuno"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+types-uno-script = ">=0.1.1"
+types-unopy = ">=1.0.1"
+
+
+[[tool.poetry.source]]
+name = "pypi-test"
+url = "https://test.pypi.org/legacy/"
+default = false
+secondary = false
+
+
+[tool.poetry.group.dev.dependencies]
+black = ">=23.1.0"
+esbonio = ">=0.16.1"
+lo-dev-search = ">=2.0"
+
+[tool.ruff]
+ignore = ["E501", "F811"]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+]
+line-length = 100
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
