@@ -4,15 +4,13 @@ import sys
 import datetime
 import time
 from numbers import Number
-from typing import Any, Optional, List, Tuple, TypeVar, overload, TYPE_CHECKING, overload
+from typing import Any, Optional, List, Tuple, Type, TypeVar, overload, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    if sys.version_info < (3, 8):
-        from typing_extensions import Literal
-    else:
-        from typing import Literal
+    from typing import Literal
     from com.sun.star.awt import XControl
     from com.sun.star.awt import XControlModel
+    from com.sun.star.awt import XTabControllerModel
     from com.sun.star.awt import XWindow
     from com.sun.star.awt.tree import XMutableTreeDataModel
     from com.sun.star.awt.tree import XMutableTreeNode
@@ -38,11 +36,10 @@ if TYPE_CHECKING:
     from com.sun.star.util import Date as UNODate
     from com.sun.star.util import DateTime as UNODateTime
     from com.sun.star.util import Time as UNOTime
-
 # endregion IMPORTS
 
 # region Types
-_T = TypeVar("_T")
+_T_Singleton = TypeVar(name="_T_Singleton", bound="_Singleton")
 # endregion Types
 
 # region MetaClass
@@ -53,7 +50,7 @@ class _Singleton(type):
     """
 
     instances: dict
-    def __call__(cls: _T, *args, **kwargs) -> _T: ...
+    def __call__(cls: Type[_T_Singleton], *args, **kwargs) -> _T_Singleton: ...
 
 # endregion MetaClass
 
@@ -348,7 +345,7 @@ class SFServices:
     # endregion CONST
 
     # region Attribs
-    forceGetProperty: bool = False
+    forceGetProperty: bool = ...
     """Define the default behaviour for read-only properties: buffer their values in Python"""
     propertysynonyms: dict = ...
     """Empty dictionary for lower/camelcased homonyms or properties"""
@@ -406,6 +403,7 @@ class SFServices:
 # region SFScriptForge CLASS    (alias of ScriptForge Basic library)
 class SFScriptForge:
     ...
+
     # region SF_Array CLASS
     class SF_Array(SFServices, metaclass=_Singleton):
         """
@@ -602,6 +600,18 @@ class SFScriptForge:
 
             See Also:
                 `SF_Basic Help CreateUnoService <https://tinyurl.com/ycv7q52r#CreateUnoService>`_
+            """
+            ...
+        @classmethod
+        def CreateUnoStruct(cls, unostructure: str) -> Any:
+            """
+            Creates a UNO struct or exception given by type Name.
+
+            Args:
+                unostructure (str): UNO Struct typename such as ``com.sun.star.awt.Size``.
+
+            Returns:
+                Any: UNO Object
             """
             ...
         @classmethod
@@ -1100,7 +1110,7 @@ class SFScriptForge:
                 `SF_Dictionary Help ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
             """
             ...
-        def ImportFromPropertyValues(self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = False) -> bool:
+        def ImportFromPropertyValues(self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = ...) -> bool:
             """
             Inserts the contents of an array of ``PropertyValue`` objects into the current dictionary.
             ``PropertyValue`` Names are used as keys in the dictionary, whereas Values contain
@@ -1109,7 +1119,7 @@ class SFScriptForge:
             Args:
                 propertyvalues (Tuple[PropertyValue, ...]): tuple containing com.sun.star.beans.PropertyValue objects
                 overwrite (bool, optional): When True, entries with same name may exist in the dictionary and their values
-                    are overwritten. When False (default), repeated keys are not overwritten. Defaults to False.
+                    are overwritten. When ``False`` (default), repeated keys are not overwritten. Defaults to ``False``.
 
             Returns:
                 bool: True when successful
@@ -1661,6 +1671,27 @@ class SFScriptForge:
                 `SF_FileSystem Help MoveFile <https://tinyurl.com/ybxpt7eo#MoveFile>`_
             """
             ...
+        def Normalize(self, filename: str) -> str:
+            """
+            Returns a string containing the normalized path name by collapsing redundant separators and up-level references.
+            
+            For instance, the path names ``A//B``, ``A/B/``, ``A/./B`` and ``A/foo/../B`` are all normalized to ``A/B``.
+            
+            On Windows, forward slashes ``/`` are converted to backward slashes ``\``.
+
+            Args:
+                filename (str): A string representing a valid path name. The file or directory represented by this argument may not exist.
+            
+            Returns:
+                str: Normalized file.
+            
+            Note:
+                The current value of the property ``SF_FileSystem.FileNaming`` is used to determine the notation of the filename argument as well as the format of the returned string.
+            
+            See Also:
+                `SF_FileSystem Help Normalize <https://tinyurl.com/ybxpt7eo#Normalize>`_
+            """
+            ...
         def MoveFolder(self, source: str, destination: str) -> bool:
             """
             Moves one or more folders from one location to another.
@@ -1866,7 +1897,7 @@ class SFScriptForge:
         See Also:
             `ScriptForge.L10N service <https://tinyurl.com/y77mbtp9>`_
         """
-
+        # region Methods
         @classmethod
         def ReviewServiceArgs(
             cls,
@@ -2162,7 +2193,7 @@ class SFScriptForge:
                 str: the ISO 4217 currency code of the specified region.
             """
             ...
-        def DatePatterns(self, region="") -> List[str]:
+        def DatePatterns(self, region=...) -> List[str]:
             """
             Gets a zero-based array of strings containing the date acceptance patterns for the specified region.
 
@@ -2393,6 +2424,7 @@ class SFScriptForge:
             """
             ...
 
+    # region SF_Session CLASS
     class SF_Session(SFServices, metaclass=_Singleton):
         """
         The Session service gathers various general-purpose methods about:
@@ -3326,7 +3358,14 @@ class SFScriptForge:
             ...
         def GetDocument(
             self, windowname: str | XComponent | DatabaseDocument = ...
-        ) -> SFDocuments.SF_Base | SFDocuments.SF_Calc | SFDocuments.SF_Chart | SFDocuments.SF_Document | SFDocuments.SF_Form | SFDocuments.SF_Writer:
+        ) -> (
+            SFDocuments.SF_Base
+            | SFDocuments.SF_Calc
+            | SFDocuments.SF_Chart
+            | SFDocuments.SF_Document
+            | SFDocuments.SF_Form
+            | SFDocuments.SF_Writer
+        ):
             """
             Returns a Document object referring to the active window or the given window.
 
@@ -3643,6 +3682,53 @@ class SFDatabases:
                 `SF_Database Help GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
             """
             ...
+        def OpenQuery(self, queryname: str) -> object | None:
+            """
+            Opens the Data View window of the specified query and returns an instance of the Datasheet service.
+
+            If the query could not be opened, then Nothing is returned.
+
+            Args:
+                queryname (str): The name of an existing query as a case-sensitive String.
+
+            Returns:
+                object | None:
+
+            See Also:
+                `SF_Database Help OpenQuery <https://tinyurl.com/yd9y6xa7#OpenQuery>`_
+            """
+            ...
+
+        def OpenSql(self, sql: str, directsql: bool = ...) -> object:
+            """
+            Runs a ``SQL SELECT`` command, opens a Data View window with the results
+            and returns an instance of the ``Datasheet`` service.
+
+            Args:
+                sql (str): A string containing a valid ``SQL SELECT`` statement. Identifiers may be enclosed by square brackets.
+                directsql (bool, optional): When ``True``, the ``SQL`` command is sent to the database engine without pre-analysis . Defaults to ``False``.
+
+            Returns:
+                object:
+
+            See Also:
+                `SF_Database Help OpenSql <https://tinyurl.com/yd9y6xa7#OpenSql>`_
+            """
+            ...
+        def OpenTable(self, tablename: str) -> object:
+            """
+            Opens the Data View window of the specified table and returns an instance of the Datasheet service.
+
+            Args:
+                tablename (str): The name of an existing table as a case-sensitive String.
+
+            Returns:
+                object:
+
+            See Also:
+                `SF_Database Help OpenSql <https://tinyurl.com/yd9y6xa7#OpenSql>`_
+            """
+            ...
         def RunSql(self, sqlcommand: str, directsql: bool = ...) -> Any:
             """
             Execute an action query (table creation, record insertion, ...) or SQL statement on the current database.
@@ -3686,6 +3772,242 @@ class SFDatabases:
     # endregion SF_Database CLASS
 
 # endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
+
+# region SF_Datasheet CLASS
+    class SF_Datasheet(SFServices):
+        """
+        A datasheet is the visual representation of tabular data produced by a database.
+        A datasheet may be opened automatically by script code at any moment.
+        The Base document owning the data may or may not be opened.
+        Any SELECT SQL statement may trigger the datasheet display.
+        """
+        # region Methods
+        def Activate(self) -> None:
+            """
+            Brings to front the data view window referred to by the Datasheet instance.
+
+            Returns:
+                None:
+
+            See Also:
+                `SF_Datasheet Help Activate <https://tinyurl.com/2juu2pbd#CloseDatasheet>`_
+            """
+            ...
+        def CloseDatasheet(self) -> None:
+            """
+            Closes the data view window referred to by the ``Datasheet`` instance.
+
+            Returns:
+                None:
+            
+            See Also:
+                `SF_Datasheet Help CloseDatasheet <https://tinyurl.com/2juu2pbd#CloseDatasheet>`_
+            """
+            ...
+        def CreateMenu(self, menuheader:str, before:str=..., submenuchar:str=...) -> object:
+            """
+            Creates a new menu entry in the data view window and returns a ``SFWidgets.Menu`` service instance, with which menu items can be programmatically added.
+
+            Args:
+                menuheader (str): _description_
+                before (str, optional): This argument can be either the name of an existing menu entry before which the new menu will be placed or a number expressing the position of the new menu.
+                    If this argument is left blank the new menu is placed as the last entry.
+                submenuchar (str, optional): The delimiter used in menu trees . Defaults to ``>``.
+
+            Returns:
+                object:
+
+            Note:
+                Menus added using the ``CreateMenu`` method are lost as soon as the data view window is closed.
+
+            See Also:
+                `SF_Datasheet Help CreateMenu <https://tinyurl.com/2juu2pbd#CreateMenu>`_
+            """
+            ...
+        def GetText(self, column:int=...) -> str:
+            """
+            Returns the text in a given column of the current row.
+
+            Args:
+                column (int, optional): The name of the column as a String or the column position (starting at ``1``).
+                    If a position greater than the number of columns is given, the last column is returned.
+
+            Note:
+                This method does not change the position of the cursor in the data view window.
+
+            Returns:
+                str: column text.
+            
+            See Also:
+                `SF_Datasheet Help GetText <https://tinyurl.com/2juu2pbd#GetText>`_
+            """
+            ...
+        @overload
+        def GetValue(self) -> Any:
+            """
+            Returns the value in a given column of the current row as a valid Basic type.
+
+            The types that can be returned are: ``str``, ``int``, ``float``, ``Date`` and ``None``.
+
+            Binary types are returned as a ``int`` value indicating the length of the binary field.
+
+            Returns:
+                Any: column value.
+            
+            See Also:
+                `SF_Datasheet Help GetValue <https://tinyurl.com/2juu2pbd#GetValue>`__
+            """
+            ...
+        @overload
+        def GetValue(self, column:str = ...) -> Any:
+            """
+            Returns the value in a given column of the current row as a valid Basic type.
+
+            The types that can be returned are: ``str``, ``int``, ``float``, ``Date`` and ``None``.
+
+            Binary types are returned as a ``int`` value indicating the length of the binary field.
+
+            Args:
+                column (str): The name of the column as a string.
+
+            Returns:
+                Any: column value.
+
+            See Also:
+                `SF_Datasheet Help GetValue <https://tinyurl.com/2juu2pbd#GetValue>`__
+            """
+            ...
+        @overload
+        def GetValue(self, column:int = ...) -> Any:
+            """
+            Returns the value in a given column of the current row as a valid Basic type.
+
+            The types that can be returned are: ``str``, ``int``, ``float``, ``Date`` and ``None``.
+
+            Binary types are returned as a ``int`` value indicating the length of the binary field.
+
+            Args:
+                column (int): The the column position (starting at 1).
+                    If a position greater than the number of columns is given, the last column is returned.
+
+            Returns:
+                Any: column value.
+
+            See Also:
+                `SF_Datasheet Help GetValue <https://tinyurl.com/2juu2pbd#GetValue>`__
+            """
+            ...
+        def GoToCell(self, row:int = 0, column:int | str = 0) -> None:
+            """
+            Moves the cursor to the specified row and column.
+
+            Args:
+                row (int, optional): The row number as a numeric value starting at ``1``.
+                    If the requested row exceeds the number of existing rows, the cursor is moved to the last row.
+                    If this argument is not specified, then the row is not changed.
+                column (int,s tr, optional): The name of the column as a string or the column position (starting at ``1``).
+                    If the requested column exceeds the number of existing columns, the cursor is moved to the last column.
+                    If this argument is not specified, then the column is not changed.
+
+            Returns:
+                None:
+
+            Note:
+                This method does not change the position of the cursor in the data view window.
+
+            See Also:
+                `SF_Datasheet Help GoToCell <https://tinyurl.com/2juu2pbd#GoToCell>`_
+            """
+            ...
+        def RemoveMenu(self, menuheader: str) -> bool:
+            """
+            Removes a menu entry from the data view by its name.
+
+            Args:
+                menuheader (str): The case-sensitive name of the menu to be removed. The name must not include the tilde (``~``) character.
+
+            Returns:
+                bool:
+
+            Note:
+                This method can remove menus that belong to the standard user interface as well as menus that were programmatically added with the CreateMenu method.
+                The removal of standard menus is not permanent and they will reappear after the window is closed and reopened.
+
+            See Also:
+                `SF_Datasheet Help RemoveMenu <https://tinyurl.com/2juu2pbd#RemoveMenu>`_
+            """
+            ...
+        # endregion Methods
+        
+        # region properties
+        @property
+        def ColumnHeaders(self) -> Tuple[str, ...]:
+            """Gets an tuple with the names of column headers in the datasheet."""
+            ...
+        @property
+        def CurrentColumn(self) -> str:
+            """Gets the currently selected column name."""
+            ...
+        @property
+        def CurrentRow(self) -> int:
+            """Gets the number of the currently selected row, starting at ``1``."""
+            ...
+        @property
+        def DatabaseFileName(self) -> str:
+            """Gets the file name of the Base file in ``FSO.FileNaming`` format."""
+            ...
+        property
+        def Filter(self) -> str:
+            """
+            Gets/Sets a filter to be applied to the datasheet expressed as the
+            ``WHERE`` clause of a SQL query without the ``WHERE`` keyword.
+            If an empty string is specified then the active Filter is removed.
+            """
+            ...
+        @property
+        def LastRow(self) -> int:
+            """Gets the number of rows in the datasheet."""
+            ...
+        @property
+        def OrderBy(self) -> str:
+            """
+            Gets/Sets the order in which records are shown expressed as the ``ORDER BY``
+            clause of a ``SQL`` query without the ``ORDER BY`` keyword.
+            If an empty string is specified then the active ``OrderBy`` is removed.
+            """
+            ...
+        @property
+        def ParentDatabase(self) -> object:
+            """Gets the Database service instance to which the datasheet belongs."""
+            ...
+        @property
+        def Source(self) -> str:
+            """Gets a string that represents the data source, which can be a ``SQL`` statement, a table name or a query name."""
+            ...
+        @property
+        def SourceType(self) -> str:
+            """Gets teturns the type of the data source, which can be one of the following values: ``SQL``, ``TABLE`` or ``QUERY``."""
+            ...
+        @property
+        def XComponent(self) -> XComponent:
+            """
+            Gets the ``com.sun.star.lang.XComponent`` ``UNO`` object that represents the datasheet.
+            """
+            ...
+        @property
+        def XControlModel(self) -> XControlModel:
+            """
+            Gets the ``com.sun.star.awt.XControl`` ``UNO`` object that represents the datasheet.
+            """
+            ...
+        @property
+        def XTabControllerModel(self) -> XTabControllerModel:
+            """
+            Gets the ``com.sun.star.awt.XTabControllerModel `` ``UNO`` object that represents the datasheet.
+            """
+            ...
+        # endregion properties
+# endregion SF_Datasheet CLASS
 
 # region SFDialogs CLASS    (alias of SFDialogs Basic library)
 class SFDialogs:
@@ -3836,6 +4158,46 @@ class SFDialogs:
 
             Returns:
                 bool: True if the resize was successful.
+            """
+            ...
+        def SetPageManager(self, pilotcontrols:str = ..., tabcontrols: str = ..., wizardcontrols:str = ..., lastpage:int = ...) -> bool:
+            """
+            Defines which controls in a dialog are responsible for switching pages, making it easier to manage the ``Page`` property of a dialog and its controls.
+            
+            Dialogs may have multiple pages and the currently visible page is defined by the ``Page``dialog property.
+            If the ``Page`` property is left unchanged, the default visible page is equal to ``0`` (zero), meaning
+            that no particular page is defined and all visible controls are displayed regardless of the value set in
+            their own ``Page`` property.
+
+            When the ``Page`` property of a dialog is changed to some other value such as ``1``, ``2``, ``3`` and so forth,
+            then only the controls whose ``Page`` property match the current dialog page will be displayed.
+            
+            By using the SetPageManager method it is possible to define four types of page managers:
+            
+                - List box or combo box: in this case, each entry in the list box or combo box corresponds to a page. The first item refers to Page 1, the second items refers to Page 2 and so on.
+                - Group of radio buttons: defines a group of radio buttons that will control which page is visible.
+                - Sequence of buttons: defines a set of buttons, each of which corresponding to a dialog page. This can be used to emulate a tabbed interface by placing buttons side by side in the dialog.
+                - Previous/Next buttons: defines which buttons in the dialog that will be used to navigate to the Previous/Next page in the dialog.
+
+            This method is supposed to be called just once before calling the Execute method. Subsequent calls are ignored.
+
+            Args:
+                pilotcontrols (str, optional): A comma-separated list of ``ListBox``, ``ComboBox`` or ``RadioButton`` control names used as page managers.
+                    For ``RadioButton`` controls, specify the name of the first control in the group to be used.
+                tabcontrols (str, optional): A comma-separated list of button names that will be used as page managers.
+                    The order in which they are specified in this argument corresponds to the page number they are associated with.
+                wizardcontrols (str, optional): A comma-separated list with the names of two buttons that will be used as the ``Previous/Next`` buttons.
+                lastpage (int, optional): The number of the last available page.
+                    It is recommended to specify this value when using the ``Previous/Next`` page manager.
+
+            Returns:
+                bool: ``True`` on success; Otherwise, ``False``.
+
+            Tip:
+                It is possible to use more than one page management mechanism at the same time.
+
+            See Also:
+                `SF_Dialog Help SetPageManager <https://tinyurl.com/yckkehha#SetPageManager>`_
             """
             ...
         def Terminate(self) -> bool:
@@ -4118,10 +4480,10 @@ class SFDialogs:
 
             Args:
                 displayvalue (str): The text appearing in the control box.
-                datavalue (str, optional): Any value associated with the root node. Defaults to ScriptForge.cstSymEmpty.
+                datavalue (str, optional): Any value associated with the root node. Defaults to ``ScriptForge.cstSymEmpty``.
 
             Returns:
-                XMutableTreeNode: The new root node as a UNO object of type com.sun.star.awt.tree.XMutableTreeNode
+                XMutableTreeNode: The new root node as a UNO object of type ``com.sun.star.awt.tree.XMutableTreeNode``
 
             See Also:
                 `SF_DialogControl Help CreateRoot <https://tinyurl.com/yb27tk36#CreateRoot>`_
@@ -4130,8 +4492,8 @@ class SFDialogs:
         def FindNode(
             self,
             displayvalue: str,
-            datavalue: str = ScriptForge.cstSymEmpty,
-            casesensitive: bool = False,
+            datavalue: str = ...,
+            casesensitive: bool = ...,
         ) -> XMutableTreeNode | None:
             """
             Traverses the tree and find recursively, starting from the root, a node meeting some criteria.
@@ -4144,11 +4506,11 @@ class SFDialogs:
 
             Args:
                 displayvalue (str): The pattern to be matched
-                datavalue (str, optional): A string, a numeric value or a date or Empty (if not applicable). Defaults to ScriptForge.cstSymEmpty.
+                datavalue (str, optional): A string, a numeric value or a date or Empty (if not applicable). Defaults to ``ScriptForge.cstSymEmpty``.
                 casesensitive (bool, optional): a string, a numeric value or a date or Empty (if not applicable). Defaults to False.
 
             Returns:
-                XMutableTreeNode | None: The found node of type com.sun.star.awt.tree.XMutableTreeNode or None if not found.
+                XMutableTreeNode | None: The found node of type ``com.sun.star.awt.tree.XMutableTreeNode`` or ``None`` if not found.
 
             See Also:
                 `SF_DialogControl Help FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
@@ -5028,12 +5390,12 @@ class SFDocuments:
 
         # region methods
         @classmethod
-        def ReviewServiceArgs(cls, windowname: str = "") -> Tuple[str]:
+        def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
             """
             Transform positional and keyword arguments into positional only
             """
             ...
-        def CloseDocument(self, saveask: bool = True) -> bool:
+        def CloseDocument(self, saveask: bool = ...) -> bool:
             """
             The closure of a Base document requires the closures of
                 - the connection => done in the CloseDatabase() method
@@ -5041,7 +5403,7 @@ class SFDocuments:
                 - the document itself => done in the superclass
 
             Args:
-                saveask (bool, optional): Ask to save. Defaults to True.
+                saveask (bool, optional): Ask to save. Defaults to ``True``.
 
             Returns:
                 bool: True if closure is successful.
@@ -5122,6 +5484,48 @@ class SFDocuments:
 
             See Also:
                 `SF_Base Help OpenFormDocument <https://tinyurl.com/ya4lp2mq#OpenFormDocument>`_
+            """
+            ...
+        def OpenQuery(self, queryname: str) -> object:
+            """
+            Opens the Data View window of the specified query and returns an instance of the Datasheet service.
+
+            The query can be opened in normal mode.
+
+            If the query is already open, its Data View window will be made active.
+
+            Args:
+                queryname (str): The name of an existing query as a case-sensitive String.
+
+            Returns:
+                object:
+
+            Note:
+                Closing the Base document will cause the Data View window to be closed as well.
+            
+            See Also:
+                `SF_Base Help OpenQuery <https://tinyurl.com/ya4lp2mq#OpenQuery>`_
+            """
+            ...
+        def OpenTable(self, tablename: str) -> object:
+            """
+            Opens the Data View window of the specified table and returns an instance of the Datasheet service.
+
+            The query can be opened in normal mode.
+
+            If the table is already open, its Data View window will be made active.
+
+            Args:
+                tablename (str): The name of an existing table as a case-sensitive String.
+
+            Returns:
+                object:
+            
+            Note:
+                Closing the Base document will cause the Data View window to be closed as well.
+            
+            See Also:
+                `SF_Base Help OpenTable <https://tinyurl.com/ya4lp2mq#OpenTable>`_
             """
             ...
         def PrintOut(self, formdocument: str, pages: str = ..., copies: int = ...) -> bool:
@@ -5455,34 +5859,67 @@ class SFDocuments:
                 `SF_Calc Help Charts <https://tinyurl.com/y7jwr7b7#Charts>`_
             """
             ...
-        def ClearAll(self, range: str) -> None:
+        def ClearAll(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
             """
             Clears all the contents and formats of the given range.
 
             Args:
                 range (str): The range to be cleared, as a string.
+                filterformula (str, optional): A Calc formula that shall be applied to the given range to determine which cells will be affected.
+                    The specified formula must return ``True`` or ``False``. If this argument is not specified, then all cells in the range are affected.
+                filterscope (str, optional): Determines how filterformula is expanded to the given range.
+
+            Note:
+                ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
+                The following values are accepted:
+                
+                - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
+                - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
+                - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
 
             See Also:
                 `SF_Calc Help ClearAll <https://tinyurl.com/y7jwr7b7#ClearAll>`_
             """
             ...
-        def ClearFormats(self, range: str) -> None:
+        def ClearFormats(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
             """
             Clears the formats and styles in the given range.
 
             Args:
                 range (str): The range whose formats and styles are to be cleared, as a string.
+                filterformula (str, optional): A Calc formula that shall be applied to the given range to determine which cells will be affected.
+                    The specified formula must return ``True`` or ``False``. If this argument is not specified, then all cells in the range are affected.
+                filterscope (str, optional): Determines how filterformula is expanded to the given range.
+
+            Note:
+                ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
+                The following values are accepted:
+                
+                - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
+                - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
+                - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
 
             See Also:
                 `SF_Calc Help ClearFormats <https://tinyurl.com/y7jwr7b7#ClearFormats>`_
             """
             ...
-        def ClearValues(self, range: str) -> None:
+        def ClearValues(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
             """
             Clears the values and formulas in the given range.
 
             Args:
                 range (str): The range whose values and formulas are to be cleared, as a string.
+                filterformula (str, optional): A Calc formula that shall be applied to the given range to determine which cells will be affected.
+                    The specified formula must return ``True`` or ``False``. If this argument is not specified, then all cells in the range are affected.
+                filterscope (str, optional): Determines how filterformula is expanded to the given range.
+
+            Note:
+                ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
+                The following values are accepted:
+                
+                - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
+                - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
+                - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
 
             See Also:
                 `SF_Calc Help ClearValues <https://tinyurl.com/y7jwr7b7#ClearValues>`_
@@ -6248,7 +6685,7 @@ class SFDocuments:
                 `SF_Calc Help SetArray <https://tinyurl.com/y7jwr7b7#SetArray>`_
             """
             ...
-        def SetCellStyle(self, targetrange: str, style: str) -> str:
+        def SetCellStyle(self, targetrange: str, style: str, filterformula: str = ..., filterscope:str = ...) -> str:
             """
             Applies the specified cell style to the given target range.
             The full range is updated and the remainder of the sheet is left untouched.
@@ -6257,6 +6694,17 @@ class SFDocuments:
             Args:
                 targetrange (str): The range to which the style will be applied, as a string.
                 style (str): The name of the cell style to apply.
+                filterformula (str, optional): A Calc formula that shall be applied to the given range to determine which cells will be affected.
+                    The specified formula must return ``True`` or ``False``. If this argument is not specified, then all cells in the range are affected.
+                filterscope (str, optional): Determines how filterformula is expanded to the given range.
+
+            Note:
+                ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
+                The following values are accepted:
+                
+                - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
+                - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
+                - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
 
             Returns:
                 str: A string representing the modified area as a range of cells.
@@ -7751,6 +8199,7 @@ class SFWidgets:
                 int: an integer value that identifies the inserted item.
             """
             ...
+
     # region SF_PopupMenu CLASS
     class SF_PopupMenu(SFServices):
         """
@@ -7778,10 +8227,10 @@ class SFWidgets:
         def AddCheckBox(
             self,
             menuitem: str,
-            name: str = "",
-            status: bool = False,
-            icon: str = "",
-            tooltip: str = "",
+            name: str = ...,
+            status: bool = ...,
+            icon: str = ...,
+            tooltip: str = ...,
         ) -> int:
             """
             Inserts a check box in the popup menu.
@@ -7898,276 +8347,98 @@ class SFWidgets:
 # region CreateScriptService()
 #   region array
 @overload
-def CreateScriptService(service: Literal["Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
+def CreateScriptService(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
 @overload
-def CreateScriptService(service: Literal["array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
+def createscriptservice(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Array"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Array: ...
-@overload
-def createscriptservice(service: Literal["Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
-@overload
-def createscriptservice(service: Literal["array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Array"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Array: ...
-@overload
-def createScriptService(service: Literal["Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
-@overload
-def createScriptService(service: Literal["array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Array"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Array: ...
+def createScriptService(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
 
 #   endregion array
 
 #   region basic
 @overload
-def CreateScriptService(service: Literal["Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
+def CreateScriptService(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
 @overload
-def CreateScriptService(service: Literal["basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Basic"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Basic: ...
+def createscriptservice(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
 @overload
-def createscriptservice(service: Literal["Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
 @overload
-def createscriptservice(service: Literal["basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Basic"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Basic: ...
-@overload
-def createScriptService(service: Literal["Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
-@overload
-def createScriptService(service: Literal["basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Basic"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Basic: ...
+def createScriptService(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
+
 
 #   endregion basic
 
 #   region dictionary
 @overload
-def CreateScriptService(service: Literal["Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
+def CreateScriptService(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
 @overload
-def CreateScriptService(service: Literal["dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
+def createscriptservice(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Dictionary"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createscriptservice(service: Literal["Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createscriptservice(service: Literal["dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Dictionary"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createScriptService(service: Literal["Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createScriptService(service: Literal["dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Dictionary"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Dictionary: ...
+def createScriptService(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
 
 #   endregion dictionary
 
 #   region exception
 @overload
-def CreateScriptService(service: Literal["Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
+def CreateScriptService(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
 @overload
-def CreateScriptService(service: Literal["exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
+def createscriptservice(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Exception"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Exception: ...
-@overload
-def createscriptservice(service: Literal["Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
-@overload
-def createscriptservice(service: Literal["exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Exception"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Exception: ...
-@overload
-def createScriptService(service: Literal["Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
-@overload
-def createScriptService(service: Literal["exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Exception"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Exception: ...
-
+def createScriptService(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
 #   endregion exception
 
 #   region FileSystem
 @overload
-def CreateScriptService(service: Literal["FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
+def CreateScriptService(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
 @overload
-def CreateScriptService(service: Literal["filesystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
+def createscriptservice(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.FileSystem"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createscriptservice(service: Literal["FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createscriptservice(service: Literal["filesystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.FileSystem"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createScriptService(service: Literal["FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createScriptService(service: Literal["filesystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.FileSystem"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_FileSystem: ...
-
+def createScriptService(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
 #   endregion FileSystem
 
 #   region SF_L10N
 @overload
-def CreateScriptService(service: Literal["L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
+def CreateScriptService(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
 @overload
-def CreateScriptService(service: Literal["l10n"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
+def createscriptservice(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
 @overload
-def CreateScriptService(service: Literal["ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createscriptservice(service: Literal["L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createscriptservice(service: Literal["l10n"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createscriptservice(service: Literal["ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createScriptService(service: Literal["L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createScriptService(service: Literal["l10n"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-@overload
-def createScriptService(service: Literal["ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
-
+def createScriptService(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
 #   endregion SF_L10N
 
 #   region SF_Platform
 @overload
-def CreateScriptService(service: Literal["Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
+def CreateScriptService(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
 @overload
-def CreateScriptService(service: Literal["platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
+def createscriptservice(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Platform"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Platform: ...
-@overload
-def createscriptservice(service: Literal["Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
-@overload
-def createscriptservice(service: Literal["platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Platform"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Platform: ...
-@overload
-def createScriptService(service: Literal["Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
-@overload
-def createScriptService(service: Literal["platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Platform"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Platform: ...
-
+def createScriptService(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
 #   endregion SF_Platform
 
 #   region SF_Region
 @overload
-def CreateScriptService(service: Literal["Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
+def CreateScriptService(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
 @overload
-def CreateScriptService(service: Literal["region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
+def createscriptservice(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Region"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Region: ...
-@overload
-def createscriptservice(service: Literal["Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
-@overload
-def createscriptservice(service: Literal["region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Region"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Region: ...
-@overload
-def createScriptService(service: Literal["Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
-@overload
-def createScriptService(service: Literal["region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Region"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Region: ...
-
+def createScriptService(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
 #   endregion SF_Region
 
 #   region SF_Session
 @overload
-def CreateScriptService(service: Literal["Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
+def CreateScriptService(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
 @overload
-def CreateScriptService(service: Literal["session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
+def createscriptservice(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Session"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Session: ...
-@overload
-def createscriptservice(service: Literal["Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
-@overload
-def createscriptservice(service: Literal["session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Session"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Session: ...
-@overload
-def createScriptService(service: Literal["Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
-@overload
-def createScriptService(service: Literal["session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Session"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Session: ...
-
+def createScriptService(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
 #   endregion SF_Session
 
 #   region SF_String
 @overload
-def CreateScriptService(service: Literal["String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
+def CreateScriptService(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
 @overload
-def CreateScriptService(service: Literal["string"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
+def createscriptservice(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.String"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_String: ...
-@overload
-def createscriptservice(service: Literal["String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
-@overload
-def createscriptservice(service: Literal["string"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.String"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_String: ...
-@overload
-def createScriptService(service: Literal["String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
-@overload
-def createScriptService(service: Literal["string"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.String"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_String: ...
-
+def createScriptService(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
 #   endregion SF_String
 
 #   region SF_TextStream
@@ -8188,102 +8459,47 @@ def createScriptService(
 
 #   region SF_Timer
 @overload
-def CreateScriptService(service: Literal["Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
+def CreateScriptService(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
 @overload
-def CreateScriptService(service: Literal["timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
+def createscriptservice(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
 @overload
-def CreateScriptService(
-    service: Literal["ScriptForge.Timer"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Timer: ...
-@overload
-def createscriptservice(service: Literal["Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
-@overload
-def createscriptservice(service: Literal["timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
-@overload
-def createscriptservice(
-    service: Literal["ScriptForge.Timer"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Timer: ...
-@overload
-def createScriptService(service: Literal["Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
-@overload
-def createScriptService(service: Literal["timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
-@overload
-def createScriptService(
-    service: Literal["ScriptForge.Timer"], *args: Any, **kwargs: Any
-) -> SFScriptForge.SF_Timer: ...
-
+def createScriptService(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
 #   endregion SF_Timer
 
 #   region SF_UI
 @overload
-def CreateScriptService(service: Literal["UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
+def CreateScriptService(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
 @overload
-def CreateScriptService(service: Literal["ui"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
+def createscriptservice(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
 @overload
-def CreateScriptService(service: Literal["ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createscriptservice(service: Literal["UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createscriptservice(service: Literal["ui"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createscriptservice(service: Literal["ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createScriptService(service: Literal["UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createScriptService(service: Literal["ui"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-@overload
-def createScriptService(service: Literal["ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
-
+def createScriptService(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
 #   endregion SF_UI
 
 #   region SF_Database
 @overload
-def CreateScriptService(service: Literal["Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
+def CreateScriptService(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
 @overload
-def CreateScriptService(service: Literal["database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
+def createscriptservice(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
 @overload
-def CreateScriptService(
-    service: Literal["SFDatabases.Database"], *args: Any, **kwargs: Any
-) -> SFDatabases.SF_Database: ...
-@overload
-def createscriptservice(service: Literal["Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
-@overload
-def createscriptservice(service: Literal["database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
-@overload
-def createscriptservice(
-    service: Literal["SFDatabases.Database"], *args: Any, **kwargs: Any
-) -> SFDatabases.SF_Database: ...
-@overload
-def createScriptService(service: Literal["Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
-@overload
-def createScriptService(service: Literal["database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
-@overload
-def createScriptService(
-    service: Literal["SFDatabases.Database"], *args: Any, **kwargs: Any
-) -> SFDatabases.SF_Database: ...
-
+def createScriptService(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
 #   endregion SF_Database
+
+#   region SF_Datasheet
+@overload
+def CreateScriptService(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+@overload
+def createscriptservice(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+@overload
+def createScriptService(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+#   endregion SF_Datasheet
 
 #   region SF_Dialog
 @overload
-def CreateScriptService(service: Literal["Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
+def CreateScriptService(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
 @overload
-def CreateScriptService(service: Literal["dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
+def createscriptservice(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
 @overload
-def CreateScriptService(service: Literal["SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createscriptservice(service: Literal["Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createscriptservice(service: Literal["dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createscriptservice(service: Literal["SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createScriptService(service: Literal["Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createScriptService(service: Literal["dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-@overload
-def createScriptService(service: Literal["SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
-
+def createScriptService(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
 #   endregion SF_Dialog
 
 #   region SF_DialogControl
@@ -8304,74 +8520,29 @@ def createScriptService(
 
 #   region SF_Document
 @overload
-def CreateScriptService(service: Literal["Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
+def CreateScriptService(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
 @overload
-def CreateScriptService(service: Literal["document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
+def createscriptservice(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
 @overload
-def CreateScriptService(
-    service: Literal["SFDocuments.Document"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Document: ...
-@overload
-def createscriptservice(service: Literal["Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
-@overload
-def createscriptservice(service: Literal["document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
-@overload
-def createscriptservice(
-    service: Literal["SFDocuments.Document"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Document: ...
-@overload
-def createScriptService(service: Literal["Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
-@overload
-def createScriptService(service: Literal["document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
-@overload
-def createScriptService(
-    service: Literal["SFDocuments.Document"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Document: ...
-
+def createScriptService(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
 #   endregion SF_Document
 
 #   region SF_Base
 @overload
-def CreateScriptService(service: Literal["Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
+def CreateScriptService(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
 @overload
-def CreateScriptService(service: Literal["base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
+def createscriptservice(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
 @overload
-def CreateScriptService(service: Literal["SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createscriptservice(service: Literal["Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createscriptservice(service: Literal["base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createscriptservice(service: Literal["SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createScriptService(service: Literal["Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createScriptService(service: Literal["base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-@overload
-def createScriptService(service: Literal["SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
-
+def createScriptService(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
 #   endregion SF_Base
 
 #   region SF_Calc
 @overload
-def CreateScriptService(service: Literal["Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
+def CreateScriptService(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
 @overload
-def CreateScriptService(service: Literal["calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
+def createscriptservice(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
 @overload
-def CreateScriptService(service: Literal["SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createscriptservice(service: Literal["Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createscriptservice(service: Literal["calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createscriptservice(service: Literal["SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createScriptService(service: Literal["Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createScriptService(service: Literal["calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-@overload
-def createScriptService(service: Literal["SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
-
+def createScriptService(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
 #   endregion SF_Calc
 
 #   region SF_CalcReference
@@ -8428,80 +8599,29 @@ def createScriptService(
 
 #   region SF_Writer
 @overload
-def CreateScriptService(service: Literal["Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
+def CreateScriptService(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
 @overload
-def CreateScriptService(service: Literal["writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
+def createscriptservice(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
 @overload
-def CreateScriptService(
-    service: Literal["SFDocuments.Writer"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Writer: ...
-@overload
-def createscriptservice(service: Literal["Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
-@overload
-def createscriptservice(service: Literal["writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
-@overload
-def createscriptservice(
-    service: Literal["SFDocuments.Writer"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Writer: ...
-@overload
-def createScriptService(service: Literal["Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
-@overload
-def createScriptService(service: Literal["writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
-@overload
-def createScriptService(
-    service: Literal["SFDocuments.Writer"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Writer: ...
-
+def createScriptService(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
 #   endregion SF_Writer
 
 #   region SF_Menu
 @overload
-def CreateScriptService(service: Literal["Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
+def CreateScriptService(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
 @overload
-def CreateScriptService(service: Literal["menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
+def createscriptservice(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
 @overload
-def CreateScriptService(service: Literal["SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createscriptservice(service: Literal["Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createscriptservice(service: Literal["menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createscriptservice(service: Literal["SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createScriptService(service: Literal["Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createScriptService(service: Literal["menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-@overload
-def createScriptService(service: Literal["SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
-
+def createScriptService(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
 #   endregion SF_Menu
 
 #   region SF_PopupMenu
 @overload
-def CreateScriptService(service: Literal["PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
+def CreateScriptService(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
 @overload
-def CreateScriptService(service: Literal["popupmenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
+def createscriptservice(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
 @overload
-def CreateScriptService(
-    service: Literal["SFWidgets.PopupMenu"], *args: Any, **kwargs: Any
-) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createscriptservice(service: Literal["PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createscriptservice(service: Literal["popupmenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createscriptservice(
-    service: Literal["SFWidgets.PopupMenu"], *args: Any, **kwargs: Any
-) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createScriptService(service: Literal["PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createScriptService(service: Literal["popupmenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
-@overload
-def createScriptService(
-    service: Literal["SFWidgets.PopupMenu"], *args: Any, **kwargs: Any
-) -> SFWidgets.SF_PopupMenu: ...
-
+def createScriptService(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
 #   endregion SF_PopupMenu
 
 def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices | Any:

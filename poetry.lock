@@ -366,6 +366,18 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "lo-dev-search"
+version = "2.0.0"
+description = "LibreOffice Developer Search Engine"
+category = "dev"
+optional = false
+python-versions = ">=3.7.0"
+files = [
+    {file = "lo-dev-search-2.0.0.tar.gz", hash = "sha256:302629b9d29e569dbe86d589f2e8390233ad0124d36c8eb11c7acc3f9d47efc7"},
+    {file = "lo_dev_search-2.0.0-py3-none-any.whl", hash = "sha256:1b9390ffbe1d6be2c813878ca00b50ca5a2a189a3e19bd02d142c9e8076ddf74"},
+]
+
+[[package]]
 name = "lsprotocol"
 version = "2023.0.0a1"
 description = "Python implementation of the Language Server Protocol."
@@ -859,4 +871,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "6ca74de367fce863a92f77b02c5fc8fb63317414133fbd8f68430e66abb19a80"
+content-hash = "b84b8a9926e1d049c3d70b49aacc4e32e0bfc0d2a5c383fa8714b404b92b5580"
