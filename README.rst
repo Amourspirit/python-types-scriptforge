@@ -16,7 +16,7 @@ full typing support for `LibreOffice API <https://api.libreoffice.org/>`_.
 This allows full type support for `ScriptForge <https://gitlab.com/LibreOfficiant/scriptforge>`_
 and `LibreOffice API <https://api.libreoffice.org/>`_.
 
-These Typings are created for LibreOffice ``7.5``.
+These Typings are created for LibreOffice ``7.6``.
 
 Installation
 ============
@@ -37,6 +37,12 @@ Older versions
 
 While this version will also work with previous version of ScriptForge, not all methods/functions are available in previous versions
 that are part of this typing library.
+
+To install for version ``7.5``.
+
+.. code-block:: bash
+
+    $ pip install "types-scriptforge>=2.0,<3.0"
 
 To install for version ``7.4``.
 
