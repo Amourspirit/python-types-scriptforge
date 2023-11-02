@@ -63,3 +63,7 @@ Other
 
 .. figure:: https://user-images.githubusercontent.com/4193389/163497042-a572dff9-0278-4d42-be22-dea4555545ff.gif
    :alt: types-scriptforge example gif.
+
+After of version ``3.0`` of ``types-scriptforge`` a new version scheme is used that now matches the version release of LibreOffice and ScriptForge.
+So ``types-scriptforge`` version ``7.6`` is for LibreOffice version ``7.6``, ``types-scriptforge`` version ``7.7`` is for LibreOffice version ``7.7``
+and so on.
