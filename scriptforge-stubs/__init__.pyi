@@ -4,7 +4,17 @@ import sys
 import datetime
 import time
 from numbers import Number
-from typing import Any, Optional, List, Tuple, Type, TypeVar, overload, TYPE_CHECKING
+from typing import (
+    Any,
+    Optional,
+    List,
+    Tuple,
+    Type,
+    TypeVar,
+    overload,
+    Sequence,
+    TYPE_CHECKING,
+)
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -80,7 +90,9 @@ class ScriptForge(object, metaclass=_Singleton):
     Version: Literal["7.4"]
     # endregion Class constants
     # Basic dispatcher for Python scripts
-    basicdispatcher: Literal["@application#ScriptForge.SF_PythonHelper._PythonDispatcher"]
+    basicdispatcher: Literal[
+        "@application#ScriptForge.SF_PythonHelper._PythonDispatcher"
+    ]
     # Python helper functions module
     pythonhelpermodule: Literal["ScriptForgeHelper.py"]
     #
@@ -124,7 +136,9 @@ class ScriptForge(object, metaclass=_Singleton):
         ...
     # region ClassMethods
     @classmethod
-    def ConnectToLOProcess(cls, hostname: str = ..., port: int = ...) -> XComponentContext:
+    def ConnectToLOProcess(
+        cls, hostname: str = ..., port: int = ...
+    ) -> XComponentContext:
         """
         Called by the ScriptForge class constructor to establish the connection with
         the requested LibreOffice instance
@@ -172,7 +186,9 @@ class ScriptForge(object, metaclass=_Singleton):
         """
         ...
     @classmethod
-    def InvokeBasicService(cls, basicobject: object, flags: int, method: str, *args: Any) -> tuple | datetime.datetime:
+    def InvokeBasicService(
+        cls, basicobject: object, flags: int, method: str, *args: Any
+    ) -> tuple | datetime.datetime:
         """
         Execute a given Basic script and interpret its result
         This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
@@ -382,7 +398,9 @@ class SFServices:
         """
         Dispose
         """
-    def ExecMethod(self, flags: int = ..., methodname: str = ..., *args: Any) -> Any: ...
+    def ExecMethod(
+        self, flags: int = ..., methodname: str = ..., *args: Any
+    ) -> Any: ...
     def GetProperty(self, propertyname: str, arg=None):
         """
         Get the given property from the Basic world
@@ -421,7 +439,9 @@ class SFScriptForge:
             `Array Help <https://tinyurl.com/y8b7bq2d>`_
         """
 
-        def ImportFromCSVFile(self, filename: str, delimiter: str = ..., dateformat: str = ...) -> Any:
+        def ImportFromCSVFile(
+            self, filename: str, delimiter: str = ..., dateformat: str = ...
+        ) -> Any:
             """
             Difference with the Basic version: dates are returned in their iso format,
             not as any of the datetime objects.
@@ -522,7 +542,11 @@ class SFScriptForge:
             ...
         @staticmethod
         def CDateToUnoDateTime(
-            date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
+            date: float
+            | time.struct_time
+            | datetime.datetime
+            | datetime.date
+            | datetime.time,
         ) -> UNODateTime | Any:
             """
             Converts a date representation into the ccom.sun.star.util.DateTime date format
@@ -619,7 +643,11 @@ class SFScriptForge:
             cls,
             interval: str,
             number: int,
-            date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
+            date: float
+            | time.struct_time
+            | datetime.datetime
+            | datetime.date
+            | datetime.time,
         ) -> UNODateTime | Any:
             """
             Adds a date or time interval to a given date/time a number of times and returns the resulting date.
@@ -654,8 +682,16 @@ class SFScriptForge:
         def DateDiff(
             cls,
             interval: str,
-            date1: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
-            date2: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
+            date1: float
+            | time.struct_time
+            | datetime.datetime
+            | datetime.date
+            | datetime.time,
+            date2: float
+            | time.struct_time
+            | datetime.datetime
+            | datetime.date
+            | datetime.time,
             firstdayofweek: int = ...,
             firstweekofyear: int = ...,
         ) -> int:
@@ -709,7 +745,11 @@ class SFScriptForge:
         def DatePart(
             cls,
             interval: str,
-            date: time.struct_time | datetime.datetime | datetime.date | datetime.time | str,
+            date: time.struct_time
+            | datetime.datetime
+            | datetime.date
+            | datetime.time
+            | str,
             firstdayofweek: int = ...,
             firstweekofyear: int = ...,
         ) -> int:
@@ -788,7 +828,9 @@ class SFScriptForge:
             """
             ...
         @classmethod
-        def Format(cls, expression: datetime.datetime | Number, format: str = ...) -> str:
+        def Format(
+            cls, expression: datetime.datetime | Number, format: str = ...
+        ) -> str:
             """
             Converts a number to a string, and then formats it according to the format that you specify.
 
@@ -1110,7 +1152,9 @@ class SFScriptForge:
                 `SF_Dictionary Help ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
             """
             ...
-        def ImportFromPropertyValues(self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = ...) -> bool:
+        def ImportFromPropertyValues(
+            self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = ...
+        ) -> bool:
             """
             Inserts the contents of an array of ``PropertyValue`` objects into the current dictionary.
             ``PropertyValue`` Names are used as keys in the dictionary, whereas Values contain
@@ -1238,7 +1282,9 @@ class SFScriptForge:
                 `SF_FileSystem Help BuildPath <https://tinyurl.com/ybxpt7eo#BuildPath>`_
             """
             ...
-        def CompareFiles(self, filename1: str, filename2: str, comparecontents: bool = ...) -> bool:
+        def CompareFiles(
+            self, filename1: str, filename2: str, comparecontents: bool = ...
+        ) -> bool:
             """
             Compare 2 files and return ``True`` if they seem identical.
 
@@ -1258,7 +1304,9 @@ class SFScriptForge:
                 `SF_FileSystem Help CompareFiles <https://tinyurl.com/ybxpt7eo#CompareFiles>`_
             """
             ...
-        def CopyFile(self, source: str, destination: str, overwrite: bool = ...) -> bool:
+        def CopyFile(
+            self, source: str, destination: str, overwrite: bool = ...
+        ) -> bool:
             """
             Copies one or more files from one location to another.
             Returns ``True`` if at least one file has been copied or ``False`` if an error occurred.
@@ -1287,7 +1335,9 @@ class SFScriptForge:
                 `SF_FileSystem Help CopyFile <https://tinyurl.com/ybxpt7eo#CopyFile>`_
             """
             ...
-        def CopyFolder(self, source: str, destination: str, overwrite: bool = ...) -> bool:
+        def CopyFolder(
+            self, source: str, destination: str, overwrite: bool = ...
+        ) -> bool:
             """
             Copies one or more folders from one location to another.
             Returns ``True`` if at least one folder has been copied or ``False`` if an error occurred.
@@ -1674,20 +1724,20 @@ class SFScriptForge:
         def Normalize(self, filename: str) -> str:
             """
             Returns a string containing the normalized path name by collapsing redundant separators and up-level references.
-            
+
             For instance, the path names ``A//B``, ``A/B/``, ``A/./B`` and ``A/foo/../B`` are all normalized to ``A/B``.
-            
+
             On Windows, forward slashes ``/`` are converted to backward slashes ``\``.
 
             Args:
                 filename (str): A string representing a valid path name. The file or directory represented by this argument may not exist.
-            
+
             Returns:
                 str: Normalized file.
-            
+
             Note:
                 The current value of the property ``SF_FileSystem.FileNaming`` is used to determine the notation of the filename argument as well as the format of the returned string.
-            
+
             See Also:
                 `SF_FileSystem Help Normalize <https://tinyurl.com/ybxpt7eo#Normalize>`_
             """
@@ -1897,6 +1947,7 @@ class SFScriptForge:
         See Also:
             `ScriptForge.L10N service <https://tinyurl.com/y77mbtp9>`_
         """
+
         # region Methods
         @classmethod
         def ReviewServiceArgs(
@@ -1911,7 +1962,9 @@ class SFScriptForge:
             Transform positional and keyword arguments into positional only
             """
             ...
-        def AddText(self, context: str = ..., msgid: str = ..., comment: str = ...) -> bool:
+        def AddText(
+            self, context: str = ..., msgid: str = ..., comment: str = ...
+        ) -> bool:
             """
             Adds a new entry in the list of localizable strings. It must not exist yet.
 
@@ -1960,7 +2013,9 @@ class SFScriptForge:
                 `SF_L10N Help AddTextsFromDialog <https://tinyurl.com/y77mbtp9#AddTextsFromDialog>`_
             """
             ...
-        def ExportToPOTFile(self, filename: str, header: str = ..., encoding: str = ...) -> bool:
+        def ExportToPOTFile(
+            self, filename: str, header: str = ..., encoding: str = ...
+        ) -> bool:
             """
             Export a set of untranslated strings as a POT file.
             The set of strings has been built either by a succession of AddText() methods
@@ -2336,7 +2391,9 @@ class SFScriptForge:
             """
             ...
         # Usual methods
-        def DSTOffset(self, localdatetime: datetime.datetime, timezone: str, locale: str = ...) -> int:
+        def DSTOffset(
+            self, localdatetime: datetime.datetime, timezone: str, locale: str = ...
+        ) -> int:
             """
             Computes the additional Daylight Saving Time (DST) offset, in minutes, that is applicable to a given region and timezone.
 
@@ -2350,7 +2407,9 @@ class SFScriptForge:
                 int: offset, in minutes, that is applicable to a given region and timezone.
             """
             ...
-        def LocalDateTime(self, utcdatetime: datetime.datetime, timezone: str, locale: str = ...) -> datetime.datetime:
+        def LocalDateTime(
+            self, utcdatetime: datetime.datetime, timezone: str, locale: str = ...
+        ) -> datetime.datetime:
             """
             Computes the local date and time from a UTC date and time.
 
@@ -2394,7 +2453,9 @@ class SFScriptForge:
                 int: the offset between GMT and the given timezone and locale, in minutes.
             """
             ...
-        def UTCDateTime(self, localdatetime: datetime.datetime, timezone: str, locale: str = ...) -> datetime.datetime:
+        def UTCDateTime(
+            self, localdatetime: datetime.datetime, timezone: str, locale: str = ...
+        ) -> datetime.datetime:
             """
             Gets the UTC date and time considering a given local date and time in a timezone.
 
@@ -2441,15 +2502,23 @@ class SFScriptForge:
         SCRIPTISEMBEDDED: Literal["document"]  # in the document
         SCRIPTISAPPLICATION: Literal["application"]  # in any shared library (Basic)
         SCRIPTISPERSONAL: Literal["user"]  # in My Macros (Python)
-        SCRIPTISPERSOXT: Literal["user:uno_packages"]  # in an extension installed for the current user (Python)
+        SCRIPTISPERSOXT: Literal[
+            "user:uno_packages"
+        ]  # in an extension installed for the current user (Python)
         SCRIPTISSHARED: Literal["share"]  # in LibreOffice macros (Python)
-        SCRIPTISSHAROXT: Literal["share:uno_packages"]  # in an extension installed for all users (Python)
-        SCRIPTISOXT: Literal["uno_packages"]  # in an extension but the installation parameters are unknown (Python)
+        SCRIPTISSHAROXT: Literal[
+            "share:uno_packages"
+        ]  # in an extension installed for all users (Python)
+        SCRIPTISOXT: Literal[
+            "uno_packages"
+        ]  # in an extension but the installation parameters are unknown (Python)
         # endregion CONST
 
         # region Methods
         @classmethod
-        def ExecuteBasicScript(cls, scope: str = ..., script: str = ..., *args: Any) -> Any:
+        def ExecuteBasicScript(
+            cls, scope: str = ..., script: str = ..., *args: Any
+        ) -> Any:
             """
             Execute the Basic script given its name and location and fetch its result if any.
 
@@ -2509,7 +2578,9 @@ class SFScriptForge:
             """
             ...
         @classmethod
-        def ExecutePythonScript(cls, scope: str = ..., script: str = ..., *args: Any) -> Any:
+        def ExecutePythonScript(
+            cls, scope: str = ..., script: str = ..., *args: Any
+        ) -> Any:
             """
             Execute the Python script given its location and name, fetch its result if any.
             Result can be a single value or an array of values.
@@ -2859,7 +2930,9 @@ class SFScriptForge:
                 `SF_String Help IsIPv4 <https://tinyurl.com/y9hm6agu#IsIPv4>`_
             """
             ...
-        def IsLike(self, inputstr: str, pattern: str, casesensitive: bool = ...) -> bool:
+        def IsLike(
+            self, inputstr: str, pattern: str, casesensitive: bool = ...
+        ) -> bool:
             """
             Returns True if the whole input string matches a given pattern containing wildcards
 
@@ -3445,7 +3518,9 @@ class SFScriptForge:
                 None if the opening failed, including when due to a user decision.
             """
             ...
-        def Resize(self, left: int = ..., top: int = ..., width: int = ..., height: int = ...) -> None:
+        def Resize(
+            self, left: int = ..., top: int = ..., width: int = ..., height: int = ...
+        ) -> None:
             """
             Resizes and/or moves the active window. Negative arguments are ignored.
             If the window was minimized or without arguments, it is restored.
@@ -3480,7 +3555,9 @@ class SFScriptForge:
                 percentage (int, optional): The optional degree of progress between 0 and 100. Defaults to -1.
             """
             ...
-        def ShowProgressBar(self, title: str = ..., text: str = ..., percentage: int = ...) -> None:
+        def ShowProgressBar(
+            self, title: str = ..., text: str = ..., percentage: int = ...
+        ) -> None:
             """
             Display a non-modal dialog box. Specify its title, an explicatory text and the progress on a progressbar.
             A call without arguments erases the progress bar dialog.
@@ -3551,7 +3628,9 @@ class SFDatabases:
                 `SF_Database Help CloseDatabase <https://tinyurl.com/yd9y6xa7#CloseDatabase>`_
             """
             ...
-        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
+        def DAvg(
+            self, expression: str, tablename: str, criteria: str = ...
+        ) -> float | None:
             """
             Compute the aggregate function AVG() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3568,7 +3647,9 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DCount(self, expression: str, tablename: str, criteria: str = ...) -> int | None:
+        def DCount(
+            self, expression: str, tablename: str, criteria: str = ...
+        ) -> int | None:
             """
             Compute the aggregate function COUNT() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3609,7 +3690,9 @@ class SFDatabases:
                 `SF_Database Help DLookup <https://tinyurl.com/yd9y6xa7#DLookup>`_
             """
             ...
-        def DMax(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
+        def DMax(
+            self, expression: str, tablename: str, criteria: str = ...
+        ) -> float | None:
             """
             Compute the aggregate function MAX() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3625,7 +3708,9 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DMin(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
+        def DMin(
+            self, expression: str, tablename: str, criteria: str = ...
+        ) -> float | None:
             """
             Compute the aggregate function MIN() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3641,7 +3726,9 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
+        def DSum(
+            self, expression: str, tablename: str, criteria: str = ...
+        ) -> float | None:
             """
             Compute the aggregate function Sum() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3682,6 +3769,21 @@ class SFDatabases:
                 `SF_Database Help GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
             """
             ...
+        def OpenFormDocument(
+            self, formdocument: str
+        ) -> SFDocuments.SF_FormDocument | None:
+            """
+            Open the FormDocument given by its hierarchical name in normal mode
+            If the form document is already open, the form document is made active
+
+            Args:
+                formdocument (str): a valid form document name as a case-sensitive string
+                    When hierarchical, the hierarchy must be rendered with forward slashes ("/")
+
+            Returns:
+                SFDocuments.SF_FormDocument | None: A FormDocument instance or Nothing
+            """
+            ...
         def OpenQuery(self, queryname: str) -> object | None:
             """
             Opens the Data View window of the specified query and returns an instance of the Datasheet service.
@@ -3698,7 +3800,6 @@ class SFDatabases:
                 `SF_Database Help OpenQuery <https://tinyurl.com/yd9y6xa7#OpenQuery>`_
             """
             ...
-
         def OpenSql(self, sql: str, directsql: bool = ...) -> object:
             """
             Runs a ``SQL SELECT`` command, opens a Data View window with the results
@@ -3771,9 +3872,9 @@ class SFDatabases:
         # endregion Properties
     # endregion SF_Database CLASS
 
-# endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
+    # endregion SFDatabases CLASS    (alias of SFDatabases Basic library)
 
-# region SF_Datasheet CLASS
+    # region SF_Datasheet CLASS
     class SF_Datasheet(SFServices):
         """
         A datasheet is the visual representation of tabular data produced by a database.
@@ -3781,6 +3882,7 @@ class SFDatabases:
         The Base document owning the data may or may not be opened.
         Any SELECT SQL statement may trigger the datasheet display.
         """
+
         # region Methods
         def Activate(self) -> None:
             """
@@ -3799,12 +3901,14 @@ class SFDatabases:
 
             Returns:
                 None:
-            
+
             See Also:
                 `SF_Datasheet Help CloseDatasheet <https://tinyurl.com/2juu2pbd#CloseDatasheet>`_
             """
             ...
-        def CreateMenu(self, menuheader:str, before:str=..., submenuchar:str=...) -> object:
+        def CreateMenu(
+            self, menuheader: str, before: str = ..., submenuchar: str = ...
+        ) -> object:
             """
             Creates a new menu entry in the data view window and returns a ``SFWidgets.Menu`` service instance, with which menu items can be programmatically added.
 
@@ -3824,7 +3928,7 @@ class SFDatabases:
                 `SF_Datasheet Help CreateMenu <https://tinyurl.com/2juu2pbd#CreateMenu>`_
             """
             ...
-        def GetText(self, column:int=...) -> str:
+        def GetText(self, column: int = ...) -> str:
             """
             Returns the text in a given column of the current row.
 
@@ -3837,7 +3941,7 @@ class SFDatabases:
 
             Returns:
                 str: column text.
-            
+
             See Also:
                 `SF_Datasheet Help GetText <https://tinyurl.com/2juu2pbd#GetText>`_
             """
@@ -3853,13 +3957,13 @@ class SFDatabases:
 
             Returns:
                 Any: column value.
-            
+
             See Also:
                 `SF_Datasheet Help GetValue <https://tinyurl.com/2juu2pbd#GetValue>`__
             """
             ...
         @overload
-        def GetValue(self, column:str = ...) -> Any:
+        def GetValue(self, column: str = ...) -> Any:
             """
             Returns the value in a given column of the current row as a valid Basic type.
 
@@ -3878,7 +3982,7 @@ class SFDatabases:
             """
             ...
         @overload
-        def GetValue(self, column:int = ...) -> Any:
+        def GetValue(self, column: int = ...) -> Any:
             """
             Returns the value in a given column of the current row as a valid Basic type.
 
@@ -3897,7 +4001,7 @@ class SFDatabases:
                 `SF_Datasheet Help GetValue <https://tinyurl.com/2juu2pbd#GetValue>`__
             """
             ...
-        def GoToCell(self, row:int = 0, column:int | str = 0) -> None:
+        def GoToCell(self, row: int = 0, column: int | str = 0) -> None:
             """
             Moves the cursor to the specified row and column.
 
@@ -3937,8 +4041,19 @@ class SFDatabases:
                 `SF_Datasheet Help RemoveMenu <https://tinyurl.com/2juu2pbd#RemoveMenu>`_
             """
             ...
+        def Toolbars(self, toolbarname: str = ...) -> Any:
+            """
+            Returns either a list of the available toolbar names in the actual document or a Toolbar object instance.
+
+            Args:
+                toolbarname (str, optional):  the usual name of one of the available toolbars
+
+            Returns:
+                Any: A zero-based array of toolbar names when the argument is absent, or a new Toolbar object instance from the SF_Widgets library.
+            """
+            ...
         # endregion Methods
-        
+
         # region properties
         @property
         def ColumnHeaders(self) -> Tuple[str, ...]:
@@ -4007,6 +4122,7 @@ class SFDatabases:
             """
             ...
         # endregion properties
+
 # endregion SF_Datasheet CLASS
 
 # region SFDialogs CLASS    (alias of SFDialogs Basic library)
@@ -4074,7 +4190,26 @@ class SFDialogs:
                 bool: True when successful.
             """
             ...
-        def Controls(self, controlname: str = ...) -> Tuple[str, ...] | SFDialogs.SF_DialogControl:
+        def CloneControl(
+            self, sourcename: str, controlname: str, left: int = ..., top: int = ...
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Duplicate an existing control of any type in the actual dialog.
+            The duplicated control is left unchanged. The new control can be relocated.
+
+            Args:
+                sourcename (str): the name of the control to duplicate
+                controlname (str):  the name of the new control. It must not exist yet
+                left (int, optional):  the lefg coordinate of the new control expressed in "Map AppFont" units
+                top (int, optional):  the top coordinate of the new control expressed in "Map AppFont" units
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or Nothing
+            """
+            ...
+        def Controls(
+            self, controlname: str = ...
+        ) -> Tuple[str, ...] | SFDialogs.SF_DialogControl:
             """
             Retrun the list of the controls contained in the dialog or
             a dialog control object based on its name.
@@ -4088,6 +4223,629 @@ class SFDialogs:
 
             See Also:
                 `SF_Dialog Help Controls <https://tinyurl.com/yckkehha#Controls>`_
+            """
+            ...
+        def CreateButton(
+            self,
+            controlname: str,
+            place: Any,
+            toggle: bool = ...,
+            push: Literal["", "OK", "CANCEL"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type Button in the actual dialog.
+
+            Args:
+                controlname (str):  the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                toggle (bool, optional): when True a Toggle button is created. Default: ``False``
+                push (str, optional): Button type "OK", "CANCEL" or empty string. Default: ``""``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            # push (str, optional): 'OK', 'CANCEL' or '' default
+            ...
+        def CreateCheckBox(
+            self, controlname: str, place: any, multiline: bool = ...
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type CheckBox in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                multiline (bool, optional): When True (default = False), the caption may be displayed on more than one line
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateComboBox(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            dropdown: bool = ...,
+            linecount: int = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type ComboBox in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
+                dropdown (bool, optional): When True (default), a drop down button is displayed
+                linecount (int, optional): Specifies the maximum line count displayed in the drop down. default is ``5``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateCurrencyField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            spinbutton: bool = ...,
+            minvalue: int = ...,
+            maxvalueint: int = ...,
+            incrementint: int = ...,
+            accuracy: int = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type CurrencyField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
+                spinbutton (bool, optional): when True, a spin button is present. Default ``False``
+                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
+                maxvalueint (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+                incrementint (int, optional):  the step when the spin button is pressed. Default = ``1``
+                accuracy (int, optional): specifies the decimal accuracy. Default = ``2`` decimal digits
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateDateField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            dropdown: bool = ...,
+            mindate: datetime.datetime = ...,
+            maxdate: datetime.datetime = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type DateField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
+                dropdown (bool, optional): when True (default = False), a dropdown button is shown
+                mindate (datetime.datetime, optional): the smallest date that can be entered in the control. Dafault is ``1900-01-01``
+                maxdate (datetime.datetime, optional): the largest Date that can be entered in the control. Dafault is ``2200-12-31``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateFileControl(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type FileControl in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateFixedLine(
+            self,
+            controlname: str,
+            place: Any,
+            orientation: Literal["H", "Horizontal", "V", "Vertical"],
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type FixedLine in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                orientation (str): Orientation kind, "H[orizontal]" or "V[ertical]".
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateFixedText(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            multiline: bool = ...,
+            align: Literal["LEFT", "CENTER", "RIGHT"] = ...,
+            verticalalign: Literal["TOP", "MIDDLE", "BOTTOM"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type FixedText in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``NONE``
+                multiline (bool, optional): When True the caption may be displayed on more than one line. Default ``False``
+                align (str, optional): horizontal alignment, "LEFT" or "CENTER" or "RIGHT". Default 'LEFT'
+                verticalalign (str, optional): vertical alignment, "TOP" or "MIDDLE" or "BOTTOM". Default ``TOP``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateFormattedField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            spinbutton: bool = ...,
+            minvalue: int = ...,
+            maxvalueint: int = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type FormattedField in the actual dialog
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                spinbutton (bool, optional): when True, a spin button is present. Default ``False``
+                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
+                maxvalueint (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateGroupBox(
+            self, controlname: str, place: Any
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type GroupBox in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateHyperlink(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            multiline: bool = ...,
+            align: Literal["LEFT", "CENTER", "RIGHT"] = ...,
+            verticalalign: Literal["TOP", "MIDDLE", "BOTTOM"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type Hyperlink in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``NONE``
+                multiline (bool, optional): _description_. Defaults to ....
+                align (str, optional): horizontal alignment, "LEFT" or "CENTER" or "RIGHT". Default ``LEFT``
+                verticalalign (str, optional): vertical alignment, "TOP" or "MIDDLE" or "BOTTOM". Default ``TOP``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateImageControl(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            scale: Literal["FITTOSIZE", "KEEPRATIO", "NO"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type ImageControl in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                scale (str, optional): One of next values: "FITTOSIZE" "KEEPRATIO" or "NO". Default ``FITTOSIZE``
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateListBox(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            dropdown: bool = ...,
+            linecount: int = ...,  # 5
+            multiselect: bool = ...,  # False
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type ListBox in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                dropdown (bool, optional): When True, a drop down button is displayed. Default ``True``
+                linecount (int, optional): Specifies the maximum line count displayed in the drop down, Default is ``5``
+                multiselect (bool, optional): When True, multiple lines can be selected. Default is ``False``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateNumericField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            spinbutton: bool = ...,  # False
+            minvalue: int = ...,  # -1000000
+            maxvalue: int = ...,  # +1000000
+            increment: int = ...,  # 1
+            accuracy: int = ...,  # 2
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type NumericField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                spinbutton (bool, optional): when True, a spin button is present. Default ``False``
+                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
+                maxvalue (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+                increment (int, optional):  the step when the spin button is pressed. Default = ``1``
+                accuracy (int, optional): specifies the decimal accuracy. Default = ``2`` decimal digits
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreatePatternField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            editmask: str = ...,  # ""
+            literalmask: str = ...,  # ""
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type PatternField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                editmask (str, optional): a character code that determines what the user may enter
+                literalmask (str, optional): contains the initial values that are displayed in the pattern field
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+
+            See Also:
+                More details on `Pattern Field, <https://wiki.documentfoundation.org/Documentation/DevGuide/Graphical_User_Interfaces#Pattern_Field>`__
+            """
+            ...
+        def CreateProgressBar(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            minvalue: int = ...,
+            maxvalue: int = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type ProgressBar in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                minvalue (int, optional): the smallest value that can be entered in the control. Default is ``0``
+                maxvalue (int, optional): the largest value that can be entered in the control. Default is ``100``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateRadioButton(
+            self, controlname: str, place: Any, multiline: bool = ...
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type RadioButton in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                multiline (bool, optional): When True the caption may be displayed on more than one line. Default ``False``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateScrollBar(
+            self,
+            controlname: str,
+            place: Any,
+            orientation: Literal["H", "Horizontal", "V", "Vertical"],
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            minvalue: int = ...,
+            maxvalue: int = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type ScrollBar in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                orientation (str): Orientation kind, "H[orizontal]" or "V[ertical]".
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                minvalue (int, optional): the smallest value that can be entered in the control. Default is ``0``.
+                maxvalue (int, optional): the largest value that can be entered in the control. Default is ``100``.
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateTableControl(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            rowheaders: bool = ...,
+            columnheaders: bool = ...,
+            scrollbars: Literal[
+                "H", "Horizontal", "V", "Vertical", "B", "Both", "N", "None"
+            ] = ...,
+            gridlines: bool = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type TableControl in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                rowheaders (bool, optional): when True, the row headers are shown. Default is ``True``.
+                columnheaders (bool, optional): when True, the column headers are shown. Default is ``True``.
+                scrollbars (str, optional): H[orizontal] or V[ertical] or B[oth] or N[one] (default). Defaults to "None".
+                gridlines (bool, optional): when True horizontal and vertical lines are painted between the grid cells. Default is ``False``.
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateTextField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            multiline: bool = ...,
+            maximumlength: int = ...,
+            passwordcharacter: str = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type TextField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                multiline (bool, optional): When True, the caption may be displayed on more than one line. Default is ``False``.
+                maximumlength (int, optional): the maximum character count, ``0`` means unlimited. Defaults to ``0``.
+                passwordcharacter (str, optional): a single character specifying the echo for a password text field . Defaults to "".
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                MultiLine must be False to have PasswordCharacter being applied.
+
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateTimeField(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+            mintime: datetime.datetime = ...,
+            maxtime: datetime.datetime = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type TimeField in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+                mintime (datetime.datetime, optional): the smallest time that can be entered in the control. Dafault ``datetime(1899, 12, 30, 0, 0, 0, 0),``
+                maxtime (datetime.datetime, optional): the largest time that can be entered in the control. Default ``datetime(1899, 12, 30, 23, 59, 59, 0)``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
+            """
+            ...
+        def CreateTreeControl(
+            self,
+            controlname: str,
+            place: Any,
+            border: Literal["3D", "FLAT", "NONE"] = ...,
+        ) -> SFDialogs.SF_DialogControl | None:
+            """
+            Create a new control of type TreeControl in the actual dialog.
+
+            Args:
+                controlname (str): the name of the new control. It must not exist yet
+                place (Any): the size and position expressed in APPFONT units.
+                border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
+
+            Returns:
+                SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
+
+
+            Note:
+                ``place`` is:
+
+                    - an array (X, Y, Width, Height)
+                    - a com.sun.star.awt.Rectangle structure
             """
             ...
         def EndExecute(self, returnvalue: int) -> None:
@@ -4143,7 +4901,31 @@ class SFDialogs:
                 `SF_Dialog Help GetTextsFromL10N <https://tinyurl.com/yckkehha#GetTextsFromL10N>`_
             """
             ...
-        def Resize(self, left: int = ..., top: int = ..., width: int = ..., height: int = ...) -> bool:
+        def OrderTabs(
+            self, tabslist: Sequence[str], start: int = ..., increment: int = ...
+        ) -> bool:
+            """
+            Set the tabulation index f a series of controls.
+
+            The sequence of controls are given as an array of control names from the first to the last.
+            Next controls will not be accessible (anymore ?) via the TAB key if >=1 of next conditions is met:
+
+            - if they are not in the given list
+            - if their type is FixedLine, GroupBox or ProgressBar
+            - if the control is disabled
+
+            Args:
+                tabslist (Sequence[str]): an Sequence of valid control names in the order of tabulation
+                start (int, optional): the tab index to be assigned to the 1st control in the list. Default is ``1``
+                increment (int, optional): the difference between ``2`` successive tab indexes. Default is ``1``
+
+            Returns:
+                bool: True when successful; Otherwise, False.
+            """
+            ...
+        def Resize(
+            self, left: int = ..., top: int = ..., width: int = ..., height: int = ...
+        ) -> bool:
             """
             Moves the top left corner of a dialogue box to new coordinates and/or modify its dimensions.
             All distances are expressed in 1/100 mm. Without arguments, the method resets the initial dimensions.
@@ -4160,10 +4942,16 @@ class SFDialogs:
                 bool: True if the resize was successful.
             """
             ...
-        def SetPageManager(self, pilotcontrols:str = ..., tabcontrols: str = ..., wizardcontrols:str = ..., lastpage:int = ...) -> bool:
+        def SetPageManager(
+            self,
+            pilotcontrols: str = ...,
+            tabcontrols: str = ...,
+            wizardcontrols: str = ...,
+            lastpage: int = ...,
+        ) -> bool:
             """
             Defines which controls in a dialog are responsible for switching pages, making it easier to manage the ``Page`` property of a dialog and its controls.
-            
+
             Dialogs may have multiple pages and the currently visible page is defined by the ``Page``dialog property.
             If the ``Page`` property is left unchanged, the default visible page is equal to ``0`` (zero), meaning
             that no particular page is defined and all visible controls are displayed regardless of the value set in
@@ -4171,9 +4959,9 @@ class SFDialogs:
 
             When the ``Page`` property of a dialog is changed to some other value such as ``1``, ``2``, ``3`` and so forth,
             then only the controls whose ``Page`` property match the current dialog page will be displayed.
-            
+
             By using the SetPageManager method it is possible to define four types of page managers:
-            
+
                 - List box or combo box: in this case, each entry in the list box or combo box corresponds to a page. The first item refers to Page 1, the second items refers to Page 2 and so on.
                 - Group of radio buttons: defines a group of radio buttons that will control which page is visible.
                 - Sequence of buttons: defines a set of buttons, each of which corresponding to a dialog page. This can be used to emulate a tabbed interface by placing buttons side by side in the dialog.
@@ -4392,6 +5180,23 @@ class SFDialogs:
         # endregion Properties
     # endregion SF_Dialog CLASS
 
+    # region SF_NewDialog CLASS
+
+    class SF_NewDialog(SFServices):
+        """
+        Pseudo service never returned from the Basic world. A SF_Dialog instance is returned instead.
+        Main purpose: manage the arguments of CreateScriptService() for the creation of a dialog from scratch
+        """
+
+        @classmethod
+        def ReviewServiceArgs(cls, dialogname: str = ..., place: Any = ...) -> tuple:
+            """
+            Transform positional and keyword arguments into positional only
+            Add the XComponentContext as last argument
+            """
+            ...
+    # endregion SF_NewDialog CLASS
+
     # region SF_DialogControl CLASS
     class SF_DialogControl(SFServices):
         """
@@ -4474,7 +5279,9 @@ class SFDialogs:
                 `SF_DialogControl Help AddSubTree <https://tinyurl.com/yb27tk36#AddSubTree>`_
             """
             ...
-        def CreateRoot(self, displayvalue: str, datavalue: str = ...) -> XMutableTreeNode:
+        def CreateRoot(
+            self, displayvalue: str, datavalue: str = ...
+        ) -> XMutableTreeNode:
             """
             Return a new root node of the tree control. The new tree root is inserted below pre-existing root nodes.
 
@@ -4516,6 +5323,28 @@ class SFDialogs:
                 `SF_DialogControl Help FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
             """
             ...
+        def Resize(
+            self, left: int = ..., top: int = ..., width: int = -..., height: int = ...
+        ) -> bool:
+            """
+            Move the top-left corner of the control to new coordinates and/or modify its dimensions.
+            Without arguments, the method resets the initial dimensions and position.
+            Attributes denoting the position and size of a control are expressed in "Map AppFont" units.
+
+            Map AppFont units are device and resolution independent.
+            One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
+            The dialog editor (= the Basic IDE) also uses Map AppFont units.
+
+            Args:
+                left (int, optional): the horizontal distance from the top-left corner. It may be negative.
+                top (int, optional): the vertical distance from the top-left corner. It may be negative.
+                width (int, optional): the horizontal width of the rectangle containing the Dialog. It must be positive.
+                height (int, optional): the vertical height of the rectangle containing the Dialog. It must be positive.
+
+            Returns:
+                bool: True when successful; Otherwise, False.
+            """
+            ...
         def SetFocus(self) -> bool:
             """
             Set the focus on the current Control instance.
@@ -4528,7 +5357,13 @@ class SFDialogs:
                 `SF_DialogControl Help SetFocus <https://tinyurl.com/yb27tk36#SetFocus>`_
             """
             ...
-        def SetTableData(self, dataarray: tuple, widths: Tuple[int, ...] = ..., alignments: str = ...) -> bool:
+        def SetTableData(
+            self,
+            dataarray: tuple,
+            widths: Tuple[int, ...] = ...,
+            alignments: str = ...,
+            rowheaderwidth: int = ...,
+        ) -> bool:
             """
             Fill a table control with the given data. Preexisting data is erased.
 
@@ -4552,9 +5387,13 @@ class SFDialogs:
                 alignments (str, optional): the column's horizontal alignment as a string with length = number of columns.
                     Possible characters are: L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
                     Defaults to ''.
+                rowheaderwidth (int, optional): width of the row header column expressed in AppFont units. Defaults to ``10``.
 
             Returns:
                 bool: True when successful.
+
+            Note:
+                ``rowheaderwidth`` argument is ignored when the TableControl has no row header.
 
             See Also:
                 `SF_DialogControl Help SetTableData <https://tinyurl.com/yb27tk36#SetTableData>`_
@@ -4579,6 +5418,12 @@ class SFDialogs:
 
         # region Properties
         # Root related properties do not start with X and, nevertheless, return a UNO object
+        @property
+        def Border(self) -> Literal["3D", "FLAT", "NONE"]:
+            """The Border property refers to the surrounding of the control: 3D, FLAT or NONE"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
+            ...
         @property
         def Cancel(self) -> bool:
             """
@@ -4656,6 +5501,12 @@ class SFDialogs:
                 - TimeField
                 - FormattedField (read-only)
             """
+            ...
+        @property
+        def Height(self) -> int:
+            """The Height property refers to the height of the control"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
             ...
         @property
         def ListCount(self) -> int:
@@ -4991,6 +5842,12 @@ class SFDialogs:
             """
             ...
         @property
+        def URL(self) -> str:
+            """The URL property refers to the URL to open when the control is clicked"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
+            ...
+        @property
         def Value(self) -> Any:
             """
             Gets/Sets control type.
@@ -5007,6 +5864,24 @@ class SFDialogs:
             Applicable Controls:
                 All
             """
+            ...
+        @property
+        def Width(self) -> int:
+            """TThe Width property refers to the Width of the control"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
+            ...
+        @property
+        def X(self) -> int:
+            """The X property refers to the X coordinate of the top-left corner of the control"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
+            ...
+        @property
+        def Y(self) -> int:
+            """The Y property refers to the Y coordinate of the top-left corner of the control"""
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_dialogcontrol.html?&DbPAR=SHARED
             ...
         @property
         def XControlModel(self) -> XControlModel:
@@ -5095,7 +5970,9 @@ class SFDocuments:
                 `SF_Document Help CloseDocument <https://tinyurl.com/ybujrgjk#CloseDocument>`_
             """
             ...
-        def CreateMenu(self, menuheader: str, before: Any = ..., submenuchar: str = ...) -> SFWidgets.SF_Menu:
+        def CreateMenu(
+            self, menuheader: str, before: Any = ..., submenuchar: str = ...
+        ) -> SFWidgets.SF_Menu:
             """
             Creates a new menu entry in the menubar of a given document window.
 
@@ -5113,6 +5990,25 @@ class SFDocuments:
 
             Returns:
                 SFWidgets.SF_PopupMenu: menu
+            """
+            ...
+        def Echo(self, echoon: bool = ..., hourglass: bool = ...) -> None:
+            """
+            While a script is executed any display update resulting from that execution
+            is done immediately.
+
+            For performance reasons it might be an advantage to differ the display updates
+            up to the end of the script. This is where pairs of Echo() methods to set and reset the removal of the
+            immediate updates may be beneficial.
+
+            Optionally the actual mouse pointer can be modified to the image of an hourglass.
+
+            Args:
+                echoon (bool, optional): when False, the display updates are suspended. Default is ``True``.
+                hourglass (bool, optional): when True, the mouse pointer is changed to an hourglass. Default is ``False``.
+
+            Returns:
+                None:
             """
             ...
         def ExportAsPDF(
@@ -5247,7 +6143,9 @@ class SFDocuments:
                 `SF_Document Help SaveCopyAs <https://tinyurl.com/ybujrgjk#SaveCopyAs>`_
             """
             ...
-        def SetPrinter(self, printer: str = ..., orientation: str = ..., paperformat: str = ...) -> bool:
+        def SetPrinter(
+            self, printer: str = ..., orientation: str = ..., paperformat: str = ...
+        ) -> bool:
             """
             Define the printer options for the document.
 
@@ -5273,6 +6171,20 @@ class SFDocuments:
             See Also:
                 `SF_Document Help SetPrinter <https://tinyurl.com/ybujrgjk#SetPrinter>`_
             """
+            ...
+        def Toolbars(self, toolbarname: str = ...) -> Any:
+            """
+            Returns either a list of the available toolbar names in the actual document
+            or a Toolbar object instance.
+
+            Args:
+                toolbarname (str, optional): the usual name of one of the available toolbars.
+
+            Returns:
+                Any: A zero-based array of toolbar names when the argument is absent, or a new Toolbar object instance from the SF_Widgets library.
+            """
+            # TODO update this doc when the help becomes available online.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_document.html?&DbPAR=SHARED
             ...
         # endregion methods
 
@@ -5323,6 +6235,12 @@ class SFDocuments:
         def IsDraw(self) -> bool:
             """
             Gets if instance is Draw document.
+            """
+            ...
+        @property
+        def IsFormDocument(self) -> bool:
+            """
+            Gets if instance is form document.
             """
             ...
         @property
@@ -5436,7 +6354,9 @@ class SFDocuments:
                 `SF_Base Help FormDocuments <https://tinyurl.com/ya4lp2mq#FormDocuments>`_
             """
             ...
-        def GetDatabase(self, user: str = ..., password: str = ...) -> SFDatabases.SF_Database | None:
+        def GetDatabase(
+            self, user: str = ..., password: str = ...
+        ) -> SFDatabases.SF_Database | None:
             """
             Returns a Database instance (service = SFDatabases.Database) giving access
             to the execution of SQL commands on the database defined and/or stored in
@@ -5502,7 +6422,7 @@ class SFDocuments:
 
             Note:
                 Closing the Base document will cause the Data View window to be closed as well.
-            
+
             See Also:
                 `SF_Base Help OpenQuery <https://tinyurl.com/ya4lp2mq#OpenQuery>`_
             """
@@ -5520,15 +6440,17 @@ class SFDocuments:
 
             Returns:
                 object:
-            
+
             Note:
                 Closing the Base document will cause the Data View window to be closed as well.
-            
+
             See Also:
                 `SF_Base Help OpenTable <https://tinyurl.com/ya4lp2mq#OpenTable>`_
             """
             ...
-        def PrintOut(self, formdocument: str, pages: str = ..., copies: int = ...) -> bool:
+        def PrintOut(
+            self, formdocument: str, pages: str = ..., copies: int = ...
+        ) -> bool:
             """
             Send the content of the given form document to the printer.
             The printer might be defined previously by default, by the user or by the SetPrinter() method.
@@ -5591,7 +6513,7 @@ class SFDocuments:
         - exchange of data between Basic data structures and Calc ranges of values
 
         See Also:
-           `SF_Calc Help <https://tinyurl.com/y7jwr7b7>`_
+            `SF_Calc Help <https://tinyurl.com/y7jwr7b7>`_
         """
 
         # region methods
@@ -5840,7 +6762,9 @@ class SFDocuments:
                 `SF_Calc Help Activate <https://tinyurl.com/y7jwr7b7#Activate>`_
             """
             ...
-        def Charts(self, sheetname: str, chartname: str = ...) -> Tuple[str] | "SFDocuments.SF_Chart":
+        def Charts(
+            self, sheetname: str, chartname: str = ...
+        ) -> Tuple[str] | "SFDocuments.SF_Chart":
             """
             Returns either the list with the names of all chart objects in a given sheet or a single Chart service instance.
             * If only ``sheetname`` is specified, an zero-based array of strings containing the names of all charts is returned.
@@ -5859,7 +6783,9 @@ class SFDocuments:
                 `SF_Calc Help Charts <https://tinyurl.com/y7jwr7b7#Charts>`_
             """
             ...
-        def ClearAll(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
+        def ClearAll(
+            self, range: str, filterformula: str = ..., filterscope: str = ...
+        ) -> None:
             """
             Clears all the contents and formats of the given range.
 
@@ -5872,7 +6798,7 @@ class SFDocuments:
             Note:
                 ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
                 The following values are accepted:
-                
+
                 - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
                 - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
                 - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
@@ -5881,7 +6807,9 @@ class SFDocuments:
                 `SF_Calc Help ClearAll <https://tinyurl.com/y7jwr7b7#ClearAll>`_
             """
             ...
-        def ClearFormats(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
+        def ClearFormats(
+            self, range: str, filterformula: str = ..., filterscope: str = ...
+        ) -> None:
             """
             Clears the formats and styles in the given range.
 
@@ -5894,7 +6822,7 @@ class SFDocuments:
             Note:
                 ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
                 The following values are accepted:
-                
+
                 - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
                 - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
                 - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
@@ -5903,7 +6831,9 @@ class SFDocuments:
                 `SF_Calc Help ClearFormats <https://tinyurl.com/y7jwr7b7#ClearFormats>`_
             """
             ...
-        def ClearValues(self, range: str, filterformula: str = ..., filterscope:str = ...) -> None:
+        def ClearValues(
+            self, range: str, filterformula: str = ..., filterscope: str = ...
+        ) -> None:
             """
             Clears the values and formulas in the given range.
 
@@ -5916,7 +6846,7 @@ class SFDocuments:
             Note:
                 ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
                 The following values are accepted:
-                
+
                 - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
                 - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
                 - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
@@ -5925,7 +6855,9 @@ class SFDocuments:
                 `SF_Calc Help ClearValues <https://tinyurl.com/y7jwr7b7#ClearValues>`_
             """
             ...
-        def CompactLeft(self, range: str, wholecolumn: bool = ..., filterformula: str = ...) -> str:
+        def CompactLeft(
+            self, range: str, wholecolumn: bool = ..., filterformula: str = ...
+        ) -> str:
             """
             Deletes the columns of a specified range that match a filter expressed as a Calc formula.
             The filter is applied to each column to decide whether it will be deleted or not.
@@ -5951,7 +6883,9 @@ class SFDocuments:
                 str: string with the range address of the compacted range. If all columns are deleted, then an empty string is returned.
             """
             ...
-        def CompactUp(self, range: str, wholerow: bool = ..., filterformula: str = ...) -> str:
+        def CompactUp(
+            self, range: str, wholerow: bool = ..., filterformula: str = ...
+        ) -> str:
             """
             Deletes the rows of a specified range that match a filter expressed as a Calc formula.
             The filter is applied to each row to decide whether it will be deleted or not.
@@ -6030,7 +6964,9 @@ class SFDocuments:
                 `SF_Calc Help CopySheet <https://tinyurl.com/y7jwr7b7#CopySheet>`_
             """
             ...
-        def CopySheetFromFile(self, filename: str, sheetname: str, newname: str, beforesheet: int = ...) -> bool:
+        def CopySheetFromFile(
+            self, filename: str, sheetname: str, newname: str, beforesheet: int = ...
+        ) -> bool:
             """
             Copies a specified sheet from a closed Calc document and pastes it before an existing
             sheet or at the end of the list of sheets of the file referred to by a ``Document`` object.
@@ -6238,7 +7174,9 @@ class SFDocuments:
                 `SF_Calc Help DSum <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
             ...
-        def ExportRangeToFile(self, range: str, filename: str, imagetype: str = ..., overwrite: bool = ...) -> bool:
+        def ExportRangeToFile(
+            self, range: str, filename: str, imagetype: str = ..., overwrite: bool = ...
+        ) -> bool:
             """
             Exports the specified range as an image or PDF file.
 
@@ -6318,7 +7256,9 @@ class SFDocuments:
                 `SF_Calc Help GetColumnName <https://tinyurl.com/y7jwr7b7#GetColumnName>`_
             """
             ...
-        def GetFormula(self, range: str) -> str | Tuple[str, str] | Tuple[Tuple[str, ...], ...]:
+        def GetFormula(
+            self, range: str
+        ) -> str | Tuple[str, str] | Tuple[Tuple[str, ...], ...]:
             """
             Get the formula(s) stored in the given range of cells as a single string, a 1D or a 2D tuple of strings.
 
@@ -6346,7 +7286,9 @@ class SFDocuments:
                 `SF_Calc Help GetValue <https://tinyurl.com/y7jwr7b7#GetValue>`_
             """
             ...
-        def ImportFromCSVFile(self, filename: str, destinationcell: str, filteroptions: str = ...) -> str:
+        def ImportFromCSVFile(
+            self, filename: str, destinationcell: str, filteroptions: str = ...
+        ) -> str:
             """
             Imports the contents of a CSV-formatted text file and places it on a given destination cell.
 
@@ -6618,7 +7560,9 @@ class SFDocuments:
                 `SF_Calc Help Printf <https://tinyurl.com/y7jwr7b7#Printf>`_
             """
             ...
-        def PrintOut(self, sheetname: str = ..., pages: int = ..., copies: int = ...) -> bool:
+        def PrintOut(
+            self, sheetname: str = ..., pages: int = ..., copies: int = ...
+        ) -> bool:
             """
             This method sends the contents of the given sheet to the default printer or to the
             printer defined by the SetPrinter method of the Document service.
@@ -6635,6 +7579,39 @@ class SFDocuments:
             See Also:
                 `SF_Calc Help PrintOut <https://tinyurl.com/y7jwr7b7#PrintOut>`_
             """
+            ...
+        def RemoveDuplicates(
+            self,
+            range: str,
+            columns: int | Sequence[int] = ...,
+            header: bool = ...,
+            casesensitive: bool = ...,
+            mode: Literal["CLEAR", "COMPACT"] = ...,
+        ) -> str:
+            """
+            Remove duplicate values from a range of values.
+            The comparison between rows is done on a subset of the columns in the range.
+
+            The resulting range replaces the input range, in which, either:
+
+            - all duplicate rows are cleared from their content
+            - all duplicate rows are suppressed and rows below are pushed upwards.
+
+            Anyway, the first copy of each set of duplicates is kept and the initial sequence is preserved.
+
+            Args:
+                range (str): the range, as a string, from which the duplicate rows should be removed
+                columns (int, Sequence[int], optional): a column number or a sequence of column numbers to compare; items are in the interval [1 .. range width]. Defaults to 1.
+                header (bool, optional): when True, the first row is a header row. Default is ``False``.
+                casesensitive (bool, optional): for string comparisons. Defaul is ``False``.
+                mode (Literal[&quot;CLEAR&quot;, &quot;COMPACT&quot;], optional): either "CLEAR" or "COMPACT".
+                    For large ranges, the "COMPACT" mode is probably significantly slower. Default is ``COMPACT``
+
+            Returns:
+                str: resulting range as a string
+            """
+            # TODO update docstring when online help becomes available. Specifically check columns argument.
+            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_calc.html?&DbPAR=SHARED
             ...
         def RemoveSheet(self, sheetname: str) -> bool:
             """
@@ -6685,7 +7662,13 @@ class SFDocuments:
                 `SF_Calc Help SetArray <https://tinyurl.com/y7jwr7b7#SetArray>`_
             """
             ...
-        def SetCellStyle(self, targetrange: str, style: str, filterformula: str = ..., filterscope:str = ...) -> str:
+        def SetCellStyle(
+            self,
+            targetrange: str,
+            style: str,
+            filterformula: str = ...,
+            filterscope: str = ...,
+        ) -> str:
             """
             Applies the specified cell style to the given target range.
             The full range is updated and the remainder of the sheet is left untouched.
@@ -6701,7 +7684,7 @@ class SFDocuments:
             Note:
                 ``filterscope`` argument is mandatory if a ``filterformula`` is specified.
                 The following values are accepted:
-                
+
                 - "CELL": The formula specified in the ``filterformula`` argument is expanded once for each cell in range.
                 - "ROW": The formula specified in the ``filterformula`` argument is expanded once for each row in range.
                 - "COLUMN": The formula specified in the ``filterformula`` argument is expanded once for each column in range.
@@ -6786,7 +7769,9 @@ class SFDocuments:
                 `SF_Calc Help ShiftDown <https://tinyurl.com/y7jwr7b7#ShiftDown>`_
             """
             ...
-        def ShiftLeft(self, range: str, wholecolumn: bool = ..., columns: int = ...) -> str:
+        def ShiftLeft(
+            self, range: str, wholecolumn: bool = ..., columns: int = ...
+        ) -> str:
             """
             Deletes the leftmost columns of a given range and moves to the left all cells to the right
             of the affected range. The current selection is not affected.
@@ -6811,7 +7796,9 @@ class SFDocuments:
                 `SF_Calc Help ShiftLeft <https://tinyurl.com/y7jwr7b7#ShiftLeft>`_
             """
             ...
-        def ShiftRight(self, range: str, wholecolumn: int = ..., columns: int = 000) -> str:
+        def ShiftRight(
+            self, range: str, wholecolumn: int = ..., columns: int = 000
+        ) -> str:
             """
             Moves a given range of cells to the right by inserting empty columns.
             The current selection is not affected.
@@ -6940,7 +7927,9 @@ class SFDocuments:
         """
 
         # region Methods
-        def Resize(self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...) -> bool:
+        def Resize(
+            self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...
+        ) -> bool:
             """
             Changes the position of the chart in the current sheet and modifies its width and height.
 
@@ -6968,7 +7957,9 @@ class SFDocuments:
                 `SF_Chart Help Resize <https://tinyurl.com/ydcexzky#Resize>`_
             """
             ...
-        def ExportToFile(self, filename: str, imagetype: str = ..., overwrite: bool = ...) -> bool:
+        def ExportToFile(
+            self, filename: str, imagetype: str = ..., overwrite: bool = ...
+        ) -> bool:
             """
             Saves the chart as an image file in a specified location.
 
@@ -7115,7 +8106,7 @@ class SFDocuments:
         It includes the management of subforms
         Each instance of the current class represents a single form or a single subform
         A form may optionally be (understand "is often") linked to a data source manageable with
-        the SFDatabases.Database service. The current service offers a rapid access to that service.
+        the SFDatabases.Database service. The current service offers rapid access to that service.
 
         See Also:
             `SF_Form Help <https://tinyurl.com/y72zdzjy>`_
@@ -7180,7 +8171,9 @@ class SFDocuments:
                 `SF_Form Help Controls <https://tinyurl.com/y72zdzjy#Controls>`_
             """
             ...
-        def GetDatabase(self, user: str = ..., password: str = ...) -> SFDatabases.SF_Database:
+        def GetDatabase(
+            self, user: str = ..., password: str = ...
+        ) -> SFDatabases.SF_Database:
             """
             Gets a SFDatabases.Database instance giving access to the execution of SQL commands on the database the current form is connected to and/or that is stored in the current Base document.
 
@@ -8005,6 +8998,92 @@ class SFDocuments:
         # endregion Properties
     # endregion SF_FormControl CLASS
 
+    # region SF_FormDocument CLASS
+    class SF_FormDocument(SF_Document, SFServices):
+        """
+        The orchestration of Base form documents (aka Base Forms, but this is confusing)
+        and the identification of and the access to their controls.
+        Form documents are always contained in a Base document.
+        They should not be confused with Writer documents containing forms,
+        even if it is easy to convert the former to the latter.
+        """
+
+        @classmethod
+        def ReviewServiceArgs(cls, windowname: str = ...) -> Tuple[str]:
+            """
+            Transform positional and keyword arguments into positional only
+            """
+            ...
+        def CloseDocument(self) -> bool:
+            """
+            Close the form document and dispose the actual instance
+
+            Returns:
+                bool: True if closure is successful; Otherwise, False.
+            """
+            ...
+        def Forms(self, form: str | int = ...) -> SFDocuments.SF_Form | Sequence[str]:
+            """
+            Return either:
+
+            - the list of the Forms contained in the form document
+            - a SFDocuments.Form object based on its name or its index
+
+            Args:
+                form (str, int, optional): a form stored in the document given by its name or its index.
+                    When absent, the list of available forms is returned
+                    To get the first (unique ?) form stored in the form document, set Form = 0
+
+            Returns:
+                SFDocuments.SF_Form | Sequence[str]: A zero-based array of strings if Form is absent or An instance of the SF_Form class if Form exists
+            """
+            ...
+        def GetDatabase(
+            self, user: str = ..., password: str = ...
+        ) -> SFDatabases.SF_Database | None:
+            """
+            Returns a Database instance (service = SFDatabases.Database) giving access
+            to the execution of SQL commands on the database defined and/or stored in
+            the actual form document
+
+            Args:
+                user (str, optional): the login user name. Defaults to "".
+                password (str, optional): the loging password. Defaults to "".
+
+            Returns:
+                SFDatabases.SF_Database | None: _description_
+            """
+            ...
+        def PrintOut(
+            self,
+            pages: str = ...,
+            copies: int = ...,
+            printbackground: bool = ...,
+            printblankpages: bool = ...,
+            printevenpages: bool = ...,
+            printoddpages: bool = ...,
+            printimages: bool = ...,
+        ) -> bool:
+            """
+            Send the content of the document to the printer.
+
+            The printer might be defined previously by default, by the user or by the SetPrinter() method
+
+            Args:
+                pages (str, optional): the pages to print as a string, like in the user interface. Example: "1-4;10;15-18". Defaults to all pages.
+                copies (int, optional):  the number of copies to print. Defaults to 1.
+                printbackground (bool, optional): print the background image when True. Default is ``True``.
+                printblankpages (bool, optional): when False, omit empty pages. Default is ``False``.
+                printevenpages (bool, optional): print the left pages when True. Default is ``True``.
+                printoddpages (bool, optional): print the right pages when True. Defaults is ``True``.
+                printimages (bool, optional): print the graphic objects when True. Default is ``True``.
+
+            Returns:
+                bool: True when successful; Otherwise, False.
+            """
+            ...
+    # endregion SF_FormDocument CLASS
+
     # region SF_Writer CLASS
     class SF_Writer(SF_Document, SFServices):
         """
@@ -8253,7 +9332,9 @@ class SFWidgets:
                 `SF_PopupMenu Help AddCheckBox <https://tinyurl.com/y7ngmoa8#AddCheckBox>`_
             """
             ...
-        def AddItem(self, menuitem: str, name: str = ..., icon: str = ..., tooltip: str = ...) -> int:
+        def AddItem(
+            self, menuitem: str, name: str = ..., icon: str = ..., tooltip: str = ...
+        ) -> int:
             """
             Inserts a menu entry in the popup menu
 
@@ -8342,103 +9423,257 @@ class SFWidgets:
         # endregion Properties
     # endregion SF_PopupMenu CLASS
 
+    # region SF_Toolbar class
+    class SF_Toolbar(SFServices):
+        """
+        Each component has its own set of toolbars, depending on the component type
+        (Calc, Writer, Basic IDE, ...).
+        In the context of the actual class, a toolbar is presumed defined statically:
+
+        - either by the application
+        - or by a customization done by the user.
+        """
+
+        def ToolbarButtons(
+            self, buttonname: str = ...
+        ) -> SFWidgets.SF_ToolbarButton | Sequence[str]:
+            """
+            Returns either a list of the available toolbar button names in the actual toolbar
+            or a ToolbarButton object instance.
+
+            Args:
+                buttonname (str, optional): the usual name of one of the available buttons in the actual toolbar. Defaults to "".
+
+            Returns:
+                SFWidgets.SF_ToolbarButton | Sequence[str]: A zero-based array of button names when the argument is absent, or a new SF_ToolbarButton object instance.
+            """
+            ...
+    # endregion SF_Toolbar class
+
+    # region SF_ToolbarButton
+    class SF_ToolbarButton(SFServices):
+        """
+        A toolbar consists in a series of graphical controls to trigger actions.
+        The "Toolbar" service gives access to the "ToolbarButton" service to manage
+        the individual buttons belonging to the toolbar.
+        """
+
+        def Execute(self) -> Any:
+            """
+            Execute the command stored in the toolbar button.
+            The command can be a UNO command or a Basic/Python script (expressed in the scripting framework_URI notation)
+
+            Returns:
+                Any: The output of the script or None
+            """
+            ...
+    # endregion SF_ToolbarButton
+
 # endregion SFWidgets CLASS    (alias of SFWidgets Basic library)
 
 # region CreateScriptService()
 #   region array
 @overload
-def CreateScriptService(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
+def CreateScriptService(
+    service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Array: ...
 @overload
-def createscriptservice(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
+def createscriptservice(
+    service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Array: ...
 @overload
-def createScriptService(service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Array: ...
+def createScriptService(
+    service: Literal["Array", "array", "ScriptForge.Array"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Array: ...
 
 #   endregion array
 
 #   region basic
 @overload
-def CreateScriptService(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
+def CreateScriptService(
+    service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Basic: ...
 @overload
 @overload
-def createscriptservice(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
+def createscriptservice(
+    service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Basic: ...
 @overload
 @overload
-def createScriptService(service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Basic: ...
-
+def createScriptService(
+    service: Literal["Basic", "basic", "ScriptForge.Basic"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Basic: ...
 
 #   endregion basic
 
 #   region dictionary
 @overload
-def CreateScriptService(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
+def CreateScriptService(
+    service: Literal["Dictionary", "dictionary", "ScriptForge.Dictionary"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Dictionary: ...
 @overload
-def createscriptservice(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
+def createscriptservice(
+    service: Literal["Dictionary", "dictionary", "ScriptForge.Dictionary"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Dictionary: ...
 @overload
-def createScriptService(service: Literal["Dictionary","dictionary", "ScriptForge.Dictionary"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Dictionary: ...
+def createScriptService(
+    service: Literal["Dictionary", "dictionary", "ScriptForge.Dictionary"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Dictionary: ...
 
 #   endregion dictionary
 
 #   region exception
 @overload
-def CreateScriptService(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
+def CreateScriptService(
+    service: Literal["Exception", "exception", "ScriptForge.Exception"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Exception: ...
 @overload
-def createscriptservice(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
+def createscriptservice(
+    service: Literal["Exception", "exception", "ScriptForge.Exception"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Exception: ...
 @overload
-def createScriptService(service: Literal["Exception", "exception", "ScriptForge.Exception"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Exception: ...
+def createScriptService(
+    service: Literal["Exception", "exception", "ScriptForge.Exception"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Exception: ...
+
 #   endregion exception
 
 #   region FileSystem
 @overload
-def CreateScriptService(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
+def CreateScriptService(
+    service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_FileSystem: ...
 @overload
-def createscriptservice(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
+def createscriptservice(
+    service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_FileSystem: ...
 @overload
-def createScriptService(service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_FileSystem: ...
+def createScriptService(
+    service: Literal["FileSystem", "filesystem", "ScriptForge.FileSystem"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_FileSystem: ...
+
 #   endregion FileSystem
 
 #   region SF_L10N
 @overload
-def CreateScriptService(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
+def CreateScriptService(
+    service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_L10N: ...
 @overload
-def createscriptservice(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
+def createscriptservice(
+    service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_L10N: ...
 @overload
-def createScriptService(service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_L10N: ...
+def createScriptService(
+    service: Literal["L10N", "l10n", "ScriptForge.L10N"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_L10N: ...
+
 #   endregion SF_L10N
 
 #   region SF_Platform
 @overload
-def CreateScriptService(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
+def CreateScriptService(
+    service: Literal["Platform", "platform", "ScriptForge.Platform"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Platform: ...
 @overload
-def createscriptservice(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
+def createscriptservice(
+    service: Literal["Platform", "platform", "ScriptForge.Platform"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Platform: ...
 @overload
-def createScriptService(service: Literal["Platform", "platform", "ScriptForge.Platform"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Platform: ...
+def createScriptService(
+    service: Literal["Platform", "platform", "ScriptForge.Platform"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Platform: ...
+
 #   endregion SF_Platform
 
 #   region SF_Region
 @overload
-def CreateScriptService(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
+def CreateScriptService(
+    service: Literal["Region", "region", "ScriptForge.Region"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Region: ...
 @overload
-def createscriptservice(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
+def createscriptservice(
+    service: Literal["Region", "region", "ScriptForge.Region"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Region: ...
 @overload
-def createScriptService(service: Literal["Region", "region", "ScriptForge.Region"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Region: ...
+def createScriptService(
+    service: Literal["Region", "region", "ScriptForge.Region"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Region: ...
+
 #   endregion SF_Region
 
 #   region SF_Session
 @overload
-def CreateScriptService(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
+def CreateScriptService(
+    service: Literal["Session", "session", "ScriptForge.Session"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Session: ...
 @overload
-def createscriptservice(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
+def createscriptservice(
+    service: Literal["Session", "session", "ScriptForge.Session"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Session: ...
 @overload
-def createScriptService(service: Literal["Session", "session", "ScriptForge.Session"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Session: ...
+def createScriptService(
+    service: Literal["Session", "session", "ScriptForge.Session"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_Session: ...
+
 #   endregion SF_Session
 
 #   region SF_String
 @overload
-def CreateScriptService(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
+def CreateScriptService(
+    service: Literal["String", "string", "ScriptForge.String"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_String: ...
 @overload
-def createscriptservice(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
+def createscriptservice(
+    service: Literal["String", "string", "ScriptForge.String"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_String: ...
 @overload
-def createScriptService(service: Literal["String", "string", "ScriptForge.String"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_String: ...
+def createScriptService(
+    service: Literal["String", "string", "ScriptForge.String"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFScriptForge.SF_String: ...
+
 #   endregion SF_String
 
 #   region SF_TextStream
@@ -8459,47 +9694,94 @@ def createScriptService(
 
 #   region SF_Timer
 @overload
-def CreateScriptService(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
+def CreateScriptService(
+    service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Timer: ...
 @overload
-def createscriptservice(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
+def createscriptservice(
+    service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Timer: ...
 @overload
-def createScriptService(service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_Timer: ...
+def createScriptService(
+    service: Literal["Timer", "timer", "ScriptForge.Timer"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_Timer: ...
+
 #   endregion SF_Timer
 
 #   region SF_UI
 @overload
-def CreateScriptService(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
+def CreateScriptService(
+    service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_UI: ...
 @overload
-def createscriptservice(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
+def createscriptservice(
+    service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_UI: ...
 @overload
-def createScriptService(service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any) -> SFScriptForge.SF_UI: ...
+def createScriptService(
+    service: Literal["UI", "ui", "ScriptForge.UI"], *args: Any, **kwargs: Any
+) -> SFScriptForge.SF_UI: ...
+
 #   endregion SF_UI
 
 #   region SF_Database
 @overload
-def CreateScriptService(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
+def CreateScriptService(
+    service: Literal["Database", "database", "SFDatabases.Database"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Database: ...
 @overload
-def createscriptservice(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
+def createscriptservice(
+    service: Literal["Database", "database", "SFDatabases.Database"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Database: ...
 @overload
-def createScriptService(service: Literal["Database", "database", "SFDatabases.Database"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Database: ...
+def createScriptService(
+    service: Literal["Database", "database", "SFDatabases.Database"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Database: ...
+
 #   endregion SF_Database
 
 #   region SF_Datasheet
 @overload
-def CreateScriptService(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+def CreateScriptService(
+    service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Datasheet: ...
 @overload
-def createscriptservice(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+def createscriptservice(
+    service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Datasheet: ...
 @overload
-def createScriptService(service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"], *args: Any, **kwargs: Any) -> SFDatabases.SF_Datasheet: ...
+def createScriptService(
+    service: Literal["Datasheet", "datasheet", "SFDatabases.Datasheet"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDatabases.SF_Datasheet: ...
+
 #   endregion SF_Datasheet
 
 #   region SF_Dialog
 @overload
-def CreateScriptService(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
+def CreateScriptService(
+    service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any
+) -> SFDialogs.SF_Dialog: ...
 @overload
-def createscriptservice(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
+def createscriptservice(
+    service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any
+) -> SFDialogs.SF_Dialog: ...
 @overload
-def createScriptService(service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any) -> SFDialogs.SF_Dialog: ...
+def createScriptService(
+    service: Literal["Dialog", "dialog", "SFDialogs.Dialog"], *args: Any, **kwargs: Any
+) -> SFDialogs.SF_Dialog: ...
+
 #   endregion SF_Dialog
 
 #   region SF_DialogControl
@@ -8520,29 +9802,56 @@ def createScriptService(
 
 #   region SF_Document
 @overload
-def CreateScriptService(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
+def CreateScriptService(
+    service: Literal["Document", "document", "SFDocuments.Document"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Document: ...
 @overload
-def createscriptservice(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
+def createscriptservice(
+    service: Literal["Document", "document", "SFDocuments.Document"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Document: ...
 @overload
-def createScriptService(service: Literal["Document", "document", "SFDocuments.Document"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Document: ...
+def createScriptService(
+    service: Literal["Document", "document", "SFDocuments.Document"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Document: ...
+
 #   endregion SF_Document
 
 #   region SF_Base
 @overload
-def CreateScriptService(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
+def CreateScriptService(
+    service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Base: ...
 @overload
-def createscriptservice(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
+def createscriptservice(
+    service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Base: ...
 @overload
-def createScriptService(service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Base: ...
+def createScriptService(
+    service: Literal["Base", "base", "SFDocuments.Base"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Base: ...
+
 #   endregion SF_Base
 
 #   region SF_Calc
 @overload
-def CreateScriptService(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
+def CreateScriptService(
+    service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Calc: ...
 @overload
-def createscriptservice(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
+def createscriptservice(
+    service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Calc: ...
 @overload
-def createScriptService(service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Calc: ...
+def createScriptService(
+    service: Literal["Calc", "calc", "SFDocuments.Calc"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Calc: ...
+
 #   endregion SF_Calc
 
 #   region SF_CalcReference
@@ -8563,21 +9872,33 @@ def createScriptService(
 
 #   region SF_Chart
 @overload
-def CreateScriptService(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
+def CreateScriptService(
+    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Chart: ...
 @overload
-def createscriptservice(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
+def createscriptservice(
+    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Chart: ...
 @overload
-def createScriptService(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
+def createScriptService(
+    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Chart: ...
 
 #   endregion SF_Chart
 
 #   region SF_Form
 @overload
-def CreateScriptService(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
+def CreateScriptService(
+    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Form: ...
 @overload
-def createscriptservice(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
+def createscriptservice(
+    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Form: ...
 @overload
-def createScriptService(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
+def createScriptService(
+    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
+) -> SFDocuments.SF_Form: ...
 
 #   endregion SF_Form
 
@@ -8599,29 +9920,62 @@ def createScriptService(
 
 #   region SF_Writer
 @overload
-def CreateScriptService(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
+def CreateScriptService(
+    service: Literal["Writer", "writer", "SFDocuments.Writer"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Writer: ...
 @overload
-def createscriptservice(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
+def createscriptservice(
+    service: Literal["Writer", "writer", "SFDocuments.Writer"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Writer: ...
 @overload
-def createScriptService(service: Literal["Writer", "writer", "SFDocuments.Writer"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Writer: ...
+def createScriptService(
+    service: Literal["Writer", "writer", "SFDocuments.Writer"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFDocuments.SF_Writer: ...
+
 #   endregion SF_Writer
 
 #   region SF_Menu
 @overload
-def CreateScriptService(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
+def CreateScriptService(
+    service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any
+) -> SFWidgets.SF_Menu: ...
 @overload
-def createscriptservice(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
+def createscriptservice(
+    service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any
+) -> SFWidgets.SF_Menu: ...
 @overload
-def createScriptService(service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_Menu: ...
+def createScriptService(
+    service: Literal["Menu", "menu", "SFWidgets.Menu"], *args: Any, **kwargs: Any
+) -> SFWidgets.SF_Menu: ...
+
 #   endregion SF_Menu
 
 #   region SF_PopupMenu
 @overload
-def CreateScriptService(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
+def CreateScriptService(
+    service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFWidgets.SF_PopupMenu: ...
 @overload
-def createscriptservice(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
+def createscriptservice(
+    service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFWidgets.SF_PopupMenu: ...
 @overload
-def createScriptService(service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"], *args: Any, **kwargs: Any) -> SFWidgets.SF_PopupMenu: ...
+def createScriptService(
+    service: Literal["PopupMenu", "popupmenu", "SFWidgets.PopupMenu"],
+    *args: Any,
+    **kwargs: Any,
+) -> SFWidgets.SF_PopupMenu: ...
+
 #   endregion SF_PopupMenu
 
 def CreateScriptService(service: str, *args: Any, **kwargs: Any) -> SFServices | Any:
