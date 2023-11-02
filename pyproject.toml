@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "types-scriptforge"
-version = "2.0.1"
+version = "3.0.0"
 description = "Type annotations for LibreOffice API"
 # name regex
 # https://github.com/python-poetry/poetry-core/commit/01602122f9b2a4cc927d94c543efb5020dfa3817
@@ -35,8 +35,12 @@ types-unopy = ">=1.0.1"
 [[tool.poetry.source]]
 name = "pypi-test"
 url = "https://test.pypi.org/legacy/"
-default = false
-secondary = false
+priority = "supplemental"
+
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
 
 
 [tool.poetry.group.dev.dependencies]
