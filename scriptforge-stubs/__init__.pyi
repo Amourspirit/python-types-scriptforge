@@ -1,6 +1,7 @@
+"""ScriptForge is a Python library that provides a bridge between Python and LibreOffice Basic."""
+# pylint: disable=too-many-lines, invalid-name, line-too-long, too-many-arguments
 # region IMPORTS
 from __future__ import annotations
-import sys
 import datetime
 import time
 from numbers import Number
@@ -52,6 +53,9 @@ if TYPE_CHECKING:
 _T_Singleton = TypeVar(name="_T_Singleton", bound="_Singleton")
 # endregion Types
 
+# pylint: disable=unused-argument
+# pylint: disable=unnecessary-ellipsis
+
 # region MetaClass
 class _Singleton(type):
     """
@@ -90,9 +94,7 @@ class ScriptForge(object, metaclass=_Singleton):
     Version: Literal["7.4"]
     # endregion Class constants
     # Basic dispatcher for Python scripts
-    basicdispatcher: Literal[
-        "@application#ScriptForge.SF_PythonHelper._PythonDispatcher"
-    ]
+    basicdispatcher: Literal["@application#ScriptForge.SF_PythonHelper._PythonDispatcher"]
     # Python helper functions module
     pythonhelpermodule: Literal["ScriptForgeHelper.py"]
     #
@@ -136,9 +138,7 @@ class ScriptForge(object, metaclass=_Singleton):
         ...
     # region ClassMethods
     @classmethod
-    def ConnectToLOProcess(
-        cls, hostname: str = ..., port: int = ...
-    ) -> XComponentContext:
+    def ConnectToLOProcess(cls, hostname: str = ..., port: int = ...) -> XComponentContext:
         """
         Called by the ScriptForge class constructor to establish the connection with
         the requested LibreOffice instance
@@ -175,7 +175,7 @@ class ScriptForge(object, metaclass=_Singleton):
             script (str): See Note
 
         Note:
-            Arg ``script`` is Eithor:
+            Arg ``script`` is Either:
 
             - [@][scope#][library.]module.method - Must not be a class module or method
             - [@] means that the targeted method accepts ParamArray arguments (Basic only)
@@ -186,9 +186,7 @@ class ScriptForge(object, metaclass=_Singleton):
         """
         ...
     @classmethod
-    def InvokeBasicService(
-        cls, basicobject: object, flags: int, method: str, *args: Any
-    ) -> tuple | datetime.datetime:
+    def InvokeBasicService(cls, basicobject: object, flags: int, method: str, *args: Any) -> tuple | datetime.datetime:
         """
         Execute a given Basic script and interpret its result
         This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
@@ -211,7 +209,7 @@ class ScriptForge(object, metaclass=_Singleton):
                 [0]     The returned value - scalar, object reference or a tuple
 
                 [1]     The Basic VarType() of the returned value
-                        Null, Empty and Nothing have different vartypes but return all None to Python
+                        Null, Empty and Nothing have different var types but return all None to Python
 
                 Additionally, when [0] is a tuple:
                     [2]     Number of dimensions in Basic
@@ -318,7 +316,7 @@ class SFServices:
                 a list named 'localProperties' reserved to properties for internal use
                     e.g. oDlg.Controls() is a method that uses '_Controls' to hold the list of available controls
             When:
-                    forceGetProperty = False    # Standard behaviour
+                    forceGetProperty = False    # Standard behavior
             read-only serviceproperties are buffered in Python after their 1st get request to Basic
             Otherwise set it to True to force a recomputation at each property getter invocation
             If there is a need to handle a specific property in a specific manner:
@@ -360,16 +358,16 @@ class SFServices:
     moduleStandard: Literal[1]
     # endregion CONST
 
-    # region Attribs
+    # region Attributes
     forceGetProperty: bool = ...
-    """Define the default behaviour for read-only properties: buffer their values in Python"""
+    """Define the default behavior for read-only properties: buffer their values in Python"""
     propertysynonyms: dict = ...
-    """Empty dictionary for lower/camelcased homonyms or properties"""
+    """Empty dictionary for lower/camel-cased homonyms or properties"""
     internal_attributes: tuple
     # Shortcuts to script provider interfaces
     SIMPLEEXEC: Any
     EXEC: Any
-    # endregion Attribs
+    # endregion Attributes
 
     # region Methods
     def __init__(
@@ -380,7 +378,7 @@ class SFServices:
         name: str = ...,
     ) -> None:
         """
-         Trivial initialization of internal properties
+        Trivial initialization of internal properties
         If the subclass has its own __init()__ method, a call to this one should be its first statement.
         Afterwards localProperties should be filled with the list of its own properties
 
@@ -398,17 +396,24 @@ class SFServices:
         """
         Dispose
         """
-    def ExecMethod(
-        self, flags: int = ..., methodname: str = ..., *args: Any
-    ) -> Any: ...
+    # pylint: disable=keyword-arg-before-vararg
+    def ExecMethod(self, flags: int = ..., methodname: str = ..., *args: Any) -> Any:
+        """Execute Method."""
+        ...
     def GetProperty(self, propertyname: str, arg=None):
         """
         Get the given property from the Basic world
         """
         ...
-    def Properties(self) -> list: ...
-    def basicmethods(self) -> Any: ...
-    def basicproperties(self) -> Any: ...
+    def Properties(self) -> list:
+        """Properties list."""
+        ...
+    def basicmethods(self) -> Any:
+        """Basic Methods."""
+        ...
+    def basicproperties(self) -> Any:
+        """Basic Properties."""
+        ...
     def SetProperty(self, propertyname: str, value: Any) -> Any:
         """
         Set the given property to a new value in the Basic world
@@ -420,6 +425,8 @@ class SFServices:
 
 # region SFScriptForge CLASS    (alias of ScriptForge Basic library)
 class SFScriptForge:
+    """SF Script Forge Classes."""
+
     ...
 
     # region SF_Array CLASS
@@ -439,9 +446,7 @@ class SFScriptForge:
             `Array Help <https://tinyurl.com/y8b7bq2d>`_
         """
 
-        def ImportFromCSVFile(
-            self, filename: str, delimiter: str = ..., dateformat: str = ...
-        ) -> Any:
+        def ImportFromCSVFile(self, filename: str, delimiter: str = ..., dateformat: str = ...) -> Any:
             """
             Difference with the Basic version: dates are returned in their iso format,
             not as any of the datetime objects.
@@ -467,7 +472,7 @@ class SFScriptForge:
     class SF_Basic(SFServices, metaclass=_Singleton):
         """
         This service proposes a collection of Basic methods to be executed in a Python context
-        simulating the exact syntax and behaviour of the identical Basic builtin method.
+        simulating the exact syntax and behavior of the identical Basic builtin method.
         Typical example:
             SF_Basic.MsgBox('This has to be displayed in a message box')
 
@@ -475,7 +480,7 @@ class SFScriptForge:
             core/basic/source/runtime/stdobj.cxx
 
         See Also:
-           `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
+            `ScriptForge.Basic Service <https://tinyurl.com/ycv7q52r>`_
         """
 
         # region CONST
@@ -542,20 +547,16 @@ class SFScriptForge:
             ...
         @staticmethod
         def CDateToUnoDateTime(
-            date: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
+            date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
         ) -> UNODateTime | Any:
             """
-            Converts a date representation into the ccom.sun.star.util.DateTime date format
+            Converts a date representation into the ``com.sun.star.util.DateTime`` date format
 
             Args:
                 date (float | time.localtime | datetime | date | time ]): datetime like object
 
             Returns:
-                UNODateTime: a com.sun.star.util.DateTime
+                UNODateTime: a ``com.sun.star.util.DateTime``.
 
             Note:
                 When arg ``date`` is a ``float`` it is considered a ``time.time`` value.
@@ -595,7 +596,7 @@ class SFScriptForge:
             Returns:
                 str: The same file name in URL format
 
-            Exampe:
+            Example:
                 .. code::
 
                     >>> a = bas.ConvertToUrl('C:\\boot.sys')
@@ -612,7 +613,7 @@ class SFScriptForge:
             Creates a uno service
 
             Args:
-                servicename (str):  a string representing the service to creat
+                servicename (str):  a string representing the service to create.
 
             Returns:
                 XInterface: A UNO object
@@ -643,11 +644,7 @@ class SFScriptForge:
             cls,
             interval: str,
             number: int,
-            date: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
+            date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
         ) -> UNODateTime | Any:
             """
             Adds a date or time interval to a given date/time a number of times and returns the resulting date.
@@ -682,60 +679,52 @@ class SFScriptForge:
         def DateDiff(
             cls,
             interval: str,
-            date1: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
-            date2: float
-            | time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time,
+            date1: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
+            date2: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
             firstdayofweek: int = ...,
             firstweekofyear: int = ...,
         ) -> int:
             """
-             Gets the number of date or time intervals between two given date/time values.
+            Gets the number of date or time intervals between two given date/time values.
 
-             Args:
-                 interval (str): A string expression specifying the date interval, as detailed in above DateAdd method.
-                 date1 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The first datetime.datetime values to be compared.
-                 date2 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The second datetime.datetime values to be compared.
-                 firstdayofweek (int, optional): An optional parameter that specifies the starting day of a week.
-                 firstweekofyear (int, optional): An optional parameter that specifies the starting week of a year.
+            Args:
+                interval (str): A string expression specifying the date interval, as detailed in above DateAdd method.
+                date1 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The first datetime.datetime values to be compared.
+                date2 (float | time.struct_time | datetime.datetime | datetime.date | datetime.time): The second datetime.datetime values to be compared.
+                firstdayofweek (int, optional): An optional parameter that specifies the starting day of a week.
+                firstweekofyear (int, optional): An optional parameter that specifies the starting week of a year.
 
-             Note:
-                 Arg ``interval`` valid expression values:
-                     - yyyy - year
-                     - q - Quarter
-                     - m - Month
-                     - y - Day of year
-                     - w - Weekday
-                     - ww - Week of year
-                     - d - Day
-                     - h - Hour
-                     - n - Minute
-                     - s - Second
+            Note:
+                Arg ``interval`` valid expression values:
+                    - yyyy - year
+                    - q - Quarter
+                    - m - Month
+                    - y - Day of year
+                    - w - Weekday
+                    - ww - Week of year
+                    - d - Day
+                    - h - Hour
+                    - n - Minute
+                    - s - Second
 
-                 Arg ``firstdayofweek`` values:
-                     - 0 - Use system default value
-                     - 1 - Sunday (default)
-                     - 2 - Monday
-                     - 3 - Tuesday
-                     - 4 - Wednesday
-                     - 5 - Thursday
-                     - 6 - Friday
-                     - 7 - Saturday
+                Arg ``firstdayofweek`` values:
+                    - 0 - Use system default value
+                    - 1 - Sunday (default)
+                    - 2 - Monday
+                    - 3 - Tuesday
+                    - 4 - Wednesday
+                    - 5 - Thursday
+                    - 6 - Friday
+                    - 7 - Saturday
 
-                 Arg ``firstweekofyear`` values:
-                     - 0 - Use system default value
-                     - 1 - Week 1 is the week with January, 1st (default)
-                     - 2 - Week 1 is the first week containing four or more days of that year
-                     - 3 - Week 1 is the first week containing only days of the new year
+                Arg ``firstweekofyear`` values:
+                    - 0 - Use system default value
+                    - 1 - Week 1 is the week with January, 1st (default)
+                    - 2 - Week 1 is the first week containing four or more days of that year
+                    - 3 - Week 1 is the first week containing only days of the new year
 
-             See Also:
-                 `SF_Basic Help DateDiff <https://tinyurl.com/ycv7q52r#DateDiff>`_
+            See Also:
+                `SF_Basic Help DateDiff <https://tinyurl.com/ycv7q52r#DateDiff>`_
 
             Returns:
                 int: A Number
@@ -745,11 +734,7 @@ class SFScriptForge:
         def DatePart(
             cls,
             interval: str,
-            date: time.struct_time
-            | datetime.datetime
-            | datetime.date
-            | datetime.time
-            | str,
+            date: time.struct_time | datetime.datetime | datetime.date | datetime.time | str,
             firstdayofweek: int = ...,
             firstweekofyear: int = ...,
         ) -> int:
@@ -829,7 +814,7 @@ class SFScriptForge:
             ...
         @classmethod
         def Format(
-            cls, expression: datetime.datetime | Number, format: str = ...
+            cls, expression: datetime.datetime | Number, format: str = ...  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Converts a number to a string, and then formats it according to the format that you specify.
@@ -912,6 +897,8 @@ class SFScriptForge:
             ...
 
         class GlobalScope(metaclass=_Singleton):
+            """Global Scope Singleton Class."""
+
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
             def BasicLibraries(cls) -> XLibraryContainer:
                 """
@@ -1072,7 +1059,9 @@ class SFScriptForge:
 
         # region Properties
         @property
-        def StarDesktop(self) -> XDesktop: ...
+        def StarDesktop(self) -> XDesktop:
+            """Gets Desktop"""
+            ...
         starDesktop, stardesktop = StarDesktop, StarDesktop
         @property
         def ThisComponent(self) -> XComponent | None:
@@ -1091,12 +1080,12 @@ class SFScriptForge:
         @property
         def ThisDatabaseDocument(self) -> XEmbeddedScripts | None:
             """
-            If the script is being executed from a Base document or any of its subcomponents
+            If the script is being executed from a Base document or any of its sub-components
             this method returns the main component of the Base instance.
 
             Returns:
-                 XEmbeddedScripts | None: the current Base (main) component or
-                    None when not a Base document or one of its subcomponents
+                XEmbeddedScripts | None: the current Base (main) component or
+                    None when not a Base document or one of its sub-components
 
             See Also:
                 `SF_Basic Help ThisDatabaseDocument <https://tinyurl.com/ycv7q52r#ThisDatabaseDocument>`_
@@ -1133,7 +1122,7 @@ class SFScriptForge:
             `ScriptForge.Dictionary service <https://tinyurl.com/y9quuboc>`_
         """
 
-        def __init__(self, dic: Optional[dict] = None) -> None: ...
+        def __init__(self, dic: Optional[dict] = None) -> None: ...  # pylint: disable=super-init-not-called
         def ConvertToPropertyValues(self) -> List[PropertyValue]:
             """
             Store the content of the dictionary in an array of PropertyValues.
@@ -1152,9 +1141,7 @@ class SFScriptForge:
                 `SF_Dictionary Help ConvertToPropertyValues <https://tinyurl.com/y9quuboc#ConvertToPropertyValues>`_
             """
             ...
-        def ImportFromPropertyValues(
-            self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = ...
-        ) -> bool:
+        def ImportFromPropertyValues(self, propertyvalues: Tuple[PropertyValue, ...], overwrite: bool = ...) -> bool:
             """
             Inserts the contents of an array of ``PropertyValue`` objects into the current dictionary.
             ``PropertyValue`` Names are used as keys in the dictionary, whereas Values contain
@@ -1191,11 +1178,21 @@ class SFScriptForge:
         """
 
         # region Methods
-        def Console(self, modal: bool = ...) -> Any: ...
-        def ConsoleClear(self, keep: int = ...) -> Any: ...
-        def ConsoleToFile(self, filename: str) -> Any: ...
-        def DebugDisplay(self, *args) -> Any: ...
-        def DebugPrint(self, *args) -> Any: ...
+        def Console(self, modal: bool = ...) -> Any:
+            """Console"""
+            ...
+        def ConsoleClear(self, keep: int = ...) -> Any:
+            """Clear Console"""
+            ...
+        def ConsoleToFile(self, filename: str) -> Any:
+            """Console to file."""
+            ...
+        def DebugDisplay(self, *args) -> Any:
+            """Debug Display"""
+            ...
+        def DebugPrint(self, *args) -> Any:
+            """Debug Print"""
+            ...
         @classmethod
         def PythonShell(cls, variables: dict | None = ...) -> None:
             """
@@ -1282,9 +1279,7 @@ class SFScriptForge:
                 `SF_FileSystem Help BuildPath <https://tinyurl.com/ybxpt7eo#BuildPath>`_
             """
             ...
-        def CompareFiles(
-            self, filename1: str, filename2: str, comparecontents: bool = ...
-        ) -> bool:
+        def CompareFiles(self, filename1: str, filename2: str, comparecontents: bool = ...) -> bool:
             """
             Compare 2 files and return ``True`` if they seem identical.
 
@@ -1304,9 +1299,7 @@ class SFScriptForge:
                 `SF_FileSystem Help CompareFiles <https://tinyurl.com/ybxpt7eo#CompareFiles>`_
             """
             ...
-        def CopyFile(
-            self, source: str, destination: str, overwrite: bool = ...
-        ) -> bool:
+        def CopyFile(self, source: str, destination: str, overwrite: bool = ...) -> bool:
             """
             Copies one or more files from one location to another.
             Returns ``True`` if at least one file has been copied or ``False`` if an error occurred.
@@ -1335,9 +1328,7 @@ class SFScriptForge:
                 `SF_FileSystem Help CopyFile <https://tinyurl.com/ybxpt7eo#CopyFile>`_
             """
             ...
-        def CopyFolder(
-            self, source: str, destination: str, overwrite: bool = ...
-        ) -> bool:
+        def CopyFolder(self, source: str, destination: str, overwrite: bool = ...) -> bool:
             """
             Copies one or more folders from one location to another.
             Returns ``True`` if at least one folder has been copied or ``False`` if an error occurred.
@@ -1483,7 +1474,7 @@ class SFScriptForge:
                 `SF_FileSystem Help FileExists <https://tinyurl.com/ybxpt7eo#FileExists>`_
             """
             ...
-        def Files(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
+        def Files(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:  # pylint: disable=redefined-builtin
             """
             Gets a tuple of the FileNames stored in the given folder. The folder must exist
 
@@ -1727,7 +1718,7 @@ class SFScriptForge:
 
             For instance, the path names ``A//B``, ``A/B/``, ``A/./B`` and ``A/foo/../B`` are all normalized to ``A/B``.
 
-            On Windows, forward slashes ``/`` are converted to backward slashes ``\``.
+            On Windows, forward slashes ``/`` are converted to backward slashes ``\\``.
 
             Args:
                 filename (str): A string representing a valid path name. The file or directory represented by this argument may not exist.
@@ -1818,7 +1809,7 @@ class SFScriptForge:
             self,
             defaultfile: str = ...,
             mode: str = ...,
-            filter: str = ...,
+            filter: str = ...,  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Opens a dialog box to open or save files.
@@ -1860,7 +1851,9 @@ class SFScriptForge:
                 `SF_FileSystem Help PickFolder <https://tinyurl.com/ybxpt7eo#PickFolder>`_
             """
             ...
-        def SubFolders(self, foldername: str, filter: str = ...) -> Tuple[str, ...]:
+        def SubFolders(
+            self, foldername: str, filter: str = ... # pylint: disable=redefined-builtin
+        ) -> Tuple[str, ...]:
             """
             Returns a zero-based array of strings corresponding to the folders stored
             in a given ``foldername``.
@@ -1962,9 +1955,7 @@ class SFScriptForge:
             Transform positional and keyword arguments into positional only
             """
             ...
-        def AddText(
-            self, context: str = ..., msgid: str = ..., comment: str = ...
-        ) -> bool:
+        def AddText(self, context: str = ..., msgid: str = ..., comment: str = ...) -> bool:
             """
             Adds a new entry in the list of localizable strings. It must not exist yet.
 
@@ -2013,9 +2004,7 @@ class SFScriptForge:
                 `SF_L10N Help AddTextsFromDialog <https://tinyurl.com/y77mbtp9#AddTextsFromDialog>`_
             """
             ...
-        def ExportToPOTFile(
-            self, filename: str, header: str = ..., encoding: str = ...
-        ) -> bool:
+        def ExportToPOTFile(self, filename: str, header: str = ..., encoding: str = ...) -> bool:
             """
             Export a set of untranslated strings as a POT file.
             The set of strings has been built either by a succession of AddText() methods
@@ -2391,9 +2380,7 @@ class SFScriptForge:
             """
             ...
         # Usual methods
-        def DSTOffset(
-            self, localdatetime: datetime.datetime, timezone: str, locale: str = ...
-        ) -> int:
+        def DSTOffset(self, localdatetime: datetime.datetime, timezone: str, locale: str = ...) -> int:
             """
             Computes the additional Daylight Saving Time (DST) offset, in minutes, that is applicable to a given region and timezone.
 
@@ -2407,9 +2394,7 @@ class SFScriptForge:
                 int: offset, in minutes, that is applicable to a given region and timezone.
             """
             ...
-        def LocalDateTime(
-            self, utcdatetime: datetime.datetime, timezone: str, locale: str = ...
-        ) -> datetime.datetime:
+        def LocalDateTime(self, utcdatetime: datetime.datetime, timezone: str, locale: str = ...) -> datetime.datetime:
             """
             Computes the local date and time from a UTC date and time.
 
@@ -2453,9 +2438,7 @@ class SFScriptForge:
                 int: the offset between GMT and the given timezone and locale, in minutes.
             """
             ...
-        def UTCDateTime(
-            self, localdatetime: datetime.datetime, timezone: str, locale: str = ...
-        ) -> datetime.datetime:
+        def UTCDateTime(self, localdatetime: datetime.datetime, timezone: str, locale: str = ...) -> datetime.datetime:
             """
             Gets the UTC date and time considering a given local date and time in a timezone.
 
@@ -2502,23 +2485,18 @@ class SFScriptForge:
         SCRIPTISEMBEDDED: Literal["document"]  # in the document
         SCRIPTISAPPLICATION: Literal["application"]  # in any shared library (Basic)
         SCRIPTISPERSONAL: Literal["user"]  # in My Macros (Python)
-        SCRIPTISPERSOXT: Literal[
-            "user:uno_packages"
-        ]  # in an extension installed for the current user (Python)
+        SCRIPTISPERSOXT: Literal["user:uno_packages"]  # in an extension installed for the current user (Python)
         SCRIPTISSHARED: Literal["share"]  # in LibreOffice macros (Python)
-        SCRIPTISSHAROXT: Literal[
-            "share:uno_packages"
-        ]  # in an extension installed for all users (Python)
-        SCRIPTISOXT: Literal[
-            "uno_packages"
-        ]  # in an extension but the installation parameters are unknown (Python)
+        SCRIPTISSHAROXT: Literal["share:uno_packages"]  # in an extension installed for all users (Python)
+        SCRIPTISOXT: Literal["uno_packages"]  # in an extension but the installation parameters are unknown (Python)
         # endregion CONST
 
         # region Methods
+        # pylint: disable=keyword-arg-before-vararg
         @classmethod
         def ExecuteBasicScript(
             cls, scope: str = ..., script: str = ..., *args: Any
-        ) -> Any:
+        ) -> Any:  # pylint: disable=keyword-arg-before-vararg
             """
             Execute the Basic script given its name and location and fetch its result if any.
 
@@ -2577,10 +2555,9 @@ class SFScriptForge:
                 `ExecuteCalcFunction <https://tinyurl.com/yaf7co37#ExecuteCalcFunction>`_
             """
             ...
+        # pylint: disable=keyword-arg-before-vararg
         @classmethod
-        def ExecutePythonScript(
-            cls, scope: str = ..., script: str = ..., *args: Any
-        ) -> Any:
+        def ExecutePythonScript(cls, scope: str = ..., script: str = ..., *args: Any) -> Any:
             """
             Execute the Python script given its location and name, fetch its result if any.
             Result can be a single value or an array of values.
@@ -2683,7 +2660,7 @@ class SFScriptForge:
                 .. code::
 
                     session.RunApplication"Notepad.exe")
-                    session.RunApplication("C:\myFolder\myDocument.odt")
+                    session.RunApplication("C:\\myFolder\\myDocument.odt")
                     session.RunApplication("kate", "/home/me/install.txt") # Linux
 
             See Also:
@@ -2930,9 +2907,7 @@ class SFScriptForge:
                 `SF_String Help IsIPv4 <https://tinyurl.com/y9hm6agu#IsIPv4>`_
             """
             ...
-        def IsLike(
-            self, inputstr: str, pattern: str, casesensitive: bool = ...
-        ) -> bool:
+        def IsLike(self, inputstr: str, pattern: str, casesensitive: bool = ...) -> bool:
             """
             Returns True if the whole input string matches a given pattern containing wildcards
 
@@ -2966,7 +2941,7 @@ class SFScriptForge:
             """
             Return True if the input string can serve as a valid Calc sheet name.
 
-            The sheet name must not contain the characters ``[ ] * ? : / \``
+            The sheet name must not contain the characters ``[ ] * ? : / \\``
             or the character ' (apostrophe) as first or last character.
 
             Args:
@@ -3091,7 +3066,7 @@ class SFScriptForge:
             """
             ...
         @property
-        def sfCR(self) -> str:
+        def sfTAB(self) -> str:
             """Gets Horizontal tabulation: Chr(9)"""
             ...
         # endregion Properties
@@ -3393,7 +3368,7 @@ class SFScriptForge:
                 registrationname (str, optional): the name used to store the new database in the databases register.
                     If "" (default), no registration takes place. If the name already exists it is overwritten without warning.
                     Defaults to ''.
-                calcfilename (str, optional): only when EmbedddedDatabase = "CALC", the name of the file containing the tables as Calc sheets.
+                calcfilename (str, optional): only when embeddeddatabase = "CALC", the name of the file containing the tables as Calc sheets.
                     The name of the file must be given in SF_FileSystem.FileNaming notation. The file must exist.
                     Defaults to ''.
 
@@ -3518,9 +3493,7 @@ class SFScriptForge:
                 None if the opening failed, including when due to a user decision.
             """
             ...
-        def Resize(
-            self, left: int = ..., top: int = ..., width: int = ..., height: int = ...
-        ) -> None:
+        def Resize(self, left: int = ..., top: int = ..., width: int = ..., height: int = ...) -> None:
             """
             Resizes and/or moves the active window. Negative arguments are ignored.
             If the window was minimized or without arguments, it is restored.
@@ -3555,9 +3528,7 @@ class SFScriptForge:
                 percentage (int, optional): The optional degree of progress between 0 and 100. Defaults to -1.
             """
             ...
-        def ShowProgressBar(
-            self, title: str = ..., text: str = ..., percentage: int = ...
-        ) -> None:
+        def ShowProgressBar(self, title: str = ..., text: str = ..., percentage: int = ...) -> None:
             """
             Display a non-modal dialog box. Specify its title, an explicatory text and the progress on a progressbar.
             A call without arguments erases the progress bar dialog.
@@ -3628,9 +3599,7 @@ class SFDatabases:
                 `SF_Database Help CloseDatabase <https://tinyurl.com/yd9y6xa7#CloseDatabase>`_
             """
             ...
-        def DAvg(
-            self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
             """
             Compute the aggregate function AVG() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3647,9 +3616,7 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DCount(
-            self, expression: str, tablename: str, criteria: str = ...
-        ) -> int | None:
+        def DCount(self, expression: str, tablename: str, criteria: str = ...) -> int | None:
             """
             Compute the aggregate function COUNT() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3690,9 +3657,7 @@ class SFDatabases:
                 `SF_Database Help DLookup <https://tinyurl.com/yd9y6xa7#DLookup>`_
             """
             ...
-        def DMax(
-            self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        def DMax(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
             """
             Compute the aggregate function MAX() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3708,9 +3673,7 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DMin(
-            self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        def DMin(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
             """
             Compute the aggregate function MIN() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3726,9 +3689,7 @@ class SFDatabases:
                 `SF_Database Help DFunctions <https://tinyurl.com/yd9y6xa7#DFunctions>`_
             """
             ...
-        def DSum(
-            self, expression: str, tablename: str, criteria: str = ...
-        ) -> float | None:
+        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> float | None:
             """
             Compute the aggregate function Sum() on a  field or expression belonging to a table
             filtered by a WHERE-clause.
@@ -3769,9 +3730,7 @@ class SFDatabases:
                 `SF_Database Help GetRows <https://tinyurl.com/yd9y6xa7#GetRows>`_
             """
             ...
-        def OpenFormDocument(
-            self, formdocument: str
-        ) -> SFDocuments.SF_FormDocument | None:
+        def OpenFormDocument(self, formdocument: str) -> SFDocuments.SF_FormDocument | None:
             """
             Open the FormDocument given by its hierarchical name in normal mode
             If the form document is already open, the form document is made active
@@ -3906,9 +3865,7 @@ class SFDatabases:
                 `SF_Datasheet Help CloseDatasheet <https://tinyurl.com/2juu2pbd#CloseDatasheet>`_
             """
             ...
-        def CreateMenu(
-            self, menuheader: str, before: str = ..., submenuchar: str = ...
-        ) -> object:
+        def CreateMenu(self, menuheader: str, before: str = ..., submenuchar: str = ...) -> object:
             """
             Creates a new menu entry in the data view window and returns a ``SFWidgets.Menu`` service instance, with which menu items can be programmatically added.
 
@@ -4071,7 +4028,7 @@ class SFDatabases:
         def DatabaseFileName(self) -> str:
             """Gets the file name of the Base file in ``FSO.FileNaming`` format."""
             ...
-        property
+        @property
         def Filter(self) -> str:
             """
             Gets/Sets a filter to be applied to the datasheet expressed as the
@@ -4101,7 +4058,7 @@ class SFDatabases:
             ...
         @property
         def SourceType(self) -> str:
-            """Gets teturns the type of the data source, which can be one of the following values: ``SQL``, ``TABLE`` or ``QUERY``."""
+            """Gets the type of the data source, which can be one of the following values: ``SQL``, ``TABLE`` or ``QUERY``."""
             ...
         @property
         def XComponent(self) -> XComponent:
@@ -4200,18 +4157,16 @@ class SFDialogs:
             Args:
                 sourcename (str): the name of the control to duplicate
                 controlname (str):  the name of the new control. It must not exist yet
-                left (int, optional):  the lefg coordinate of the new control expressed in "Map AppFont" units
+                left (int, optional):  the left coordinate of the new control expressed in "Map AppFont" units
                 top (int, optional):  the top coordinate of the new control expressed in "Map AppFont" units
 
             Returns:
                 SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or Nothing
             """
             ...
-        def Controls(
-            self, controlname: str = ...
-        ) -> Tuple[str, ...] | SFDialogs.SF_DialogControl:
+        def Controls(self, controlname: str = ...) -> Tuple[str, ...] | SFDialogs.SF_DialogControl:
             """
-            Retrun the list of the controls contained in the dialog or
+            Returns the list of the controls contained in the dialog or
             a dialog control object based on its name.
 
             Args:
@@ -4320,8 +4275,8 @@ class SFDialogs:
                 place (Any): the size and position expressed in APPFONT units.
                 border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
                 spinbutton (bool, optional): when True, a spin button is present. Default ``False``
-                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
-                maxvalueint (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+                minvalue (int, optional): the smallest value that can be entered in the control. Default = ``-1000000``
+                maxvalueint (int, optional):  the largest value that can be entered in the control. Default = ``+1000000``
                 incrementint (int, optional):  the step when the spin button is pressed. Default = ``1``
                 accuracy (int, optional): specifies the decimal accuracy. Default = ``2`` decimal digits
 
@@ -4352,8 +4307,8 @@ class SFDialogs:
                 place (Any): the size and position expressed in APPFONT units.
                 border (str, optional): Border kind, "3D" (default) or "FLAT" or "NONE"
                 dropdown (bool, optional): when True (default = False), a dropdown button is shown
-                mindate (datetime.datetime, optional): the smallest date that can be entered in the control. Dafault is ``1900-01-01``
-                maxdate (datetime.datetime, optional): the largest Date that can be entered in the control. Dafault is ``2200-12-31``
+                mindate (datetime.datetime, optional): the smallest date that can be entered in the control. Default is ``1900-01-01``
+                maxdate (datetime.datetime, optional): the largest Date that can be entered in the control. Default is ``2200-12-31``
 
             Returns:
                 SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
@@ -4460,8 +4415,8 @@ class SFDialogs:
                 place (Any): the size and position expressed in APPFONT units.
                 border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
                 spinbutton (bool, optional): when True, a spin button is present. Default ``False``
-                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
-                maxvalueint (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+                minvalue (int, optional): the smallest value that can be entered in the control. Default = ``-1000000``
+                maxvalueint (int, optional):  the largest value that can be entered in the control. Default = ``+1000000``
 
             Returns:
                 SFDialogs.SF_DialogControl | None: an instance of the SF_DialogControl class or None
@@ -4473,9 +4428,7 @@ class SFDialogs:
                     - a com.sun.star.awt.Rectangle structure
             """
             ...
-        def CreateGroupBox(
-            self, controlname: str, place: Any
-        ) -> SFDialogs.SF_DialogControl | None:
+        def CreateGroupBox(self, controlname: str, place: Any) -> SFDialogs.SF_DialogControl | None:
             """
             Create a new control of type GroupBox in the actual dialog.
 
@@ -4597,8 +4550,8 @@ class SFDialogs:
                 place (Any): the size and position expressed in APPFONT units.
                 border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
                 spinbutton (bool, optional): when True, a spin button is present. Default ``False``
-                minvalue (int, optional): the smallest value that can be entered in the control. Dafault = ``-1000000``
-                maxvalue (int, optional):  the largest value that can be entered in the control. Dafault = ``+1000000``
+                minvalue (int, optional): the smallest value that can be entered in the control. Default = ``-1000000``
+                maxvalue (int, optional):  the largest value that can be entered in the control. Default = ``+1000000``
                 increment (int, optional):  the step when the spin button is pressed. Default = ``1``
                 accuracy (int, optional): specifies the decimal accuracy. Default = ``2`` decimal digits
 
@@ -4733,9 +4686,7 @@ class SFDialogs:
             border: Literal["3D", "FLAT", "NONE"] = ...,
             rowheaders: bool = ...,
             columnheaders: bool = ...,
-            scrollbars: Literal[
-                "H", "Horizontal", "V", "Vertical", "B", "Both", "N", "None"
-            ] = ...,
+            scrollbars: Literal["H", "Horizontal", "V", "Vertical", "B", "Both", "N", "None"] = ...,
             gridlines: bool = ...,
         ) -> SFDialogs.SF_DialogControl | None:
             """
@@ -4809,7 +4760,7 @@ class SFDialogs:
                 controlname (str): the name of the new control. It must not exist yet
                 place (Any): the size and position expressed in APPFONT units.
                 border (str, optional): Border kind, "3D" or "FLAT" or "NONE". Default is ``3D``
-                mintime (datetime.datetime, optional): the smallest time that can be entered in the control. Dafault ``datetime(1899, 12, 30, 0, 0, 0, 0),``
+                mintime (datetime.datetime, optional): the smallest time that can be entered in the control. Default ``datetime(1899, 12, 30, 0, 0, 0, 0),``
                 maxtime (datetime.datetime, optional): the largest time that can be entered in the control. Default ``datetime(1899, 12, 30, 23, 59, 59, 0)``
 
             Returns:
@@ -4901,9 +4852,7 @@ class SFDialogs:
                 `SF_Dialog Help GetTextsFromL10N <https://tinyurl.com/yckkehha#GetTextsFromL10N>`_
             """
             ...
-        def OrderTabs(
-            self, tabslist: Sequence[str], start: int = ..., increment: int = ...
-        ) -> bool:
+        def OrderTabs(self, tabslist: Sequence[str], start: int = ..., increment: int = ...) -> bool:
             """
             Set the tabulation index f a series of controls.
 
@@ -4923,9 +4872,7 @@ class SFDialogs:
                 bool: True when successful; Otherwise, False.
             """
             ...
-        def Resize(
-            self, left: int = ..., top: int = ..., width: int = ..., height: int = ...
-        ) -> bool:
+        def Resize(self, left: int = ..., top: int = ..., width: int = ..., height: int = ...) -> bool:
             """
             Moves the top left corner of a dialogue box to new coordinates and/or modify its dimensions.
             All distances are expressed in 1/100 mm. Without arguments, the method resets the initial dimensions.
@@ -5241,7 +5188,6 @@ class SFDialogs:
             Return True when a subtree, subordinate to a parent node, could be inserted successfully in a tree control.
             If the parent node had already child nodes before calling this method, the child nodes are erased.
 
-
             Args:
                 parentnode (XMutableTreeNode): A node UNO object, of type com.sun.star.awt.tree.XMutableTreeNode
                 flattree (list): a 2D array sorted on the columns containing the DisplayValues.
@@ -5279,9 +5225,7 @@ class SFDialogs:
                 `SF_DialogControl Help AddSubTree <https://tinyurl.com/yb27tk36#AddSubTree>`_
             """
             ...
-        def CreateRoot(
-            self, displayvalue: str, datavalue: str = ...
-        ) -> XMutableTreeNode:
+        def CreateRoot(self, displayvalue: str, datavalue: str = ...) -> XMutableTreeNode:
             """
             Return a new root node of the tree control. The new tree root is inserted below pre-existing root nodes.
 
@@ -5323,16 +5267,14 @@ class SFDialogs:
                 `SF_DialogControl Help FindNode <https://tinyurl.com/yb27tk36#FindNode>`_
             """
             ...
-        def Resize(
-            self, left: int = ..., top: int = ..., width: int = -..., height: int = ...
-        ) -> bool:
+        def Resize(self, left: int = ..., top: int = ..., width: int = ..., height: int = ...) -> bool:
             """
             Move the top-left corner of the control to new coordinates and/or modify its dimensions.
             Without arguments, the method resets the initial dimensions and position.
             Attributes denoting the position and size of a control are expressed in "Map AppFont" units.
 
             Map AppFont units are device and resolution independent.
-            One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
+            One Map AppFont unit is equal to one eighth of the average character (System font) height and one quarter of the average character width.
             The dialog editor (= the Basic IDE) also uses Map AppFont units.
 
             Args:
@@ -5385,7 +5327,7 @@ class SFDialogs:
                     columns in the table, then the last value in the array is used to define the width
                     of the remaining columns.
                 alignments (str, optional): the column's horizontal alignment as a string with length = number of columns.
-                    Possible characters are: L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
+                    Possible characters are: L(EFT), C(ENTER), R(IGHT) or space (default behavior)
                     Defaults to ''.
                 rowheaderwidth (int, optional): width of the row header column expressed in AppFont units. Defaults to ``10``.
 
@@ -5427,7 +5369,7 @@ class SFDialogs:
         @property
         def Cancel(self) -> bool:
             """
-            Gets/Sets if a command button has or not the behaviour of a Cancel button.
+            Gets/Sets if a command button has or not the behavior of a Cancel button.
 
             Applicable Controls:
                 Button
@@ -5970,9 +5912,7 @@ class SFDocuments:
                 `SF_Document Help CloseDocument <https://tinyurl.com/ybujrgjk#CloseDocument>`_
             """
             ...
-        def CreateMenu(
-            self, menuheader: str, before: Any = ..., submenuchar: str = ...
-        ) -> SFWidgets.SF_Menu:
+        def CreateMenu(self, menuheader: str, before: Any = ..., submenuchar: str = ...) -> SFWidgets.SF_Menu:
             """
             Creates a new menu entry in the menubar of a given document window.
 
@@ -6143,9 +6083,7 @@ class SFDocuments:
                 `SF_Document Help SaveCopyAs <https://tinyurl.com/ybujrgjk#SaveCopyAs>`_
             """
             ...
-        def SetPrinter(
-            self, printer: str = ..., orientation: str = ..., paperformat: str = ...
-        ) -> bool:
+        def SetPrinter(self, printer: str = ..., orientation: str = ..., paperformat: str = ...) -> bool:
             """
             Define the printer options for the document.
 
@@ -6354,9 +6292,7 @@ class SFDocuments:
                 `SF_Base Help FormDocuments <https://tinyurl.com/ya4lp2mq#FormDocuments>`_
             """
             ...
-        def GetDatabase(
-            self, user: str = ..., password: str = ...
-        ) -> SFDatabases.SF_Database | None:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> SFDatabases.SF_Database | None:
             """
             Returns a Database instance (service = SFDatabases.Database) giving access
             to the execution of SQL commands on the database defined and/or stored in
@@ -6448,9 +6384,8 @@ class SFDocuments:
                 `SF_Base Help OpenTable <https://tinyurl.com/ya4lp2mq#OpenTable>`_
             """
             ...
-        def PrintOut(
-            self, formdocument: str, pages: str = ..., copies: int = ...
-        ) -> bool:
+        # pylint: disable=arguments-renamed
+        def PrintOut(self, formdocument: str, pages: str = ..., copies: int = ...) -> bool:
             """
             Send the content of the given form document to the printer.
             The printer might be defined previously by default, by the user or by the SetPrinter() method.
@@ -6468,6 +6403,7 @@ class SFDocuments:
                 `SF_Base Help PrintOut <https://tinyurl.com/ya4lp2mq#PrintOut>`_
             """
             ...
+        # pylint: disable=arguments-renamed
         def SetPrinter(
             self,
             formdocument: str = ...,
@@ -6747,12 +6683,13 @@ class SFDocuments:
             """
             ...
         @overload
-        def Activate(self, sheetname: str) -> bool:
+        def Activate(self, sheetname: str) -> bool:  # pylint: disable=arguments-differ
             """
-            the given sheet is activated and it becomes the currently selected sheet.
+            The given sheet is activated and it becomes the currently selected sheet.
 
             Args:
                 sheetname (str):The name of the sheet to be activated in the document.
+                    The default value is an empty string
 
             Returns:
                 bool: True if the document or the sheet could be made active;
@@ -6762,9 +6699,7 @@ class SFDocuments:
                 `SF_Calc Help Activate <https://tinyurl.com/y7jwr7b7#Activate>`_
             """
             ...
-        def Charts(
-            self, sheetname: str, chartname: str = ...
-        ) -> Tuple[str] | "SFDocuments.SF_Chart":
+        def Charts(self, sheetname: str, chartname: str = ...) -> Tuple[str] | "SFDocuments.SF_Chart":
             """
             Returns either the list with the names of all chart objects in a given sheet or a single Chart service instance.
             * If only ``sheetname`` is specified, an zero-based array of strings containing the names of all charts is returned.
@@ -6784,7 +6719,7 @@ class SFDocuments:
             """
             ...
         def ClearAll(
-            self, range: str, filterformula: str = ..., filterscope: str = ...
+            self, range: str, filterformula: str = ..., filterscope: str = ...  # pylint: disable=redefined-builtin
         ) -> None:
             """
             Clears all the contents and formats of the given range.
@@ -6808,7 +6743,7 @@ class SFDocuments:
             """
             ...
         def ClearFormats(
-            self, range: str, filterformula: str = ..., filterscope: str = ...
+            self, range: str, filterformula: str = ..., filterscope: str = ...  # pylint: disable=redefined-builtin
         ) -> None:
             """
             Clears the formats and styles in the given range.
@@ -6832,7 +6767,7 @@ class SFDocuments:
             """
             ...
         def ClearValues(
-            self, range: str, filterformula: str = ..., filterscope: str = ...
+            self, range: str, filterformula: str = ..., filterscope: str = ...  # pylint: disable=redefined-builtin
         ) -> None:
             """
             Clears the values and formulas in the given range.
@@ -6856,7 +6791,7 @@ class SFDocuments:
             """
             ...
         def CompactLeft(
-            self, range: str, wholecolumn: bool = ..., filterformula: str = ...
+            self, range: str, wholecolumn: bool = ..., filterformula: str = ...  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Deletes the columns of a specified range that match a filter expressed as a Calc formula.
@@ -6868,7 +6803,7 @@ class SFDocuments:
             For example, suppose range A1:J200 is selected (height = 200), so the default formula is =(COUNTBLANK(A1:A200)=200).
             This means that if all 200 cells are empty in the first column (Column A), then the column is deleted.
             Note that the formula is expressed with respect to the first column only.
-            Internally the CompactLeft method will generalise this formula for all the remaining columns.
+            Internally the CompactLeft method will generalize this formula for all the remaining columns.
 
             Args:
                 range (str): The range from which columns will be deleted, as a string.
@@ -6884,7 +6819,7 @@ class SFDocuments:
             """
             ...
         def CompactUp(
-            self, range: str, wholerow: bool = ..., filterformula: str = ...
+            self, range: str, wholerow: bool = ..., filterformula: str = ...  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Deletes the rows of a specified range that match a filter expressed as a Calc formula.
@@ -6896,7 +6831,7 @@ class SFDocuments:
             For example, suppose range A1:J200 is selected (width = 10), so the default formula is =(COUNTBLANK(A1:J1)=10).
             This means that if all 10 cells are empty in the first row (Row 1), then the row is deleted.
             Note that the formula is expressed with respect to the first row only.
-            Internally the CompactUp method will generalise this formula for all the remaining rows.
+            Internally the CompactUp method will generalize this formula for all the remaining rows.
 
             Args:
                 range (str): The range from which rows will be deleted, as a string.
@@ -6964,9 +6899,7 @@ class SFDocuments:
                 `SF_Calc Help CopySheet <https://tinyurl.com/y7jwr7b7#CopySheet>`_
             """
             ...
-        def CopySheetFromFile(
-            self, filename: str, sheetname: str, newname: str, beforesheet: int = ...
-        ) -> bool:
+        def CopySheetFromFile(self, filename: str, sheetname: str, newname: str, beforesheet: int = ...) -> bool:
             """
             Copies a specified sheet from a closed Calc document and pastes it before an existing
             sheet or at the end of the list of sheets of the file referred to by a ``Document`` object.
@@ -6995,7 +6928,7 @@ class SFDocuments:
         def CopyToCell(self, sourcerange: str | Any, destinationcell: str) -> str:
             """
             Copies a specified source range (values, formulas and formats) to a destination range or cell.
-            The method reproduces the behaviour of a Copy/Paste operation from a range to a single cell.
+            The method reproduces the behavior of a Copy/Paste operation from a range to a single cell.
 
             It returns a string representing the modified range of cells. The size of the modified area
             is fully determined by the size of the source area.
@@ -7017,7 +6950,7 @@ class SFDocuments:
         def CopyToRange(self, sourcerange: str | Any, destinationrange: str) -> str:
             """
             Copies downwards and/or rightwards a specified source range (values, formulas and formats)
-            to a destination range. The method imitates the behaviour of a Copy/Paste operation from
+            to a destination range. The method imitates the behavior of a Copy/Paste operation from
             a source range to a larger destination range.
             * If the height (or width) of the destination area is > 1 row (or column) then the height (or width)
             of the source must be <= the height (or width) of the destination. Otherwise nothing happens.
@@ -7042,7 +6975,7 @@ class SFDocuments:
             self,
             chartname: str,
             sheetname: str,
-            range: str,
+            range: str,  # pylint: disable=redefined-builtin
             columnheader: bool = ...,
             rowheader: bool = ...,
         ) -> SFDocuments.SF_Chart:
@@ -7104,7 +7037,7 @@ class SFDocuments:
                 str: a string containing the range where the new pivot table was placed.
             """
             ...
-        def DAvg(self, range: str) -> float:
+        def DAvg(self, range: str) -> float:  # pylint: disable=redefined-builtin
             """
             Get the average of the numeric values stored in the given range
 
@@ -7118,7 +7051,7 @@ class SFDocuments:
                 `SF_Calc Help DAvg <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
             ...
-        def DCount(self, range: str) -> float:
+        def DCount(self, range: str) -> float:  # pylint: disable=redefined-builtin
             """
             Get the number of numeric values stored in the given range.
 
@@ -7132,7 +7065,7 @@ class SFDocuments:
                 `SF_Calc Help DCount <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
             ...
-        def DMax(self, range: str) -> float:
+        def DMax(self, range: str) -> float:  # pylint: disable=redefined-builtin
             """
             Get the greatest of the numeric values stored in the given range.
 
@@ -7146,7 +7079,7 @@ class SFDocuments:
                 `SF_Calc Help DMax <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
             ...
-        def DMin(self, range: str) -> float:
+        def DMin(self, range: str) -> float:  # pylint: disable=redefined-builtin
             """
             Get the smallest of the numeric values stored in the given range.
 
@@ -7160,7 +7093,7 @@ class SFDocuments:
                 `SF_Calc Help DMin <https://tinyurl.com/y7jwr7b7#DAvg>`_
             """
             ...
-        def DSum(self, range: str) -> float:
+        def DSum(self, range: str) -> float:  # pylint: disable=redefined-builtin
             """
             Get sum of the numeric values stored in the given range.
 
@@ -7175,7 +7108,11 @@ class SFDocuments:
             """
             ...
         def ExportRangeToFile(
-            self, range: str, filename: str, imagetype: str = ..., overwrite: bool = ...
+            self,
+            range: str, # pylint: disable=redefined-builtin
+            filename: str,
+            imagetype: str = ...,
+            overwrite: bool = ...,
         ) -> bool:
             """
             Exports the specified range as an image or PDF file.
@@ -7208,7 +7145,7 @@ class SFDocuments:
         @overload
         def Forms(self, sheetname: str, form: int) -> SFDocuments.SF_Form:
             """
-            Retruns a SFDocuments.Form service instance representing the form specified as argument.
+            Returns a SFDocuments.Form service instance representing the form specified as argument.
 
             Args:
                 sheetname (str): The name of the sheet, as a string, from which the form will be retrieved.
@@ -7224,7 +7161,7 @@ class SFDocuments:
         @overload
         def Forms(self, sheetname: str, form: str) -> SFDocuments.SF_Form:
             """
-            Retruns a SFDocuments.Form service instance representing the form specified as argument.
+            Returns a SFDocuments.Form service instance representing the form specified as argument.
 
             Args:
                 sheetname (str): The name of the sheet, as a string, from which the form will be retrieved.
@@ -7257,7 +7194,7 @@ class SFDocuments:
             """
             ...
         def GetFormula(
-            self, range: str
+            self, range: str  # pylint: disable=redefined-builtin
         ) -> str | Tuple[str, str] | Tuple[Tuple[str, ...], ...]:
             """
             Get the formula(s) stored in the given range of cells as a single string, a 1D or a 2D tuple of strings.
@@ -7272,7 +7209,7 @@ class SFDocuments:
                 `SF_Calc Help GetFormula <https://tinyurl.com/y7jwr7b7#GetFormula>`_
             """
             ...
-        def GetValue(self, range: str) -> Any:
+        def GetValue(self, range: str) -> Any:  # pylint: disable=redefined-builtin
             """
             Get the value(s) stored in the given range of cells as a single value, a 1D array or a 2D array. All values are either doubles or strings.
 
@@ -7286,9 +7223,7 @@ class SFDocuments:
                 `SF_Calc Help GetValue <https://tinyurl.com/y7jwr7b7#GetValue>`_
             """
             ...
-        def ImportFromCSVFile(
-            self, filename: str, destinationcell: str, filteroptions: str = ...
-        ) -> str:
+        def ImportFromCSVFile(self, filename: str, destinationcell: str, filteroptions: str = ...) -> str:
             """
             Imports the contents of a CSV-formatted text file and places it on a given destination cell.
 
@@ -7306,7 +7241,7 @@ class SFDocuments:
                 The modified area depends only on the content of the source file.
 
             Note:
-                Default ``filteroptions`` makes the folowing assumptions:
+                Default ``filteroptions`` makes the following assumptions:
                     - The input file encoding is UTF8.
                     - The field separator is a comma, a semi-colon or a Tab character.
                     - The string delimiter is the double quote (").
@@ -7468,7 +7403,7 @@ class SFDocuments:
             ...
         def Offset(
             self,
-            range: str,
+            range: str,  # pylint: disable=redefined-builtin
             rows: int = ...,
             columns: int = ...,
             height: int = ...,
@@ -7533,9 +7468,9 @@ class SFDocuments:
             """
             ...
         @overload
-        def Printf(self, inputstr: str, range: str) -> str: ...
+        def Printf(self, inputstr: str, range: str) -> str: ...  # pylint: disable=redefined-builtin
         @overload
-        def Printf(self, inputstr: str, range: str, tokencharacter: str) -> str:
+        def Printf(self, inputstr: str, range: str, tokencharacter: str) -> str:  # pylint: disable=redefined-builtin
             """
             Returns the input string after substituting its token characters by their values in a given range.
 
@@ -7560,9 +7495,8 @@ class SFDocuments:
                 `SF_Calc Help Printf <https://tinyurl.com/y7jwr7b7#Printf>`_
             """
             ...
-        def PrintOut(
-            self, sheetname: str = ..., pages: int = ..., copies: int = ...
-        ) -> bool:
+        # pylint: disable=arguments-renamed
+        def PrintOut(self, sheetname: str = ..., pages: int = ..., copies: int = ...) -> bool:
             """
             This method sends the contents of the given sheet to the default printer or to the
             printer defined by the SetPrinter method of the Document service.
@@ -7582,15 +7516,15 @@ class SFDocuments:
             ...
         def RemoveDuplicates(
             self,
-            range: str,
+            range: str,  # pylint: disable=redefined-builtin
             columns: int | Sequence[int] = ...,
             header: bool = ...,
             casesensitive: bool = ...,
             mode: Literal["CLEAR", "COMPACT"] = ...,
         ) -> str:
             """
-            Remove duplicate values from a range of values.
-            The comparison between rows is done on a subset of the columns in the range.
+            Removes duplicate rows from a specified range.
+            The comparison to determine if a given row is a duplicate is done based on a subset of columns in the range.
 
             The resulting range replaces the input range, in which, either:
 
@@ -7601,17 +7535,25 @@ class SFDocuments:
 
             Args:
                 range (str): the range, as a string, from which the duplicate rows should be removed
-                columns (int, Sequence[int], optional): a column number or a sequence of column numbers to compare; items are in the interval [1 .. range width]. Defaults to 1.
+                columns (int, Sequence[int], optional): An array containing column numbers indicating which
+                    columns will be considered to determine if a row is a duplicate or not.
+                    If this argument is left blank, then only the first column is used.
+                    Items in this array must be in the interval between ``1`` and the range width.
                 header (bool, optional): when True, the first row is a header row. Default is ``False``.
-                casesensitive (bool, optional): for string comparisons. Defaul is ``False``.
+                casesensitive (bool, optional): for string comparisons. Default is ``False``.
                 mode (Literal[&quot;CLEAR&quot;, &quot;COMPACT&quot;], optional): either "CLEAR" or "COMPACT".
                     For large ranges, the "COMPACT" mode is probably significantly slower. Default is ``COMPACT``
 
             Returns:
                 str: resulting range as a string
+
+            Note:
+                The removal of duplicate rows is done starting at the first row in the range moving downwards,
+                meaning that if two or more rows are duplicates then only the first one is kept.
+
+            See Also:
+                `SF_Calc Help RemoveDuplicates <https://tinyurl.com/y7jwr7b7#RemoveDuplicates>`_
             """
-            # TODO update docstring when online help becomes available. Specifically check columns argument.
-            # https://help.libreoffice.org/7.6/en-GB/text/sbasic/shared/03/sf_calc.html?&DbPAR=SHARED
             ...
         def RemoveSheet(self, sheetname: str) -> bool:
             """
@@ -7746,7 +7688,9 @@ class SFDocuments:
                 `SF_Calc Help SetValue <https://tinyurl.com/y7jwr7b7#SetValue>`_
             """
             ...
-        def ShiftDown(self, range: str, wholerow: bool = ..., rows: int = ...) -> str:
+        def ShiftDown(
+            self, range: str, wholerow: bool = ..., rows: int = ... # pylint: disable=redefined-builtin
+        ) -> str:
             """
             Moves a given range of cells downwards by inserting empty rows.
             The current selection is not affected.
@@ -7770,7 +7714,7 @@ class SFDocuments:
             """
             ...
         def ShiftLeft(
-            self, range: str, wholecolumn: bool = ..., columns: int = ...
+            self, range: str, wholecolumn: bool = ..., columns: int = ...  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Deletes the leftmost columns of a given range and moves to the left all cells to the right
@@ -7797,7 +7741,7 @@ class SFDocuments:
             """
             ...
         def ShiftRight(
-            self, range: str, wholecolumn: int = ..., columns: int = 000
+            self, range: str, wholecolumn: int = ..., columns: int = 000  # pylint: disable=redefined-builtin
         ) -> str:
             """
             Moves a given range of cells to the right by inserting empty columns.
@@ -7824,7 +7768,9 @@ class SFDocuments:
                 `SF_Calc Help ShiftRight <https://tinyurl.com/y7jwr7b7#ShiftRight>`_
             """
             ...
-        def ShiftUp(self, range: str, wholerow: int = ..., rows: str = ...) -> str:
+        def ShiftUp(
+            self, range: str, wholerow: int = ..., rows: str = ... # pylint: disable=redefined-builtin
+        ) -> str:
             """
             Deletes the topmost rows of a given range and moves upwards all cells below the affected range.
             The current selection is not affected.
@@ -7851,7 +7797,7 @@ class SFDocuments:
             ...
         def SortRange(
             self,
-            range: str,
+            range: str,  # pylint: disable=redefined-builtin
             sortkeys: Any,
             sortorder: Any = ...,
             destinationcell: str = ...,
@@ -7923,13 +7869,11 @@ class SFDocuments:
         in the user interface can be read or modified.
 
         See Also:
-           `SF_Chart Help <https://tinyurl.com/ydcexzky>`_
+            `SF_Chart Help <https://tinyurl.com/ydcexzky>`_
         """
 
         # region Methods
-        def Resize(
-            self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...
-        ) -> bool:
+        def Resize(self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...) -> bool:
             """
             Changes the position of the chart in the current sheet and modifies its width and height.
 
@@ -7957,9 +7901,7 @@ class SFDocuments:
                 `SF_Chart Help Resize <https://tinyurl.com/ydcexzky#Resize>`_
             """
             ...
-        def ExportToFile(
-            self, filename: str, imagetype: str = ..., overwrite: bool = ...
-        ) -> bool:
+        def ExportToFile(self, filename: str, imagetype: str = ..., overwrite: bool = ...) -> bool:
             """
             Saves the chart as an image file in a specified location.
 
@@ -8103,8 +8045,8 @@ class SFDocuments:
     class SF_Form(SFServices):
         """
         Management of forms defined in LibreOffice documents. Supported types are Base, Calc and Writer documents.
-        It includes the management of subforms
-        Each instance of the current class represents a single form or a single subform
+        It includes the management of sub-forms
+        Each instance of the current class represents a single form or a single sub-form
         A form may optionally be (understand "is often") linked to a data source manageable with
         the SFDatabases.Database service. The current service offers rapid access to that service.
 
@@ -8147,7 +8089,7 @@ class SFDocuments:
         @overload
         def Controls(self) -> Tuple[str, ...]:
             """
-            Gets  the list of the controls contained in the form. Beware that the returned list does not contain any subform controls.
+            Gets  the list of the controls contained in the form. Beware that the returned list does not contain any sub-form controls.
 
             Returns:
                 Tuple[str, ...]: The list of the controls contained in the form
@@ -8171,9 +8113,7 @@ class SFDocuments:
                 `SF_Form Help Controls <https://tinyurl.com/y72zdzjy#Controls>`_
             """
             ...
-        def GetDatabase(
-            self, user: str = ..., password: str = ...
-        ) -> SFDatabases.SF_Database:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> SFDatabases.SF_Database:
             """
             Gets a SFDatabases.Database instance giving access to the execution of SQL commands on the database the current form is connected to and/or that is stored in the current Base document.
 
@@ -8503,8 +8443,8 @@ class SFDocuments:
     class SF_FormControl(SFServices):
         """
         Manage the controls belonging to a form or subform stored in a document.
-        Each instance of the current class represents a single control within a form, a subform or a tablecontrol.
-        A prerequisite is that all controls within the same form, subform or tablecontrol must have
+        Each instance of the current class represents a single control within a form, a subform or a table-control.
+        A prerequisite is that all controls within the same form, subform or table-control must have
         a unique name.
 
         See Also:
@@ -8577,7 +8517,7 @@ class SFDocuments:
             """
             ...
         @property
-        def Action(self) -> str:
+        def Caption(self) -> str:
             """
             Gets/Sets the text displayed by the control.
 
@@ -8886,7 +8826,7 @@ class SFDocuments:
             """
             Gets parent type.
 
-            Depending on the parent type, a form, a subform or a tablecontrol,
+            Depending on the parent type, a form, a subform or a table-control,
             returns the parent ``SFDocuments.Form`` or ``SFDocuments.FormControl``
             class object instance.
 
@@ -8895,7 +8835,7 @@ class SFDocuments:
             """
             ...
         @property
-        def Name(self) -> str:
+        def Picture(self) -> str:
             """
             Gets/Sets the file name containing a bitmap or other type of graphic to be displayed on the control.
 
@@ -9014,7 +8954,7 @@ class SFDocuments:
             Transform positional and keyword arguments into positional only
             """
             ...
-        def CloseDocument(self) -> bool:
+        def CloseDocument(self) -> bool:  # pylint: disable=arguments-differ
             """
             Close the form document and dispose the actual instance
 
@@ -9038,9 +8978,7 @@ class SFDocuments:
                 SFDocuments.SF_Form | Sequence[str]: A zero-based array of strings if Form is absent or An instance of the SF_Form class if Form exists
             """
             ...
-        def GetDatabase(
-            self, user: str = ..., password: str = ...
-        ) -> SFDatabases.SF_Database | None:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> SFDatabases.SF_Database | None:
             """
             Returns a Database instance (service = SFDatabases.Database) giving access
             to the execution of SQL commands on the database defined and/or stored in
@@ -9048,7 +8986,7 @@ class SFDocuments:
 
             Args:
                 user (str, optional): the login user name. Defaults to "".
-                password (str, optional): the loging password. Defaults to "".
+                password (str, optional): the logging password. Defaults to "".
 
             Returns:
                 SFDatabases.SF_Database | None: _description_
@@ -9286,7 +9224,7 @@ class SFWidgets:
         A popup menu is usually triggered by a mouse action (typically a right-click) on a dialog, a form
         or one of their controls. In this case the menu will be displayed below the clicked area.
         When triggered by other events, including in the normal flow of a user script, the script should
-        provide the coordinates of the topleft edge of the menu versus the actual component.
+        provide the coordinates of the top-left edge of the menu versus the actual component.
         The menu is described from top to bottom. Each menu item receives a numeric and a string identifier.
         The execute() method returns the item selected by the user.
 
@@ -9332,9 +9270,7 @@ class SFWidgets:
                 `SF_PopupMenu Help AddCheckBox <https://tinyurl.com/y7ngmoa8#AddCheckBox>`_
             """
             ...
-        def AddItem(
-            self, menuitem: str, name: str = ..., icon: str = ..., tooltip: str = ...
-        ) -> int:
+        def AddItem(self, menuitem: str, name: str = ..., icon: str = ..., tooltip: str = ...) -> int:
             """
             Inserts a menu entry in the popup menu
 
@@ -9434,9 +9370,7 @@ class SFWidgets:
         - or by a customization done by the user.
         """
 
-        def ToolbarButtons(
-            self, buttonname: str = ...
-        ) -> SFWidgets.SF_ToolbarButton | Sequence[str]:
+        def ToolbarButtons(self, buttonname: str = ...) -> SFWidgets.SF_ToolbarButton | Sequence[str]:
             """
             Returns either a list of the available toolbar button names in the actual toolbar
             or a ToolbarButton object instance.
@@ -9872,33 +9806,21 @@ def createScriptService(
 
 #   region SF_Chart
 @overload
-def CreateScriptService(
-    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Chart: ...
+def CreateScriptService(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
 @overload
-def createscriptservice(
-    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Chart: ...
+def createscriptservice(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
 @overload
-def createScriptService(
-    service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Chart: ...
+def createScriptService(service: Literal["SFDocuments.Chart"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Chart: ...
 
 #   endregion SF_Chart
 
 #   region SF_Form
 @overload
-def CreateScriptService(
-    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Form: ...
+def CreateScriptService(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
 @overload
-def createscriptservice(
-    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Form: ...
+def createscriptservice(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
 @overload
-def createScriptService(
-    service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any
-) -> SFDocuments.SF_Form: ...
+def createScriptService(service: Literal["SFDocuments.Form"], *args: Any, **kwargs: Any) -> SFDocuments.SF_Form: ...
 
 #   endregion SF_Form
 
